@@ -8,9 +8,3 @@ Sistema de gestión de inventarios
 - `/docs`: Documentación
   - `/diagramas`: Diagramas del sistema
   - `/manuales`: Guías y manuales
-
-## 🚀 Instalación
-[Instrucciones pendientes]
-
-## 📧 Contacto
-[Tu línea de contacto por email que creamos antes]
