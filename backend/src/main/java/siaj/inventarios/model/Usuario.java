@@ -83,7 +83,4 @@ public class Usuario {
         this.rolId = rolId;
    }
 
-
-
-
 }

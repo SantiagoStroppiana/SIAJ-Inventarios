@@ -18,7 +18,6 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 
         try {
             session.beginTransaction();
-
             usuario = session.createQuery("FROM Usuario  u WHERE u.email = :email  AND u.password = :password", Usuario.class)
                     .setParameter("email", email)
                     .setParameter("password", password)
