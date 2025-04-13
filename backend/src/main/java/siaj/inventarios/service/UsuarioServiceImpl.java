@@ -26,7 +26,13 @@ public class UsuarioServiceImpl implements UsuarioService{
             return  new MensajesResultados(false, "Email o password no pueden estar vacio");
         }
 
-        Usuario usuario = usuarioDAO.buscarPorEmailyPassword(email, password);
+//        Usuario usuario = usuarioDAO.buscarPorEmailyPassword(email, password);
+
+        Usuario usuario = usuarioDAO.buscarUsuarioPorEmail(email);
+
+        if (!BCrypt.checkpw(password, usuario.getPassword())) {
+            return new MensajesResultados(false, "Contraseña incorrecta");
+        }
 
         if (usuario == null) {
             mensaje = new MensajesResultados(false, "Usuario no encontrado");

@@ -55,12 +55,12 @@ public class TestConexion {
         Scanner scanner = new Scanner(System.in);
 
         // Pedir los datos del usuario
-        System.out.println("Ingrese los datos del usuario para registrar:");
-        System.out.print("Nombre: ");
-        String nombre = scanner.nextLine();
-
-        System.out.print("Apellido: ");
-        String apellido = scanner.nextLine();
+//        System.out.println("Ingrese los datos del usuario para registrar:");
+//        System.out.print("Nombre: ");
+//        String nombre = scanner.nextLine();
+//
+//        System.out.print("Apellido: ");
+//        String apellido = scanner.nextLine();
 
         System.out.print("Email: ");
         String email = scanner.nextLine();
@@ -68,16 +68,17 @@ public class TestConexion {
         System.out.print("Contraseña: ");
         String password = scanner.nextLine();
 
-        // Crear el objeto Usuario con los datos ingresados
-        Usuario usuario = new Usuario();
-        usuario.setNombre(nombre);
-        usuario.setApellido(apellido);
-        usuario.setEmail(email);
-        usuario.setPassword(password);
+//        // Crear el objeto Usuario con los datos ingresados
+//        Usuario usuario = new Usuario();
+//        usuario.setNombre(nombre);
+//        usuario.setApellido(apellido);
+//        usuario.setEmail(email);
+//        usuario.setPassword(password);
 
         // Probar el registro del usuario
         System.out.println("\nIntentando registrar el usuario...");
-        MensajesResultados resultado = usuarioService.registrarUsuario(usuario);
+//        MensajesResultados resultado = usuarioService.registrarUsuario(usuario);
+        MensajesResultados resultado = usuarioService.login(email, password);
         System.out.println("Resultado: " + resultado.getMensaje());
 
         // Cerrar el scanner

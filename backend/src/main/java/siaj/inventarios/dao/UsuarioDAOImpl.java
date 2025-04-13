@@ -13,24 +13,6 @@ public class UsuarioDAOImpl implements UsuarioDAO{
     }
 
     @Override
-    public Usuario buscarPorEmailyPassword(String email, String password) {
-
-      Session session = HibernateUtil.getSession();
-      Usuario usuario = null;
-
-        try {
-            session.beginTransaction();
-            usuario = session.createQuery("FROM Usuario  u WHERE u.email = :email  AND u.password = :password", Usuario.class)
-                    .setParameter("email", email)
-                    .setParameter("password", password)
-                    .uniqueResult();
-        }finally {
-            session.close();
-        }
-        return usuario;
-    }
-
-    @Override
     public void registrarUsuario(Usuario usuario) {
 
         Session session = HibernateUtil.getSession();
@@ -96,7 +78,11 @@ public class UsuarioDAOImpl implements UsuarioDAO{
             usuario = session.createQuery("FROM Usuario u WHERE u.email = :email", Usuario.class)
                     .setParameter("email", email)
                     .uniqueResult();
-        }finally {
+            session.getTransaction().commit();
+        }catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RuntimeException("Erorr al buscar usuario por email" + e.getMessage());
+        } finally {
             session.close();
         }
         return usuario;

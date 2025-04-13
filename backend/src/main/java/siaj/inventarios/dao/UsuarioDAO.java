@@ -7,7 +7,6 @@ import siaj.inventarios.model.Usuario;
 import java.util.List;
 
 public interface UsuarioDAO {
-    Usuario buscarPorEmailyPassword(@Email String email, @NotBlank String password);
     void registrarUsuario(Usuario usuario);
     void actualizarUsuario(Usuario usuario);
     List<Usuario> listarUsuarios();
