@@ -7,6 +7,8 @@ import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.model.Rol;
 import siaj.inventarios.model.Usuario;
 
+import java.util.List;
+
 
 public class UsuarioServiceImpl implements UsuarioService{
 
@@ -84,4 +86,10 @@ public class UsuarioServiceImpl implements UsuarioService{
     public MensajesResultados actualizarUsuario(Usuario usuario) {
         return new MensajesResultados(false, "Usuario actualizado correctamente");
     }
+
+    @Override
+    public List<Usuario> listarUsuarios() {
+        return usuarioDAO.listarUsuarios();
+    }
+
 }

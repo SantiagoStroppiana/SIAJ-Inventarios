@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import siaj.inventarios.model.Usuario;
 import siaj.inventarios.util.HibernateUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDAOImpl implements UsuarioDAO{
@@ -47,25 +48,26 @@ public class UsuarioDAOImpl implements UsuarioDAO{
             session.close();
         }
     }
-
     @Override
     public List<Usuario> listarUsuarios() {
+        List<Usuario> usuarios;
 
-        Session session = HibernateUtil.getSession();
-        List<Usuario> usuarios = null;
-
-        try{
+        try (Session session = HibernateUtil.getSession()) {
             session.beginTransaction();
-            usuarios = session.createQuery("FROM Usuario u", Usuario.class).list();
+
+            usuarios = session.createQuery("FROM Usuario u", Usuario.class).getResultList();
+
             session.getTransaction().commit();
-        }catch (Exception e) {
-            session.getTransaction().rollback();
-            throw new RuntimeException("Erorr al listar usuarios" + e.getMessage());
-        }finally {
-            session.close();
+        } catch (Exception e) {
+            // Siempre conviene loguear o imprimir la traza para debug
+            System.err.println("Error al listar usuarios: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al listar usuarios", e);
         }
+
         return usuarios;
     }
+
 
     @Override
     public Usuario buscarUsuarioPorEmail(String email) {
