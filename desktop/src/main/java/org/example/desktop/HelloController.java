@@ -1,4 +1,4 @@
-package org.example.desktop_siaj;
+package org.example.desktop;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

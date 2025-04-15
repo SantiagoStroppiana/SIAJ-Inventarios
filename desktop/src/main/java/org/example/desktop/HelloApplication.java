@@ -1,4 +1,4 @@
-package org.example.desktop_siaj;
+package org.example.desktop;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

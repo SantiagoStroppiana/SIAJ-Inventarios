@@ -1,4 +1,4 @@
-module org.example.desktop_siaj {
+module org.example.desktop {
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -7,6 +7,6 @@ module org.example.desktop_siaj {
     requires net.synedra.validatorfx;
     requires org.kordamp.bootstrapfx.core;
 
-    opens org.example.desktop_siaj to javafx.fxml;
-    exports org.example.desktop_siaj;
+    opens org.example.desktop to javafx.fxml;
+    exports org.example.desktop;
 }
