@@ -11,16 +11,19 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        UsuarioService usuarioService = new UsuarioServiceImpl(new UsuarioDAOImpl());
+//        UsuarioService usuarioService = new UsuarioServiceImpl(new UsuarioDAOImpl());
+//
+//        Javalin app = Javalin.create().start(7070);
+//
+//        app.get("/usuarios", ctx -> {
+//            List<Usuario> usuarios = usuarioService.listarUsuarios();
+//            for (Usuario u : usuarios) {
+//                System.out.println("Nombre: " + u.getNombre() + " - Email: " + u.getEmail());
+//            }
+//            ctx.result("Consulta realizada. Ver consola.");
+//        });
 
-        Javalin app = Javalin.create().start(7070);
-
-        app.get("/usuarios", ctx -> {
-            List<Usuario> usuarios = usuarioService.listarUsuarios();
-            for (Usuario u : usuarios) {
-                System.out.println("Nombre: " + u.getNombre() + " - Email: " + u.getEmail());
-            }
-            ctx.result("Consulta realizada. Ver consola.");
-        });
+        Javalin app = Javalin.create().start(7000);
+        new Pepe().prueba(app);
     }
 }
