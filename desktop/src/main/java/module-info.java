@@ -6,6 +6,7 @@ module org.example.desktop {
     requires com.dlsc.formsfx;
     requires net.synedra.validatorfx;
     requires org.kordamp.bootstrapfx.core;
+    requires java.desktop;
 
     opens org.example.desktop to javafx.fxml;
     exports org.example.desktop;
