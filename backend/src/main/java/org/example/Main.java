@@ -13,7 +13,7 @@ public class Main {
 
         UsuarioService usuarioService = new UsuarioServiceImpl(new UsuarioDAOImpl());
 
-        Javalin app = Javalin.create().start(7070);
+        Javalin app = Javalin.create().start(7000);
 
         app.get("/usuarios", ctx -> {
             List<Usuario> usuarios = usuarioService.listarUsuarios();

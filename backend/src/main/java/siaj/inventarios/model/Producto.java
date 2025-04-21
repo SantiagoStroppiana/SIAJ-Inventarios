@@ -31,19 +31,108 @@ public class Producto {
     @Column(name = "stock_minimo", nullable=false)
     private int stock_minimo;
 
-    /* FOREING KEY
+/*
     @ManyToOne
     @JoinColumn(name = "proovedores_id", nullable=false)
     private Proveedor Proveedorid;
 */
-    /* FOREIGN KEY INTERMEDIA
-    @ManyToMany
-    @JoinTable(
-            name = "categorias_productos",
-            joinColumns = @JoinColumn(name = "productos_id"),
-            inverseJoinColumns = @JoinColumn(name = "categoria_productos_id")
-    )
+
+    public Producto(int id, String nombre, BigDecimal precio, String sku, boolean activo, String img, Date fecha_alta, int stock, int stock_minimo/*,Proveedor proveedorid*/) {
+        this.id = id;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.sku = sku;
+        this.activo = activo;
+        this.img = img;
+        this.fecha_alta = fecha_alta;
+        this.stock = stock;
+        this.stock_minimo = stock_minimo;
+   //     Proveedorid = proveedorid;
+    }
+
+    public Producto() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public Date getFecha_alta() {
+        return fecha_alta;
+    }
+
+    public void setFecha_alta(Date fecha_alta) {
+        this.fecha_alta = fecha_alta;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public int getStock_minimo() {
+        return stock_minimo;
+    }
+
+    public void setStock_minimo(int stock_minimo) {
+        this.stock_minimo = stock_minimo;
+    }
+/*
+    public Proveedor getProveedorid() {
+        return Proveedorid;
+    }
+
+    public void setProveedorid(Proveedor proveedorid) {
+        Proveedorid = proveedorid;
+    }
+
 */
-
-
 }
