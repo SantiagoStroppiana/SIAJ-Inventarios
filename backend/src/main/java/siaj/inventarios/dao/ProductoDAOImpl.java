@@ -18,7 +18,7 @@ public class ProductoDAOImpl implements ProductoDAO {
         try (Session session = HibernateUtil.getSession()) {
             session.beginTransaction();
 
-            productos = session.createQuery("FROM Producto p", Producto.class).getResultList();
+            productos = session.createQuery("FROM Producto", Producto.class).getResultList();
 
             session.getTransaction().commit();
         } catch (Exception e) {

@@ -5,10 +5,15 @@ import siaj.inventarios.model.Producto;
 
 import java.util.List;
 
-public class ProductoServiceImpl {
+public class ProductoServiceImpl implements ProductoService {
+    private final ProductoDAO productoDAO;
 
-    public List<Producto> listarPorductos() {
-        return ProductoDAO.listarPorductos();
+    public ProductoServiceImpl(ProductoDAO productoDAO) {
+        this.productoDAO = productoDAO;
+    }
+    @Override
+    public List<Producto> listarProductos() {
+        return productoDAO.listarProductos();
     }
 
 }
