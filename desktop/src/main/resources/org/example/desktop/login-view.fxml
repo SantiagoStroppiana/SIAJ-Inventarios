@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<HBox fx:controller="org.example.desktop.controller.LoginController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <AnchorPane prefHeight="400.0" prefWidth="220.0" style="-fx-background-color: #1a202c;">
+            <children>
+                <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="30.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/logo.png" />
+                    </image>
+                </ImageView>
+                <Label layoutX="19.0" layoutY="200.0" text="SIAJ INVENTARIOS" textFill="WHITE">
+                    <font>
+                        <Font name="Segoe UI Semibold" size="20.0" />
+                    </font>
+                </Label>
+                <Separator layoutY="237.0" prefHeight="8.0" prefWidth="203.0" />
+                <Button fx:id="registrarse" layoutX="42.0" layoutY="292.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="122.0" style="-fx-border-color: #38a169; -fx-background-color: #22543d;" text="Registrarse" textFill="WHITE" onAction="#irARegistro">
+                    <font>
+                        <Font name="Segoe UI Bold" size="12.0" />
+                    </font>
+                </Button>
+                <Label layoutX="26.0" layoutY="265.0" text="¿No tienes una cuenta?" textFill="WHITE">
+                    <font>
+                        <Font name="Segoe UI" size="15.0" />
+                    </font></Label>
+            </children>
+        </AnchorPane>
+        <AnchorPane prefHeight="400.0" prefWidth="522.0" style="-fx-background-color: #2d3748;">
+            <children>
+                <ImageView fitHeight="120.0" fitWidth="115.0" layoutX="140.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/logo.png" />
+                    </image>
+                </ImageView>
+                <Button fx:id="iniciarSesion" layoutX="111.0" layoutY="291.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="173.0" style="-fx-border-color: #38a169; -fx-background-color: #22543d;" text="Iniciar Sesión" textFill="WHITE" onAction="#irLogin">
+                    <font>
+                        <Font name="Segoe UI Bold" size="16.0" />
+                    </font>
+                </Button>
+                <Label layoutX="38.0" layoutY="144.0" text="Email" textFill="WHITE">
+                    <font>
+                        <Font name="Segoe UI Bold" size="16.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="email" layoutX="38.0" layoutY="167.0" prefHeight="25.0" prefWidth="320.0" style="-fx-background-color: #4a5568; -fx-border-color: #38a169;" />
+                <Label layoutX="39.0" layoutY="207.0" text="Password" textFill="WHITE">
+                    <font>
+                        <Font name="Segoe UI Bold" size="16.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="password" layoutX="39.0" layoutY="230.0" prefHeight="25.0" prefWidth="320.0" style="-fx-background-color: #4a5568; -fx-border-color: #38a169;" />
+            </children></AnchorPane>
+    </children>
+</HBox>
