@@ -19,6 +19,7 @@
 
         <mapping class="siaj.inventarios.model.Usuario"/>
         <mapping class="siaj.inventarios.model.Rol"/>
+        <mapping class="siaj.inventarios.model.Producto"/>
 
 
     </session-factory>
