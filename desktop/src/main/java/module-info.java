@@ -7,7 +7,10 @@ module org.example.desktop {
     requires net.synedra.validatorfx;
     requires org.kordamp.bootstrapfx.core;
     requires java.desktop;
+    requires java.net.http;
+    requires com.google.gson;
 
-    opens org.example.desktop to javafx.fxml;
+    opens org.example.desktop.controller  to javafx.fxml;
+    opens org.example.desktop.model to com.google.gson;
     exports org.example.desktop;
 }
