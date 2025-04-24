@@ -20,7 +20,8 @@
                </font>
             </Label>
             <Separator layoutY="239.0" prefHeight="6.0" prefWidth="206.0" />
-            <Button fx:id="iniciarSesion" layoutX="42.0" layoutY="292.0" mnemonicParsing="false" onAction="#irALogin" prefHeight="27.0" prefWidth="122.0" style="-fx-border-color: #38a169; -fx-background-color: #22543d;" text="Iniciar Sesión" textFill="WHITE">
+<!--            onAction="#irALogin"-->
+            <Button fx:id="iniciarSesion" layoutX="42.0" layoutY="292.0" mnemonicParsing="false"  prefHeight="27.0" prefWidth="122.0" style="-fx-border-color: #38a169; -fx-background-color: #22543d;" text="Iniciar Sesión" textFill="WHITE">
                <font>
                   <Font name="Segoe UI Bold" size="12.0" />
                </font>
@@ -44,7 +45,7 @@
                   <Image url="@images/siaj-logo.png" />
                </image>
             </ImageView>
-            <Button fx:id="registrarse" layoutX="137.0" layoutY="338.0" mnemonicParsing="false" onAction="#irARegistro" prefHeight="40.0" prefWidth="122.0" style="-fx-border-color: #38a169; -fx-background-color: #22543d;" text="Registrarse" textFill="WHITE">
+            <Button fx:id="registro" layoutX="137.0" layoutY="338.0" mnemonicParsing="false" onAction="#registrarse" prefHeight="40.0" prefWidth="122.0" style="-fx-border-color: #38a169; -fx-background-color: #22543d;" text="Registrarse" textFill="WHITE">
                <font>
                   <Font name="Segoe UI Bold" size="16.0" />
                </font>

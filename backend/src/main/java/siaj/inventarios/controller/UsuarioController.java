@@ -8,6 +8,8 @@ public class UsuarioController {
 
     private UsuarioService usuarioService;
 
+    public UsuarioController() {}
+
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
@@ -19,7 +21,5 @@ public class UsuarioController {
     public MensajesResultados login(String email, String password) {
         return usuarioService.login(email, password);
     }
-
-    
 
 }
