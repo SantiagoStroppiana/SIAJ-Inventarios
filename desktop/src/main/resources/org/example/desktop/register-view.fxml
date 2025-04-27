@@ -1,73 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.RegisterController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" stylesheets="@estilos/login-register.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.RegisterController">
    <children>
-      <AnchorPane prefHeight="400.0" prefWidth="220.0" style="-fx-background-color: #3e4440;">
+      <AnchorPane prefHeight="400.0" prefWidth="220.0" styleClass="left-panel">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="30.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="70.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/siaj-logo.png" />
                </image>
             </ImageView>
-            <Label layoutX="9.0" layoutY="200.0" text="SIAJ INVENTARIOS" textFill="#04dd2c">
-               <font>
-                  <Font name="Yu Gothic Bold" size="20.0" />
-               </font>
-            </Label>
-            <Separator layoutY="239.0" prefHeight="6.0" prefWidth="206.0" />
-<!--            onAction="#irALogin"-->
-            <Button fx:id="iniciarSesion" layoutX="42.0" layoutY="292.0" mnemonicParsing="false"  prefHeight="27.0" prefWidth="122.0" style="-fx-border-color: #38a169; -fx-background-color: #22543d;" text="Iniciar Sesión" textFill="WHITE">
+            <Label layoutX="33.0" layoutY="215.0" styleClass="title-label" text="SIAJ INVENTARIOS" />
+            <Button fx:id="iniciarSesion" layoutX="79.0" layoutY="293.0" mnemonicParsing="false" onAction="#irALogin" prefHeight="27.0" prefWidth="133.0" text="Iniciar Sesión" textFill="WHITE">
                <font>
                   <Font name="Segoe UI Bold" size="12.0" />
                </font>
+               <styleClass>
+                  <String fx:value="secondary-button" />
+                  <String fx:value="field-label" />
+               </styleClass>
             </Button>
-            <Label layoutX="37.0" layoutY="264.0" text="¿Tienes una cuenta?" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI" size="15.0" />
-               </font></Label>
+            <Label layoutX="83.0" layoutY="264.0" styleClass="info-text" text="¿Tienes una cuenta?" />
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="400.0" prefWidth="522.0" style="-fx-background-color: #656b67;">
+      <AnchorPane prefHeight="492.0" prefWidth="410.0" styleClass="right-panel">
          <children>
-            <Label layoutX="37.0" layoutY="88.0" text="Nombre" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI Bold" size="16.0" />
-               </font>
-            </Label>
-            <TextField fx:id="nombre" layoutX="37.0" layoutY="111.0" prefHeight="25.0" prefWidth="320.0" style="-fx-background-color: #8ba288; -fx-border-color: #38a169;" />
+            <Label layoutX="45.0" layoutY="93.0" styleClass="field-label" text="Nombre" />
+            <TextField fx:id="nombre" layoutX="46.0" layoutY="118.0" prefHeight="25.0" prefWidth="320.0">
+               <styleClass>
+                  <String fx:value="field-label" />
+                  <String fx:value="text-field" />
+               </styleClass></TextField>
             <ImageView fitHeight="94.0" fitWidth="85.0" layoutX="154.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/siaj-logo.png" />
                </image>
             </ImageView>
-            <Button fx:id="registro" layoutX="137.0" layoutY="338.0" mnemonicParsing="false" onAction="#registrarse" prefHeight="40.0" prefWidth="122.0" style="-fx-border-color: #38a169; -fx-background-color: #22543d;" text="Registrarse" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI Bold" size="16.0" />
-               </font>
-            </Button>
-            <Label layoutX="37.0" layoutY="150.0" text="Apellido" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI Bold" size="16.0" />
-               </font>
-            </Label>
-            <TextField fx:id="apellido" layoutX="37.0" layoutY="173.0" prefHeight="25.0" prefWidth="320.0" style="-fx-background-color: #8ba288; -fx-border-color: #38a169;" />
-            <Label layoutX="37.0" layoutY="212.0" text="Email" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI Bold" size="16.0" />
-               </font>
-            </Label>
-            <TextField fx:id="email" layoutX="37.0" layoutY="235.0" prefHeight="25.0" prefWidth="320.0" style="-fx-background-color: #8ba288; -fx-border-color: #38a169;" />
-            <Label layoutX="38.0" layoutY="275.0" text="Password" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI Bold" size="16.0" />
-               </font>
-            </Label>
-            <TextField fx:id="password" layoutX="38.0" layoutY="298.0" prefHeight="25.0" prefWidth="320.0" style="-fx-background-color: #8ba288; -fx-border-color: #38a169;" />
+            <Button fx:id="registro" layoutX="134.0" layoutY="407.0" mnemonicParsing="false" onAction="#registrarse" prefHeight="45.0" prefWidth="144.0" text="Registrarse" textFill="WHITE">
+               <styleClass>
+                  <String fx:value="primary-button" />
+                  <String fx:value="field-label" />
+               </styleClass></Button>
+            <Label layoutX="45.0" layoutY="162.0" styleClass="field-label" text="Apellido" />
+            <TextField fx:id="apellido" layoutX="46.0" layoutY="187.0" prefHeight="25.0" prefWidth="320.0" styleClass="field-label" />
+            <Label layoutX="47.0" layoutY="238.0" styleClass="field-label" text="Email" />
+            <TextField fx:id="email" layoutX="45.0" layoutY="263.0" prefHeight="25.0" prefWidth="320.0" styleClass="field-label" />
+            <Label layoutX="42.0" layoutY="311.0" styleClass="field-label" text="Password" />
+            <TextField fx:id="password" layoutX="45.0" layoutY="336.0" prefHeight="25.0" prefWidth="320.0">
+               <styleClass>
+                  <String fx:value="field-label" />
+                  <String fx:value="password-field" />
+               </styleClass></TextField>
          </children></AnchorPane>
    </children>
 </HBox>

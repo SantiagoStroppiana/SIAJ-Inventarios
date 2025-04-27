@@ -2,13 +2,21 @@ package org.example.desktop.controller;
 
 import com.google.gson.Gson;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import org.controlsfx.control.Notifications;
 import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Usuario;
 
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -29,12 +37,12 @@ public class RegisterController {
     @FXML
     private TextField password;
 
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final Gson gson = new Gson();
+
     @FXML
     public void registrarse(javafx.event.ActionEvent actionEvent) {
         try {
-            HttpClient httpClient = HttpClient.newHttpClient();
-            Gson gson = new Gson();
-
             Usuario usuario = new Usuario();
             usuario.setNombre(nombre.getText());
             usuario.setApellido(apellido.getText());
@@ -54,34 +62,66 @@ public class RegisterController {
             String responseBody = response.body();
             System.out.println("Código de estado: " + response.statusCode());
             System.out.println("Respuesta del servidor: " + response.body());
-
             System.out.println("Datos enviados al servidor: " + json);
-
 
             if (responseBody.trim().startsWith("{")) {
                 MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
 
                 if (resultado.isExito()) {
-                    alerta("Registro exitoso", resultado.getMensaje(), Alert.AlertType.INFORMATION);
+                    notificar("Registro exitoso", resultado.getMensaje(), true);
+                    limpiarCampos();
+                    irALogin(actionEvent);
                 } else {
-                    alerta("Error al registrar el usuario", resultado.getMensaje(), Alert.AlertType.ERROR);
+                    notificar("Error al registrarse", resultado.getMensaje(), false);
                 }
             } else {
-                alerta("Respuesta inesperada", responseBody, Alert.AlertType.ERROR);
+                notificar("Respuesta del servidor incorrecta", responseBody, false);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            alerta("Error al procesar el registro", e.getMessage(), Alert.AlertType.ERROR);
+            notificar("Error critico", e.getMessage(), false);
         }
     }
 
-    private void alerta(String titulo, String mensaje, Alert.AlertType tipo) {
-        Alert alerta = new Alert(tipo);
-        alerta.setTitle(titulo);
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
+    private void notificar(String titulo, String mensaje, boolean exito){
+        Notifications notificacion = Notifications.create()
+                .title(titulo)
+                .text(mensaje)
+                .position(Pos.TOP_CENTER)
+                .hideAfter(Duration.seconds(4));
+        if (exito) {
+            notificacion.showInformation();
+        }else{
+            notificacion.showError();
+        }
+    }
+
+    private void limpiarCampos() {
+        nombre.setText("");
+        apellido.setText("");
+        email.setText("");
+        password.setText("");
+    }
+
+    public void irALogin(javafx.event.ActionEvent actionEvent) {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/login-view.fxml"));
+
+            URL resourceUrl = getClass().getResource("/org/example/desktop/login-view.fxml");
+            System.out.println("URL del recurso: " + resourceUrl);
+            if (resourceUrl == null) {
+                System.out.println("¡No se pudo encontrar el recurso!");
+            }
+
+            Parent root = fxmlLoader.load();
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }
