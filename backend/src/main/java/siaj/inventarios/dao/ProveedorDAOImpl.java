@@ -6,7 +6,7 @@ import siaj.inventarios.util.HibernateUtil;
 
 import java.util.List;
 
-public abstract class ProveedorDAOImpl implements ProveedorDAO{
+public class ProveedorDAOImpl implements ProveedorDAO{
     public ProveedorDAOImpl() {
     }
 
