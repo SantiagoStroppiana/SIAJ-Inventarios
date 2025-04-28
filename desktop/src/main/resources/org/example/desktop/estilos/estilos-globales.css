@@ -1,0 +1,126 @@
+
+.root {
+    -fx-background-color: #1a1a1a;
+    -fx-font-family: "System", sans-serif;
+    -fx-font-size: 14px;
+}
+
+* {
+    -fx-primary-color: #4caf50;
+    -fx-secondary-color: #388e3c;
+    -fx-accent-color: #2e7d32;
+
+    -fx-background-dark: #1a1a1a;
+    -fx-background-medium: #2d2d2d;
+    -fx-background-light: #383838;
+
+    -fx-text-primary: white;
+    -fx-text-secondary: #cccccc;
+    -fx-text-tertiary: #999999;
+}
+
+.heading-1 {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.heading-2 {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.heading-3 {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.text-field, .password-field, .text-area, .combo-box {
+    -fx-background-color: #505050;
+    -fx-text-fill: -fx-text-primary;
+    -fx-border-color: #606060;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 8;
+}
+
+.text-field:focused, .password-field:focused,
+.text-area:focused, .combo-box:focused {
+    -fx-border-color: -fx-primary-color;
+}
+
+.button {
+    -fx-background-color: #505050;
+    -fx-text-fill: -fx-text-primary;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #606060;
+}
+
+.button:pressed {
+    -fx-background-color: #404040;
+}
+
+.button-primary {
+    -fx-background-color: -fx-primary-color;
+}
+
+.button-primary:hover {
+    -fx-background-color: -fx-secondary-color;
+}
+
+.button-primary:pressed {
+    -fx-background-color: -fx-accent-color;
+}
+
+.table-view {
+    -fx-background-color: -fx-background-medium;
+    -fx-table-cell-border-color: #505050;
+}
+
+.table-view .column-header {
+    -fx-background-color: -fx-background-light;
+    -fx-text-fill: -fx-text-primary;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell {
+    -fx-background-color: -fx-background-medium;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #323232;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: white;
+}
+
+.scroll-bar {
+    -fx-background-color: -fx-background-medium;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #505050;
+    -fx-background-radius: 3;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #606060;
+}
+
+.card {
+    -fx-background-color: -fx-background-light;
+    -fx-background-radius: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);
+    -fx-padding: 15;
+}
