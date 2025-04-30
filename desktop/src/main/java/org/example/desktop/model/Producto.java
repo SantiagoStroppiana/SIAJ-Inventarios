@@ -17,10 +17,10 @@ public class Producto {
     private long fecha_alta;
     private int stock;
     private int stock_minimo;
-    private Proveedor proveedorId;
+    private Proveedor  proveedor_id;
 
 
-    public Producto(int id, String nombre, BigDecimal precio, String sku, boolean activo, String img, long fecha_alta, int stock, int stock_minimo,Proveedor proveedorId) {
+    public Producto(int id, String nombre, BigDecimal precio, String sku, boolean activo, String img, long fecha_alta, int stock, int stock_minimo,Proveedor proveedor_id) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -30,7 +30,7 @@ public class Producto {
         this.fecha_alta = fecha_alta;
         this.stock = stock;
         this.stock_minimo = stock_minimo;
-        this.proveedorId = proveedorId;
+        this.proveedor_id = proveedor_id;
     }
 
     public Producto() {
@@ -110,11 +110,11 @@ public class Producto {
     }
 
     public Proveedor getProveedorid() {
-        return proveedorId;
+        return proveedor_id;
     }
 
-    public void setProveedorid(Proveedor proveedorid) {
-        proveedorId = proveedorid;
+    public void setProveedorid(Proveedor proveedor_id) {
+        this.proveedor_id = proveedor_id;
     }
 
     public String getProveedor() {
