@@ -11,6 +11,6 @@ module org.example.desktop {
     requires com.google.gson;
 
     opens org.example.desktop.controller  to javafx.fxml;
-    opens org.example.desktop.model to com.google.gson;
+    opens org.example.desktop.model to com.google.gson, javafx.base;
     exports org.example.desktop;
 }

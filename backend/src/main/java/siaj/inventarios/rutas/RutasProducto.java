@@ -22,10 +22,12 @@ public class RutasProducto {
     public void rutaProducto(Javalin app) {
 
         app.get("/api/productos", ctx -> {
-            Producto producto = ctx.bodyAsClass(Producto.class);
             List<Producto> mostrar = productoController.mostrarProductos();
             ctx.json(mostrar);
         });
 
 
-    }}
+
+    }
+
+}

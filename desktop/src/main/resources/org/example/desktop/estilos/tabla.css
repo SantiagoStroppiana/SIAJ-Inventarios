@@ -20,3 +20,8 @@
     -fx-text-fill:#fff;
     -fx-font-family:"Arial";
 }
+
+.table-view .table-cell {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial";
+}

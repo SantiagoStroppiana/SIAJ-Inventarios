@@ -1,43 +1,26 @@
-package siaj.inventarios.model;
+package org.example.desktop.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+
 
 import java.math.BigDecimal;
-import java.util.Date;
 
-@Entity
-@Table(name="productos")
+
 public class Producto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int id;
-    @Column(name= "nombre", nullable=false, length=60)
     private String nombre;
-    @Column(name = "precio", nullable=false, precision = 10, scale = 2)
     private BigDecimal precio;
-    @Column(name = "sku", nullable=false, length=100, unique = true)
     private String sku;
-    @Column(name = "activo", nullable=false)
     private boolean activo;
-    @Column(name = "img", nullable=false, length=255)
     private String img;
-    @Column(name = "fecha_alta", nullable=false)
-    private Date fecha_alta;
-    @Column(name = "stock", nullable=false)
+    private long fecha_alta;
     private int stock;
-    @Column(name = "stock_minimo", nullable=false)
     private int stock_minimo;
+    private Proveedor proveedorId;
 
-    @JsonProperty("proveedor_id")
-    @ManyToOne
-    @JoinColumn(name = "proveedores_id", nullable=false)
-    private Proveedor proveedorid;
 
-    public Producto(int id, String nombre, BigDecimal precio, String sku, boolean activo, String img, Date fecha_alta, int stock, int stock_minimo,Proveedor proveedorid) {
+    public Producto(int id, String nombre, BigDecimal precio, String sku, boolean activo, String img, long fecha_alta, int stock, int stock_minimo,Proveedor proveedorId) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -47,7 +30,7 @@ public class Producto {
         this.fecha_alta = fecha_alta;
         this.stock = stock;
         this.stock_minimo = stock_minimo;
-        this.proveedorid = proveedorid;
+        this.proveedorId = proveedorId;
     }
 
     public Producto() {
@@ -102,11 +85,11 @@ public class Producto {
         this.img = img;
     }
 
-    public Date getFecha_alta() {
+    public long getFecha_alta() {
         return fecha_alta;
     }
 
-    public void setFecha_alta(Date fecha_alta) {
+    public void setFecha_alta(long fecha_alta) {
         this.fecha_alta = fecha_alta;
     }
 
@@ -127,11 +110,22 @@ public class Producto {
     }
 
     public Proveedor getProveedorid() {
-        return proveedorid;
+        return proveedorId;
     }
 
     public void setProveedorid(Proveedor proveedorid) {
-        this.proveedorid = proveedorid;
+        proveedorId = proveedorid;
+    }
+
+    public String getProveedor() {
+        return (getProveedorid() != null && getProveedorid().getRazonSocial() != null)
+                ? getProveedorid().getRazonSocial()
+                : "Sin proveedor";
+    }
+
+
+    public boolean getEstado() {
+        return isActivo();
     }
 
 

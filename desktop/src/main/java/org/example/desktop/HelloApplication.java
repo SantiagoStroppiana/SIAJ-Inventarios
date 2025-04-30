@@ -11,14 +11,15 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("productos-view.fxml"));
-//        Scene scene = new Scene(fxmlLoader.load(),  700, 500);
-            Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
 
         stage.setTitle("SIAJ Inventarios");
         stage.setScene(scene);
         stage.sizeToScene();
         stage.show();
+
+
     }
 
     public static void main(String[] args) {
