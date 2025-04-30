@@ -1,10 +1,8 @@
 package org.example.desktop.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -12,9 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
-import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Producto;
-import org.example.desktop.model.Usuario;
 
 import java.math.BigDecimal;
 import java.net.URI;
@@ -83,7 +79,13 @@ public class ProductoController implements Initializable {
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
         precioColumn.setCellValueFactory(new PropertyValueFactory<>("precio"));
         estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
-        proveedorColumn.setCellValueFactory(new PropertyValueFactory<>("proveedor"));
+        proveedorColumn.setCellValueFactory(cellData -> {
+            Producto producto = cellData.getValue();
+            return new SimpleStringProperty(
+                    producto.getProveedorid() != null ? producto.getProveedorid().getRazonSocial() : "Sin proveedor"
+            );
+        });
+
 
         mostrarProductos();
     }
