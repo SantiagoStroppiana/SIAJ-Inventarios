@@ -1,68 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox prefHeight="268.0" prefWidth="201.0" spacing="10" styleClass="side-menu" stylesheets="@estilos/estilos-globales.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="600.0" prefWidth="210.0" spacing="10" styleClass="side-menu"
+      stylesheets="@estilos/estilos-globales.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+
     <padding>
-        <Insets bottom="15" left="15" right="15" top="15" />
+        <Insets bottom="15" left="15" right="15" top="15"/>
     </padding>
-   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SIAJ INVENTARIOS">
-      <styleClass>
-         <String fx:value="heading-1" />
-         <String fx:value="heading-2" />
-      </styleClass>
-   </Text>
+
+    <Text fill="#38b536" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="heading-2" text="SIAJ INVENTARIOS"/>
+
     <ImageView fx:id="userIcon" fitHeight="50" fitWidth="50">
-      <image>
-         <Image url="@images/siaj-logo.png" />
-      </image></ImageView>
-    <Separator />
-    <Button fx:id="dashboardBtn" maxWidth="Infinity" text="MENU PRINCIPAL">
-      <styleClass>
-         <String fx:value="button-primary" />
-         <String fx:value="button" />
-      </styleClass>
-      <font>
-         <Font name="System Bold" size="12.0" />
-      </font></Button>
-    <Button fx:id="productsBtn" maxWidth="Infinity" text="PRODUCTOS">
-      <styleClass>
-         <String fx:value="button-primary" />
-         <String fx:value="button" />
-      </styleClass>
-      <font>
-         <Font name="System Bold" size="12.0" />
-      </font></Button>
-    <Button fx:id="ordersBtn" maxWidth="Infinity" text="PROVEEDORES">
-      <styleClass>
-         <String fx:value="button-primary" />
-         <String fx:value="button" />
-      </styleClass>
-      <font>
-         <Font name="System Bold" size="12.0" />
-      </font></Button>
-    <Button fx:id="reportsBtn" maxWidth="Infinity" text="REPORTES/GRAFICOS">
-      <styleClass>
-         <String fx:value="button-primary" />
-         <String fx:value="button" />
-      </styleClass>
-      <font>
-         <Font name="System Bold" size="12.0" />
-      </font></Button>
-    <Button fx:id="settingsBtn" maxWidth="Infinity" text="LogOut">
-      <styleClass>
-         <String fx:value="button-primary" />
-         <String fx:value="button" />
-      </styleClass>
-      <font>
-         <Font name="System Bold" size="12.0" />
-      </font></Button>
+        <image>
+            <Image url="@images/siaj-logo.png"/>
+        </image>
+    </ImageView>
+
+    <Separator/>
+
+    <Button fx:id="dashboardBtn" maxWidth="Infinity" text="Inicio">
+        <styleClass>
+            <String fx:value="button-primary"/>
+            <String fx:value="button"/>
+        </styleClass>
+        <font>
+            <Font name="System Bold" size="12.0"/>
+        </font>
+    </Button>
+
+    <Button fx:id="productsBtn" maxWidth="Infinity" text="Productos">
+        <styleClass>
+            <String fx:value="button-primary"/>
+            <String fx:value="button"/>
+        </styleClass>
+        <font>
+            <Font name="System Bold" size="12.0"/>
+        </font>
+    </Button>
+
+    <Button fx:id="ordersBtn" maxWidth="Infinity" text="Proveedores">
+        <styleClass>
+            <String fx:value="button-primary"/>
+            <String fx:value="button"/>
+        </styleClass>
+        <font>
+            <Font name="System Bold" size="12.0"/>
+        </font>
+    </Button>
+
+    <Button fx:id="reportsBtn" maxWidth="Infinity" text="Reportes/Graficos">
+        <styleClass>
+            <String fx:value="button-primary"/>
+            <String fx:value="button"/>
+        </styleClass>
+        <font>
+            <Font name="System Bold" size="12.0"/>
+        </font>
+    </Button>
+
+    <Button fx:id="settingsBtn" maxWidth="Infinity" text="Ventas">
+        <styleClass>
+            <String fx:value="button-primary"/>
+            <String fx:value="button"/>
+        </styleClass>
+        <font>
+            <Font name="System Bold" size="12.0"/>
+        </font>
+    </Button>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <Button fx:id="logoutBtn" maxWidth="Infinity" text="Cerrar Sesión" style="-fx-background-color: #e74c3c; -fx-text-fill: white;">
+        <font>
+            <Font name="System Bold" size="12.0"/>
+        </font>
+    </Button>
+
 </VBox>

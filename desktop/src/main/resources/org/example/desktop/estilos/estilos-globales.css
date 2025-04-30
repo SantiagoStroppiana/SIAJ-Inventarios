@@ -1,4 +1,3 @@
-
 .root {
     -fx-background-color: #1a1a1a;
     -fx-font-family: "System", sans-serif;
@@ -17,6 +16,14 @@
     -fx-text-primary: white;
     -fx-text-secondary: #cccccc;
     -fx-text-tertiary: #999999;
+}
+
+/* Estilo específico para el sidebar */
+.side-menu {
+    -fx-background-color: #121212; /* Color más oscuro para el sidebar */
+    -fx-background-radius: 0 10 10 0;
+    -fx-border-width: 0 1 0 0;
+    -fx-border-color: #505050;
 }
 
 .heading-1 {

@@ -3,6 +3,8 @@ package siaj.inventarios.controller;
 import siaj.inventarios.model.Producto;
 import siaj.inventarios.service.ProductoService;
 
+import java.util.List;
+
 public class ProductoController {
 
     private ProductoService productoService;
@@ -11,6 +13,10 @@ public class ProductoController {
         this.productoService = productoService;
     }
 
-    public Producto mostrarProductos (Producto producto) {return productoService.listarProductos().get(producto.getId());}
+    // public Producto mostrarProductos (Producto producto) {return productoService.listarProductos().get(producto.getId());}
+    public List<Producto> mostrarProductos () {return productoService.listarProductos();}
+
+
+    //sku, nombre, categoria, stock, activo, precio y proveedor
 
 }
