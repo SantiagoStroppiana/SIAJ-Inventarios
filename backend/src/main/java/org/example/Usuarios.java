@@ -2,8 +2,12 @@ package org.example;
 
 import io.javalin.Javalin;
 import siaj.inventarios.controller.UsuarioController;
+import siaj.inventarios.dao.ProductoDAO;
+import siaj.inventarios.dao.ProductoDAOImpl;
 import siaj.inventarios.dao.UsuarioDAOImpl;
 import siaj.inventarios.rutas.RutasUsuario;
+import siaj.inventarios.service.ProductoService;
+import siaj.inventarios.service.ProductoServiceImpl;
 import siaj.inventarios.service.UsuarioService;
 import siaj.inventarios.dao.UsuarioDAO;
 import siaj.inventarios.service.UsuarioServiceImpl;
