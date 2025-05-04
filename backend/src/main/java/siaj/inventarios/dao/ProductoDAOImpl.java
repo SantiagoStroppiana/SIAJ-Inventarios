@@ -73,4 +73,27 @@ public class ProductoDAOImpl implements ProductoDAO {
         }
     }
 
+    @Override
+    public String modificarProducto (Producto producto){
+
+        Session session = HibernateUtil.getSession();
+        String re;
+
+        try{
+            session.beginTransaction();
+            session.merge(producto);
+            session.getTransaction().commit();
+            re= "Producto editado con exito";
+
+        }catch (Exception e) {
+
+            session.getTransaction().rollback();
+            re="Error al editar producto: " + e.getMessage();
+
+            throw new RuntimeException("Erorr al editar producto" + e.getMessage());
+        }finally {
+            session.close();
+        }
+        return re;
+    }
 }

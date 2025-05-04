@@ -24,4 +24,9 @@ public class ProductoController {
         return productoService.crearProducto(producto);
     }
 
+    public String modificarProducto (Producto producto){
+
+        return productoService.modificarProducto(producto);
+    }
+
 }

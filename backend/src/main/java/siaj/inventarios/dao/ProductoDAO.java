@@ -11,5 +11,7 @@ public interface ProductoDAO {
 
 
     boolean buscarSku (String sku);
+    String modificarProducto (Producto producto);
+
 
 }
