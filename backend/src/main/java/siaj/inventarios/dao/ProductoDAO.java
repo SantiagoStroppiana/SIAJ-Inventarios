@@ -6,4 +6,6 @@ import java.util.List;
 public interface ProductoDAO {
 
     List<Producto> listarProductos();
+    String crearProducto(Producto producto);
+
 }

@@ -16,4 +16,8 @@ public class ProductoServiceImpl implements ProductoService {
         return productoDAO.listarProductos();
     }
 
+    @Override
+    public String crearProducto (Producto producto) {
+     return productoDAO.crearProducto(producto);
+    }
 }

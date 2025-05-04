@@ -18,7 +18,7 @@ public class Usuarios {
 
     public static void main(String[] args) {
 
-        Javalin app = Javalin.create().start(7070);
+        Javalin app = Javalin.create().start(7000);
 
         UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
         UsuarioService usuarioService = new UsuarioServiceImpl(usuarioDAO);
