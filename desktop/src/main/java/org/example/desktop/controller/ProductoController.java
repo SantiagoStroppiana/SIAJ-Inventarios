@@ -132,6 +132,55 @@ public class ProductoController implements Initializable {
     @FXML
     public void crearProducto() {
         try {
+
+
+            String sku = txtSku.getText().trim();
+            String nombre = txtNombre.getText().trim();
+            String stockStr = txtStock.getText().trim();
+            String precioStr = txtPrecio.getText().trim();
+
+
+            if (sku.isEmpty() || nombre.isEmpty() ||  stockStr.isEmpty() || precioStr.isEmpty()) {
+                notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
+                return;
+            }
+
+
+            int stock;
+            try {
+                stock = Integer.parseInt(stockStr);
+                if (stock < 0) {
+                    notificar("Stock inválido", "El stock no puede ser negativo.", false);
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                notificar("Error de formato", "El stock debe ser un número entero.", false);
+                return;
+            }
+
+            BigDecimal precio;
+            try {
+                double precioDouble = Double.parseDouble(precioStr);
+                if (precioDouble < 0) {
+                    notificar("Precio inválido", "El precio no puede ser negativo.", false);
+                    return;
+                }
+                precio = BigDecimal.valueOf(precioDouble);
+            } catch (NumberFormatException e) {
+                notificar("Error de formato", "El precio debe ser un número válido.", false);
+                return;
+            }
+            Producto producto = new Producto();
+            producto.setSku(sku);
+            producto.setNombre(nombre);
+            producto.setStock(stock);
+            producto.setPrecio(precio);
+            //producto.setCategoria(producto.getCategoria());
+            producto.setActivo(true);
+            producto.setProveedorid(new Proveedor(1, null, null, null, null, true));
+            producto.setImg(""); // ajustar según tu lógica
+
+            /*
             Producto producto = new Producto();
             producto.setSku(txtSku.getText());
             producto.setNombre(txtNombre.getText());
@@ -142,6 +191,7 @@ public class ProductoController implements Initializable {
             producto.setProveedorid(new Proveedor(1,null,null,null,null,true));
             producto.setImg("");
 
+            */
 
             String json = gson.toJson(producto);
 
