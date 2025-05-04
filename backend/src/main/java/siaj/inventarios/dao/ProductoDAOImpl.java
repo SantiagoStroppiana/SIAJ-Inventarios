@@ -57,10 +57,7 @@ public class ProductoDAOImpl implements ProductoDAO {
         return re;
     }
 
-    @Override
-    public MensajesResultados validaciones(String sku, String nombre, int stock, double precio) {
-        return null;
-    }
+
 
     @Override
     public boolean buscarSku(String sku) {

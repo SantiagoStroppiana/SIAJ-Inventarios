@@ -8,7 +8,8 @@ public interface ProductoDAO {
 
     List<Producto> listarProductos();
     String crearProducto(Producto producto);
-    MensajesResultados validaciones (String sku, String nombre, int stock, double precio);
+
+
     boolean buscarSku (String sku);
 
 }

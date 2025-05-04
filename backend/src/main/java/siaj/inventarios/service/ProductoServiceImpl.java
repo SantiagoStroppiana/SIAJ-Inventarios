@@ -4,6 +4,7 @@ import siaj.inventarios.dao.ProductoDAO;
 import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.model.Producto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ProductoServiceImpl implements ProductoService {
@@ -19,27 +20,18 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public String crearProducto (Producto producto) {
-     return productoDAO.crearProducto(producto);
-    }
+        BigDecimal precio = producto.getPrecio();
+        MensajesResultados mr = validaciones(producto.getSku(), producto.getNombre(), producto.getStock(), precio.doubleValue()/*,categoria*/, producto.isActivo(),producto.getProveedorid().getId());
+       if (mr.isExito()){
+            return productoDAO.crearProducto(producto);
 
-    @Override
-    public MensajesResultados validaciones (String sku, String nombre, int stock, double precio /*categoria,estado y proveedor*/){
-
-
-    if (sku.isEmpty()){
-        return new MensajesResultados(false, "SKU no ingresado");
-    }
-
-    if (!nombre.matches("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]+")) {
-        return new MensajesResultados(true, "El nombre solo puede contener letras, números y espacios." );
+        }else {
+           return mr.getMensaje();
+       }
 
     }
 
-
-    return null;
-    }
-
-    public MensajesResultados validaciones(String sku, String nombre, int stock, double precio, String categoria, String estado, Integer proveedorId) {
+    public MensajesResultados validaciones(String sku, String nombre, int stock, double precio,/* String categoria,*/ boolean estado, Integer proveedorId) {
 
         if (productoDAO.buscarSku(sku)) {
             return new MensajesResultados(false, "Ya existe un producto con ese SKU");
@@ -68,14 +60,12 @@ public class ProductoServiceImpl implements ProductoService {
         if (precio < 0) {
             return new MensajesResultados(false, "El precio no puede ser negativo");
         }
-
+/*
         if (categoria == null ||  categoria.trim().isEmpty()) {
             return new MensajesResultados(false, "Categoría no seleccionada");
         }
+*/
 
-        if (estado == null || estado.trim().isEmpty()) {
-            return new MensajesResultados(false, "Estado no seleccionado");
-        }
 
         if (proveedorId == null || proveedorId <= 0) {
             return new MensajesResultados(false, "Proveedor inválido o no seleccionado");
