@@ -1,6 +1,7 @@
 package siaj.inventarios.dao;
 
 import org.hibernate.Session;
+import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.model.Producto;
 import siaj.inventarios.model.Usuario;
 import siaj.inventarios.util.HibernateUtil;
@@ -55,4 +56,21 @@ public class ProductoDAOImpl implements ProductoDAO {
         }
         return re;
     }
+
+
+
+    @Override
+    public boolean buscarSku(String sku) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Long count = session.createQuery(
+                            "SELECT COUNT(p) FROM Producto p WHERE p.sku = :sku", Long.class)
+                    .setParameter("sku", sku)
+                    .uniqueResult();
+            return count != null && count > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
