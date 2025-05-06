@@ -30,6 +30,17 @@ public class ProductoServiceImpl implements ProductoService {
        }
 
     }
+    @Override
+    public String modificarProducto (Producto producto){
+        BigDecimal precio = producto.getPrecio();
+        MensajesResultados mr = validaciones(producto.getSku(), producto.getNombre(), producto.getStock(), precio.doubleValue()/*,categoria*/, producto.isActivo(),producto.getProveedorid().getId());
+        if (mr.isExito()){
+            return productoDAO.modificarProducto(producto);
+
+        }else {
+            return mr.getMensaje();
+        }
+    }
 
     public MensajesResultados validaciones(String sku, String nombre, int stock, double precio,/* String categoria,*/ boolean estado, Integer proveedorId) {
 
