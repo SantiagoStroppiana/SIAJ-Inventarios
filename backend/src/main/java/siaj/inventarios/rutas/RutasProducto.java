@@ -26,8 +26,19 @@ public class RutasProducto {
             ctx.json(mostrar);
         });
 
+        app.post("/api/crearProducto", ctx -> {
+            Producto producto = ctx.bodyAsClass(Producto.class);
+            String respuesta = productoController.crearProducto(producto);
+            ctx.json(respuesta);
+        });
 
-
+        app.post("/api/modificarProducto", ctx -> {
+            Producto producto = ctx.bodyAsClass(Producto.class);
+            String respuesta = productoController.modificarProducto(producto);
+            ctx.json(respuesta);
+        });
     }
+
+
 
 }

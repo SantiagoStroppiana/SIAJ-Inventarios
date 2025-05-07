@@ -10,7 +10,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
+import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Producto;
+import org.example.desktop.model.Proveedor;
 
 import java.math.BigDecimal;
 import java.net.URI;
@@ -34,19 +36,25 @@ public class ProductoController implements Initializable {
     @FXML private TableColumn<Producto, BigDecimal> precioColumn;
     @FXML private TableColumn<Producto, String> estadoColumn;
     @FXML private TableColumn<Producto, String> proveedorColumn;
-
+    @FXML private Button agregar;
 
     @FXML
     public void mostrarProductos() {
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:7070/api/productos"))
+                    .uri(URI.create("http://localhost:7000/api/productos"))
                     .GET()
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response);
+
             String responseBody = response.body();
+            System.out.println(responseBody);
+
+
+
 
             Producto[] productos = gson.fromJson(responseBody, Producto[].class);
 
@@ -70,6 +78,7 @@ public class ProductoController implements Initializable {
             e.printStackTrace();
             notificar("Error Crítico", e.getMessage(), false);
         }
+
     }
 
     @Override
@@ -86,9 +95,13 @@ public class ProductoController implements Initializable {
             );
         });
 
+        agregar.setOnAction(event -> crearProducto());
+
 
         mostrarProductos();
     }
+
+
 
     private void notificar(String titulo, String mensaje, boolean exito){
         Platform.runLater(() -> {
@@ -107,5 +120,219 @@ public class ProductoController implements Initializable {
     }
 
 
+    @FXML private TextField txtSku;
+    @FXML private TextField txtNombre;
+    @FXML private TextField txtStock;
+    @FXML private TextField txtPrecio;
+    @FXML private SplitMenuButton menuCategoria;
+    @FXML private SplitMenuButton menuEstado;
+    @FXML private SplitMenuButton menuProveedor;
 
-}
+
+    @FXML
+    public void crearProducto() {
+        try {
+
+
+            String sku = txtSku.getText().trim();
+            String nombre = txtNombre.getText().trim();
+            String stockStr = txtStock.getText().trim();
+            String precioStr = txtPrecio.getText().trim();
+
+
+            if (sku.isEmpty() || nombre.isEmpty() ||  stockStr.isEmpty() || precioStr.isEmpty()) {
+                notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
+                return;
+            }
+
+
+            int stock;
+            try {
+                stock = Integer.parseInt(stockStr);
+                if (stock < 0) {
+                    notificar("Stock inválido", "El stock no puede ser negativo.", false);
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                notificar("Error de formato", "El stock debe ser un número entero.", false);
+                return;
+            }
+
+            BigDecimal precio;
+            try {
+                double precioDouble = Double.parseDouble(precioStr);
+                if (precioDouble < 0) {
+                    notificar("Precio inválido", "El precio no puede ser negativo.", false);
+                    return;
+                }
+                precio = BigDecimal.valueOf(precioDouble);
+            } catch (NumberFormatException e) {
+                notificar("Error de formato", "El precio debe ser un número válido.", false);
+                return;
+            }
+            Producto producto = new Producto();
+            producto.setSku(sku);
+            producto.setNombre(nombre);
+            producto.setStock(stock);
+            producto.setPrecio(precio);
+            //producto.setCategoria(producto.getCategoria());
+            producto.setActivo(true);
+            producto.setProveedorid(new Proveedor(1, null, null, null, null, true));
+            producto.setImg(""); // ajustar según tu lógica
+
+            /*
+            Producto producto = new Producto();
+            producto.setSku(txtSku.getText());
+            producto.setNombre(txtNombre.getText());
+            producto.setStock(Integer.parseInt(txtStock.getText()));
+            producto.setPrecio(BigDecimal.valueOf(Double.parseDouble(txtPrecio.getText())));
+            //producto.setCategoria(producto.getCategoria());
+            producto.setActivo(true);
+            producto.setProveedorid(new Proveedor(1,null,null,null,null,true));
+            producto.setImg("");
+
+            */
+
+            String json = gson.toJson(producto);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:7000/api/crearProducto"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            String responseBody = response.body();
+            System.out.println("Código de estado: " + response.statusCode());
+            System.out.println("Respuesta del servidor: " + response.body());
+            System.out.println("Datos enviados al servidor: " + json);
+
+            if (responseBody.trim().startsWith("{")) {
+                MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
+
+                if (resultado.isExito()) {
+                    notificar("Procuto creado", resultado.getMensaje(), true);
+                   // limpiarCampos();
+
+                } else {
+                    notificar("Error crear producto", resultado.getMensaje(), false);
+                }
+            } else {
+                notificar("Respuesta del servidor incorrecta", responseBody, false);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            notificar("Error critico", e.getMessage(), false);
+        }
+    }
+
+   /*
+    private void limpiarCampos() {
+        nombre.setText("");
+        apellido.setText("");
+        email.setText("");
+        password.setText("");
+    }*/
+
+    public void modificarProducto(int id){
+        try {
+
+
+            String sku = txtSku.getText().trim();
+            String nombre = txtNombre.getText().trim();
+            String stockStr = txtStock.getText().trim();
+            String precioStr = txtPrecio.getText().trim();
+
+
+            if (sku.isEmpty() || nombre.isEmpty() ||  stockStr.isEmpty() || precioStr.isEmpty()) {
+                notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
+                return;
+            }
+
+
+            int stock;
+            try {
+                stock = Integer.parseInt(stockStr);
+                if (stock < 0) {
+                    notificar("Stock inválido", "El stock no puede ser negativo.", false);
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                notificar("Error de formato", "El stock debe ser un número entero.", false);
+                return;
+            }
+
+            BigDecimal precio;
+            try {
+                double precioDouble = Double.parseDouble(precioStr);
+                if (precioDouble < 0) {
+                    notificar("Precio inválido", "El precio no puede ser negativo.", false);
+                    return;
+                }
+                precio = BigDecimal.valueOf(precioDouble);
+            } catch (NumberFormatException e) {
+                notificar("Error de formato", "El precio debe ser un número válido.", false);
+                return;
+            }
+            Producto producto = new Producto();
+            producto.setId(id);
+            producto.setSku(sku);
+            producto.setNombre(nombre);
+            producto.setStock(stock);
+            producto.setPrecio(precio);
+            //producto.setCategoria(producto.getCategoria());
+            producto.setActivo(true);
+            producto.setProveedorid(new Proveedor(1, null, null, null, null, true));
+            producto.setImg("");
+
+            /*
+            Producto producto = new Producto();
+            producto.setSku(txtSku.getText());
+            producto.setNombre(txtNombre.getText());
+            producto.setStock(Integer.parseInt(txtStock.getText()));
+            producto.setPrecio(BigDecimal.valueOf(Double.parseDouble(txtPrecio.getText())));
+            //producto.setCategoria(producto.getCategoria());
+            producto.setActivo(true);
+            producto.setProveedorid(new Proveedor(1,null,null,null,null,true));
+            producto.setImg("");
+
+            */
+
+            String json = gson.toJson(producto);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:7000/api/modificarProducto"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            String responseBody = response.body();
+            System.out.println("Código de estado: " + response.statusCode());
+            System.out.println("Respuesta del servidor: " + response.body());
+            System.out.println("Datos enviados al servidor: " + json);
+
+            if (responseBody.trim().startsWith("{")) {
+                MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
+
+                if (resultado.isExito()) {
+                    notificar("Producto modificado", resultado.getMensaje(), true);
+                    // limpiarCampos();
+
+                } else {
+                    notificar("Error al modificar producto", resultado.getMensaje(), false);
+                }
+            } else {
+                notificar("Respuesta del servidor incorrecta", responseBody, false);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            notificar("Error critico", e.getMessage(), false);
+        }
+    }
+
+    }

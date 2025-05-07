@@ -17,6 +17,16 @@ public class ProductoController {
     public List<Producto> mostrarProductos () {return productoService.listarProductos();}
 
 
-    //sku, nombre, categoria, stock, activo, precio y proveedor
+    //sku, nombre, categoria, stock, activo, precio y proveedor VALIDACIONES?
+
+    public String crearProducto (Producto producto) {
+
+        return productoService.crearProducto(producto);
+    }
+
+    public String modificarProducto (Producto producto){
+
+        return productoService.modificarProducto(producto);
+    }
 
 }

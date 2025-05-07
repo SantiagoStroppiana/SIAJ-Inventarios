@@ -10,6 +10,14 @@ public class MensajesResultados {
         this.mensaje = mensaje;
     }
 
+    public void setExito(boolean exito) {
+        this.exito = exito;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
     public boolean isExito() {
         return exito;
     }
