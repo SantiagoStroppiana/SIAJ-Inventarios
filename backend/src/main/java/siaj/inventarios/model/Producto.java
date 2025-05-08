@@ -135,4 +135,14 @@ public class Producto {
     }
 
 
+    @Override
+    public String toString() {
+        return "Producto{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", precio=" + precio +
+                ", sku='" + sku + '\'' +
+                ", proveedor=" + (proveedorid != null ? proveedorid.getRazonSocial() : "null") +
+                '}';
+    }
 }
