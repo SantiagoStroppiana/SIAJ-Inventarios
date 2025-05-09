@@ -119,4 +119,28 @@ public class ProductoDAOImpl implements ProductoDAO {
         return productos;
     }
 
+    @Override
+    public List<Producto> filtrarCategoria(int idCategoria) {
+        Session session = HibernateUtil.getSession();
+        List<Producto> productos = new ArrayList<>();
+
+        try {
+            session.beginTransaction();
+
+            productos = session.createQuery(
+                            "SELECT cp.producto FROM CategoriaProducto cp WHERE cp.categoria.id = :idCategoria", Producto.class)
+                    .setParameter("idCategoria", idCategoria)
+                    .getResultList();
+
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RuntimeException("Error al buscar productos por categoría: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+
+        return productos;
+    }
+
 }
