@@ -21,6 +21,9 @@
         <mapping class="siaj.inventarios.model.Rol"/>
         <mapping class="siaj.inventarios.model.Producto"/>
         <mapping class="siaj.inventarios.model.Proveedor"/>
+        <mapping class="siaj.inventarios.model.CategoriaProducto"/>
+        <mapping class="siaj.inventarios.model.Categoria"/>
+
 
     </session-factory>
 </hibernate-configuration>

@@ -20,6 +20,17 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
+    public List<Producto> filtrarCategoria(int idCategoria) {
+        List<Producto> filtrarCategoria = productoDAO.filtrarCategoria(idCategoria);
+        System.out.println("LISTA DE PRODUCTOS CON CATEGORIA 1\n");
+        for(int i=0; i<filtrarCategoria.size(); i++){
+            System.out.println("Producto "+(i+1)+filtrarCategoria.get(i));
+        }
+        return filtrarCategoria;
+    }
+
+
+    @Override
     public List<Producto> filtrarProveedor(int id) {
         List<Producto> productos = productoDAO.filtrarProveedor(id);
         System.out.println("LISTA DE PRODUCTOS CON PROVEEDOR 1\n");
@@ -34,8 +45,9 @@ public class ProductoServiceImpl implements ProductoService {
         BigDecimal precio = producto.getPrecio();
         MensajesResultados mr = validaciones(producto.getSku(), producto.getNombre(), producto.getStock(), precio.doubleValue()/*,categoria*/, producto.isActivo(),producto.getProveedorid().getId());
        if (mr.isExito()){
-           filtrarProveedor(1);//NO IRIA ACA
+           filtrarCategoria(1);//NO IRIA ACA
            return productoDAO.crearProducto(producto);
+
 
         }else {
            return mr.getMensaje();
