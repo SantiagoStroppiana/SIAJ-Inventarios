@@ -22,35 +22,30 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Override
     public MensajesResultados login(String email, String password) {
 
-        MensajesResultados mensaje;
-
         if(email == null || password == null || email.isEmpty() || password.isEmpty()){
             return  new MensajesResultados(false, "Email o password no pueden estar vacio");
         }
 
-//        Usuario usuario = usuarioDAO.buscarPorEmailyPassword(email, password);
-
         Usuario usuario = usuarioDAO.buscarUsuarioPorEmail(email);
+
+        if(usuario == null){
+            return  new MensajesResultados(false, "Usuario no encontrado");
+        }
 
         if (!BCrypt.checkpw(password, usuario.getPassword())) {
             return new MensajesResultados(false, "Contraseña incorrecta");
         }
 
-        if (usuario == null) {
-            mensaje = new MensajesResultados(false, "Usuario no encontrado");
-            return mensaje;
-        }else{
-            mensaje = new MensajesResultados(true, "Login OK");
-        }
-        return mensaje;
+        return new MensajesResultados(true, "Inicio de sesion correcta");
+
     }
 
     @Override
     public MensajesResultados registrarUsuario(Usuario usuario) {
 
-//        if (usuario.getEmail() == null || !usuario.getEmail().matches("\"^[A-Za-z0-9+_.-]+@(.+)$\"")) {
-//            return new MensajesResultados(false, "El email no es valido");
-//        }
+        if (usuario.getEmail() == null || !usuario.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            return new MensajesResultados(false, "El email no es valido");
+        }
 
         if(usuario.getPassword() == null || usuario.getPassword().length() < 6) {
             return new MensajesResultados(false, "Password debe ser mayor que 6 caracteres");

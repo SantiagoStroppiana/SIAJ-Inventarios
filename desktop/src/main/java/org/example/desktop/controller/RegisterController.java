@@ -52,7 +52,7 @@ public class RegisterController {
             String json = gson.toJson(usuario);
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:7070/api/register"))
+                    .uri(URI.create("http://localhost:7000/api/register"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
