@@ -5,6 +5,7 @@ import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.model.Producto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoServiceImpl implements ProductoService {
@@ -19,11 +20,34 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
+    public List<Producto> filtrarCategoria(int idCategoria) {
+        List<Producto> filtrarCategoria = productoDAO.filtrarCategoria(idCategoria);
+        System.out.println("LISTA DE PRODUCTOS CON CATEGORIA 1\n");
+        for(int i=0; i<filtrarCategoria.size(); i++){
+            System.out.println("Producto "+(i+1)+filtrarCategoria.get(i));
+        }
+        return filtrarCategoria;
+    }
+
+
+    @Override
+    public List<Producto> filtrarProveedor(int id) {
+        List<Producto> productos = productoDAO.filtrarProveedor(id);
+        System.out.println("LISTA DE PRODUCTOS CON PROVEEDOR 1\n");
+        for(int i=1; i<productos.size(); i++){
+            System.out.println("Producto "+(i+1)+productos.get(i));
+        }
+        return productos;
+    }
+
+    @Override
     public String crearProducto (Producto producto) {
         BigDecimal precio = producto.getPrecio();
         MensajesResultados mr = validaciones(producto.getSku(), producto.getNombre(), producto.getStock(), precio.doubleValue()/*,categoria*/, producto.isActivo(),producto.getProveedorid().getId());
        if (mr.isExito()){
-            return productoDAO.crearProducto(producto);
+           filtrarCategoria(1);//NO IRIA ACA
+           return productoDAO.crearProducto(producto);
+
 
         }else {
            return mr.getMensaje();

@@ -3,6 +3,7 @@ package siaj.inventarios.dao;
 import org.hibernate.Session;
 import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.model.Producto;
+import siaj.inventarios.model.Proveedor;
 import siaj.inventarios.model.Usuario;
 import siaj.inventarios.util.HibernateUtil;
 
@@ -96,4 +97,50 @@ public class ProductoDAOImpl implements ProductoDAO {
         }
         return re;
     }
+
+    @Override
+    public List<Producto> filtrarProveedor(int id) {
+        Session session = HibernateUtil.getSession();
+        List<Producto> productos = new ArrayList<>();
+
+        try {
+            session.beginTransaction();
+            productos = session.createQuery("FROM Producto p WHERE p.proveedorid.id = :id", Producto.class)
+                    .setParameter("id", id)
+                    .getResultList();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RuntimeException("Error al buscar productos del proveedor: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+
+        return productos;
+    }
+
+    @Override
+    public List<Producto> filtrarCategoria(int idCategoria) {
+        Session session = HibernateUtil.getSession();
+        List<Producto> productos = new ArrayList<>();
+
+        try {
+            session.beginTransaction();
+
+            productos = session.createQuery(
+                            "SELECT cp.producto FROM CategoriaProducto cp WHERE cp.categoria.id = :idCategoria", Producto.class)
+                    .setParameter("idCategoria", idCategoria)
+                    .getResultList();
+
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RuntimeException("Error al buscar productos por categoría: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+
+        return productos;
+    }
+
 }
