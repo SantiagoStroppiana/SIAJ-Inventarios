@@ -109,9 +109,9 @@ public class LoginController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/productos-view.fxml"));
 
             URL resourceUrl = getClass().getResource("/org/example/desktop/productos-view.fxml");
-            System.out.println("URL del recurso: " + resourceUrl);
+            System.out.println("Recurso: " + resourceUrl);
             if (resourceUrl == null) {
-                System.out.println("¡No se pudo encontrar el recurso!");
+                System.out.println("No se pudo encontrar el recurso");
                 return;
             }
 
@@ -131,9 +131,9 @@ public class LoginController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/register-view.fxml"));
 
             URL resourceUrl = getClass().getResource("/org/example/desktop/register-view.fxml");
-            System.out.println("URL del recurso: " + resourceUrl);
+            System.out.println("Recurso" + resourceUrl);
             if (resourceUrl == null) {
-                System.out.println("¡No se pudo encontrar el recurso!");
+                System.out.println("No se pudo encontrar el recurso");
                 return;
             }
 

@@ -53,9 +53,6 @@ public class ProductoController implements Initializable {
             String responseBody = response.body();
             System.out.println(responseBody);
 
-
-
-
             Producto[] productos = gson.fromJson(responseBody, Producto[].class);
 
             tablaProductos.getItems().clear();
@@ -96,7 +93,6 @@ public class ProductoController implements Initializable {
         });
 
         agregar.setOnAction(event -> crearProducto());
-
 
         mostrarProductos();
     }
@@ -178,7 +174,7 @@ public class ProductoController implements Initializable {
             //producto.setCategoria(producto.getCategoria());
             producto.setActivo(true);
             producto.setProveedorid(new Proveedor(1, null, null, null, null, true));
-            producto.setImg(""); // ajustar según tu lógica
+            producto.setImg("");
 
             /*
             Producto producto = new Producto();
