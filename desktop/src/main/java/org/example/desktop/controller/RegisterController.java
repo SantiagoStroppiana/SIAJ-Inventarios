@@ -1,6 +1,7 @@
 package org.example.desktop.controller;
 
 import com.google.gson.Gson;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -42,59 +43,81 @@ public class RegisterController {
 
     @FXML
     public void registrarse(javafx.event.ActionEvent actionEvent) {
-        try {
-            Usuario usuario = new Usuario();
-            usuario.setNombre(nombre.getText());
-            usuario.setApellido(apellido.getText());
-            usuario.setEmail(email.getText());
-            usuario.setPassword(password.getText());
 
-            String json = gson.toJson(usuario);
+        if(email.getText().isEmpty() || nombre.getText().isEmpty() || apellido.getText().isEmpty() || password.getText().isEmpty()) {
+            notificar("Error", "Por favor, complete todos los campos", false);
+            return;
+        }
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:7070/api/register"))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
-                    .build();
+        new Thread(() -> {
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            try {
+                Usuario usuario = new Usuario();
+                usuario.setNombre(nombre.getText());
+                usuario.setApellido(apellido.getText());
+                usuario.setEmail(email.getText());
+                usuario.setPassword(password.getText());
 
-            String responseBody = response.body();
-            System.out.println("Código de estado: " + response.statusCode());
-            System.out.println("Respuesta del servidor: " + response.body());
-            System.out.println("Datos enviados al servidor: " + json);
+                String json = gson.toJson(usuario);
 
-            if (responseBody.trim().startsWith("{")) {
-                MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create("http://localhost:7000/api/register"))
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(json))
+                        .build();
 
-                if (resultado.isExito()) {
-                    notificar("Registro exitoso", resultado.getMensaje(), true);
-                    limpiarCampos();
-                    irALogin(actionEvent);
-                } else {
-                    notificar("Error al registrarse", resultado.getMensaje(), false);
-                }
-            } else {
-                notificar("Respuesta del servidor incorrecta", responseBody, false);
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                String responseBody = response.body();
+
+                Platform.runLater(() -> {
+                    try{
+                        if (responseBody.trim().startsWith("{")) {
+                            MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
+
+                            if (resultado.isExito()) {
+                                notificar("Registro exitoso", resultado.getMensaje(), true);
+                                limpiarCampos();
+                                irALogin(actionEvent);
+                            } else {
+                                notificar("Error al registrarse", resultado.getMensaje(), false);
+                            }
+                        } else {
+                            notificar("Respuesta del servidor incorrecta", responseBody, false);
+                        }
+
+
+                    } catch (Exception e){
+                        e.printStackTrace();
+                        notificar("Error", "Error al registrar el usuario", false);
+                    }
+
+
+
+                });
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                notificar("Error critico", e.getMessage(), false);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            notificar("Error critico", e.getMessage(), false);
-        }
+        }).start();
+
     }
 
     private void notificar(String titulo, String mensaje, boolean exito){
-        Notifications notificacion = Notifications.create()
-                .title(titulo)
-                .text(mensaje)
-                .position(Pos.TOP_CENTER)
-                .hideAfter(Duration.seconds(4));
-        if (exito) {
-            notificacion.showInformation();
-        }else{
-            notificacion.showError();
-        }
+        Platform.runLater(() -> {
+            Notifications notificacion = Notifications.create()
+                    .title(titulo)
+                    .text(mensaje)
+                    .position(Pos.TOP_CENTER)
+                    .hideAfter(Duration.seconds(4));
+            if (exito) {
+                notificacion.showInformation();
+            }else{
+                notificacion.showError();
+            }
+        });
     }
 
     private void limpiarCampos() {
@@ -111,7 +134,8 @@ public class RegisterController {
             URL resourceUrl = getClass().getResource("/org/example/desktop/login-view.fxml");
             System.out.println("URL del recurso: " + resourceUrl);
             if (resourceUrl == null) {
-                System.out.println("¡No se pudo encontrar el recurso!");
+                System.out.println("No se pudo encontrar el recurso");
+                return;
             }
 
             Parent root = fxmlLoader.load();
@@ -121,6 +145,7 @@ public class RegisterController {
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
+            notificar("Error", "No se pudo cargar la pantalla de productos: " + e.getMessage(), false);
         }
     }
 
