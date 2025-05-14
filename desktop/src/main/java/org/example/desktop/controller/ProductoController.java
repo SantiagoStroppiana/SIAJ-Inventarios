@@ -37,6 +37,7 @@ public class ProductoController implements Initializable {
     @FXML private TableColumn<Producto, String> estadoColumn;
     @FXML private TableColumn<Producto, String> proveedorColumn;
     @FXML private Button agregar;
+    @FXML private Button actualizar;
 
     @FXML
     public void mostrarProductos() {
@@ -96,6 +97,7 @@ public class ProductoController implements Initializable {
         });
 
         agregar.setOnAction(event -> crearProducto());
+        actualizar.setOnAction(event -> cambiarEstado(1));
 
 
         mostrarProductos();
@@ -129,6 +131,59 @@ public class ProductoController implements Initializable {
     @FXML private SplitMenuButton menuProveedor;
 
 
+    @FXML
+    public void cambiarEstado(int id) {
+        try {
+        Producto producto = tablaProductos.getItems().get(id);
+        boolean estado = producto.isActivo();
+
+        if (estado) {
+            producto.setActivo(false);
+        } else {
+            producto.setActivo(true);
+        }
+
+
+
+        String json = gson.toJson(producto);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:7000/api/modificarProducto"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        String responseBody = response.body();
+        System.out.println("Código de estado: " + response.statusCode());
+        System.out.println("Respuesta del servidor: " + response.body());
+        System.out.println("Datos enviados al servidor: " + json);
+
+        if (responseBody.trim().startsWith("{")) {
+            MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
+
+            if (resultado.isExito()) {
+                notificar("Producto modificado", resultado.getMensaje(), true);
+                // limpiarCampos();
+
+            } else {
+                notificar("Error al modificar producto", resultado.getMensaje(), false);
+            }
+        } else {
+            notificar("Respuesta del servidor incorrecta", responseBody, false);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        notificar("Error critico", e.getMessage(), false);
+    }
+
+
+
+
+        mostrarProductos();
+    }
     @FXML
     public void crearProducto() {
         try {
@@ -212,12 +267,17 @@ public class ProductoController implements Initializable {
                 MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
 
                 if (resultado.isExito()) {
-                    notificar("Procuto creado", resultado.getMensaje(), true);
-                   // limpiarCampos();
+                    // Agregar el producto directamente a la tabla
 
+                  /*  Thread.sleep(10000);
+                    mostrarProductos();
+*/
+                    notificar("Producto creado", resultado.getMensaje(), true);
+                    // limpiarCampos(); // si tenés esta función activa
                 } else {
                     notificar("Error crear producto", resultado.getMensaje(), false);
                 }
+
             } else {
                 notificar("Respuesta del servidor incorrecta", responseBody, false);
             }

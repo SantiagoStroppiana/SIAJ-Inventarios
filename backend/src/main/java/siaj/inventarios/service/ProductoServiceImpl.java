@@ -57,7 +57,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public String modificarProducto (Producto producto){
         BigDecimal precio = producto.getPrecio();
-        MensajesResultados mr = validaciones(producto.getSku(), producto.getNombre(), producto.getStock(), precio.doubleValue()/*,categoria*/, producto.isActivo(),producto.getProveedorid().getId());
+        MensajesResultados mr = validacionesModificar(producto.getSku(), producto.getNombre(), producto.getStock(), precio.doubleValue()/*,categoria*/, producto.isActivo(),producto.getProveedorid().getId());
         if (mr.isExito()){
             return productoDAO.modificarProducto(producto);
 
@@ -109,7 +109,45 @@ public class ProductoServiceImpl implements ProductoService {
         return new MensajesResultados(true, "Validación exitosa");
     }
 
+    public MensajesResultados validacionesModificar(String sku, String nombre, int stock, double precio,/* String categoria,*/ boolean estado, Integer proveedorId) {
 
+
+        if (sku == null || sku.trim().isEmpty()) {
+            return new MensajesResultados(false, "SKU no ingresado");
+        }
+
+        if (sku.length() > 20) {
+            return new MensajesResultados(false, "El SKU no puede tener más de 20 caracteres");
+        }
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+            return new MensajesResultados(false, "Nombre no ingresado");
+        }
+
+        if (!nombre.matches("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]+")) {
+            return new MensajesResultados(false, "El nombre solo puede contener letras, números y espacios");
+        }
+
+        if (stock < 0) {
+            return new MensajesResultados(false, "El stock no puede ser negativo");
+        }
+
+        if (precio < 0) {
+            return new MensajesResultados(false, "El precio no puede ser negativo");
+        }
+/*
+        if (categoria == null ||  categoria.trim().isEmpty()) {
+            return new MensajesResultados(false, "Categoría no seleccionada");
+        }
+*/
+
+
+        if (proveedorId == null || proveedorId <= 0) {
+            return new MensajesResultados(false, "Proveedor inválido o no seleccionado");
+        }
+
+        return new MensajesResultados(true, "Validación exitosa");
+    }
 
 
 }
