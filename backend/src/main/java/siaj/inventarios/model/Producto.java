@@ -23,7 +23,7 @@ public class Producto {
     private String sku;
     @Column(name = "activo", nullable=false)
     private boolean activo;
-    @Column(name = "img", nullable=false, length=255)
+    @Column(name = "img",/* nullable=true,*/ length=255)
     private String img;
     @Column(name = "fecha_alta", nullable=false)
     private Date fecha_alta;
