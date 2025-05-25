@@ -2,10 +2,10 @@ package siaj.inventarios.dao;
 
 import org.hibernate.Session;
 
+import siaj.inventarios.model.Rol;
 import siaj.inventarios.model.Usuario;
 import siaj.inventarios.util.HibernateUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDAOImpl implements UsuarioDAO{
@@ -33,17 +33,27 @@ public class UsuarioDAOImpl implements UsuarioDAO{
     }
 
     @Override
-    public void actualizarUsuario(Usuario usuario) {
+    public void actualizarRolAdmin(int idUsuario) {
 
         Session session = HibernateUtil.getSession();
 
         try{
             session.beginTransaction();
+
+            Usuario usuario = session.get(Usuario.class, idUsuario);
+            if(usuario == null){
+                throw new RuntimeException("Usuario no encontrado");
+            }
+
+            Rol rolAdmin = new Rol();
+            rolAdmin.setId(1);
+            usuario.setIdRol(rolAdmin);
+
             session.merge(usuario);
             session.getTransaction().commit();
         }catch (Exception e) {
             session.getTransaction().rollback();
-            throw new RuntimeException("Erorr al actualizar usuario" + e.getMessage());
+            throw new RuntimeException("Erorr al actualizar rol usuario" + e.getMessage());
         }finally {
             session.close();
         }

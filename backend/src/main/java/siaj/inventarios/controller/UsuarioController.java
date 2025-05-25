@@ -22,4 +22,6 @@ public class UsuarioController {
         return usuarioService.login(email, password);
     }
 
+    public MensajesResultados actualizarRol(int idUsuario) { return usuarioService.actualizarRolAdmin(idUsuario); }
+
 }
