@@ -48,7 +48,6 @@ public class ProductoServiceImpl implements ProductoService {
            filtrarCategoria(1);//NO IRIA ACA
            return productoDAO.crearProducto(producto);
 
-
         }else {
            return mr.getMensaje();
        }

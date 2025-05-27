@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
+import org.example.desktop.HelloApplication;
 import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Usuario;
 
@@ -35,6 +36,16 @@ public class LoginController {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
+    private Stage stage;
+    private HelloApplication application;
+
+    public void setMainStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public void setApplication(HelloApplication application) {
+        this.application = application;
+    }
 
     @FXML
     public void iniciarSesion(javafx.event.ActionEvent actionEvent) {
@@ -67,7 +78,9 @@ public class LoginController {
                             MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
                             if (resultado.isExito()) {
                                 notificar("Iniciar sesión exitoso", resultado.getMensaje(), true);
-                                irAProductos(actionEvent);
+
+                                this.application.menuPrincipal(stage);
+
                             } else {
                                 notificar("Incorrecto", resultado.getMensaje(), false);
                             }
@@ -104,27 +117,27 @@ public class LoginController {
         });
     }
 
-    public void irAProductos(javafx.event.ActionEvent actionEvent){
-        try{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/productos-view.fxml"));
-
-            URL resourceUrl = getClass().getResource("/org/example/desktop/productos-view.fxml");
-            System.out.println("Recurso: " + resourceUrl);
-            if (resourceUrl == null) {
-                System.out.println("No se pudo encontrar el recurso");
-                return;
-            }
-
-            Parent root = fxmlLoader.load();
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        }catch (Exception e){
-            e.printStackTrace();
-            notificar("Error", "No se pudo cargar la pantalla de productos: " + e.getMessage(), false);
-        }
-    }
+//    public void irAProductos(javafx.event.ActionEvent actionEvent){
+//        try{
+//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/productos-view.fxml"));
+//
+//            URL resourceUrl = getClass().getResource("/org/example/desktop/productos-view.fxml");
+//            System.out.println("Recurso: " + resourceUrl);
+//            if (resourceUrl == null) {
+//                System.out.println("No se pudo encontrar el recurso");
+//                return;
+//            }
+//
+//            Parent root = fxmlLoader.load();
+//            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+//            Scene scene = new Scene(root);
+//            stage.setScene(scene);
+//            stage.show();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            notificar("Error", "No se pudo cargar la pantalla de productos: " + e.getMessage(), false);
+//        }
+//    }
 
     public void irARegistro(javafx.event.ActionEvent actionEvent) {
         try{
