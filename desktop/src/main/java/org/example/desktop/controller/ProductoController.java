@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
+import org.example.desktop.model.Categoria;
 import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Producto;
 import org.example.desktop.model.Proveedor;
@@ -38,6 +39,9 @@ public class ProductoController implements Initializable {
     @FXML private TableColumn<Producto, String> proveedorColumn;
     @FXML private Button agregar;
     @FXML private Button actualizar;
+    @FXML private SplitMenuButton menuCategorias;
+    @FXML private SplitMenuButton menuProveedor;
+
 
     @FXML
     public void mostrarProductos() {
@@ -79,6 +83,113 @@ public class ProductoController implements Initializable {
 
     }
 
+
+    public void mostrarEstado() {
+
+        try {
+
+            String [] estados ={"Activo","Inactivo"};
+/*
+            for (int i = 0 ; i < estados.length; i++) {
+                MenuItem item = new MenuItem(estados[i]);
+                item.setOnAction(event -> {menuEstado.setText(item.getText());});
+                menuEstado.getItems().add(item);
+            }
+            */
+
+            for (String p : estados) {
+
+                MenuItem item = new MenuItem(p);
+                item.setOnAction(event -> {menuEstado.setText(p);});
+                menuEstado.getItems().add(item);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            notificar("Error Crítico", e.getMessage(), false);
+        }
+
+
+
+
+
+    }
+    public void mostrarProveedores() {
+
+        {
+
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create("http://localhost:7000/api/proveedores"))
+                        .GET()
+                        .build();
+
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                System.out.println(response);
+
+                String responseBody = response.body();
+                System.out.println(responseBody);
+
+                Proveedor[] proveedores = gson.fromJson(responseBody, Proveedor[].class);
+
+                for (Proveedor p : proveedores) {
+
+                    MenuItem item = new MenuItem(p.getRazonSocial());
+                    item.setOnAction(event -> {menuProveedor.setText(p.getRazonSocial());});
+                    menuProveedor.getItems().add(item);
+                }
+
+
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                notificar("Error Crítico", e.getMessage(), false);
+            }
+
+
+
+
+
+        }
+    }
+
+    public void mostrarCategorias() {
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:7000/api/categorias"))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response);
+
+            String responseBody = response.body();
+            System.out.println(responseBody);
+
+            Categoria[] categorias = gson.fromJson(responseBody, Categoria[].class);
+
+            for (Categoria p : categorias) {
+                System.out.println("Categoria: " + p.getNombre());
+                MenuItem item = new MenuItem(p.getNombre());
+                item.setOnAction(event -> {menuCategorias.setText(p.getNombre());});
+                menuCategorias.getItems().add(item);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            notificar("Error Crítico", e.getMessage(), false);
+        }
+
+
+
+
+
+}
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         skuColumn.setCellValueFactory(new PropertyValueFactory<>("sku"));
@@ -97,6 +208,9 @@ public class ProductoController implements Initializable {
         actualizar.setOnAction(event -> cambiarEstado(1));
 
         mostrarProductos();
+        mostrarCategorias();
+        mostrarEstado();
+        mostrarProveedores();
     }
 
 
@@ -124,7 +238,7 @@ public class ProductoController implements Initializable {
     @FXML private TextField txtPrecio;
     @FXML private SplitMenuButton menuCategoria;
     @FXML private SplitMenuButton menuEstado;
-    @FXML private SplitMenuButton menuProveedor;
+ //   @FXML private SplitMenuButton menuProveedor;
 
 
     @FXML
