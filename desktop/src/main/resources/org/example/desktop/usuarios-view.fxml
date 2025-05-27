@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.UsuarioController">
+
+    <left>
+        <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
+    </left>
+
+    <stylesheets>
+        <URL value="@estilos/estilos-globales.css" />
+        <URL value="@estilos/tabla.css" />
+    </stylesheets>
+   <center>
+        <AnchorPane prefHeight="800.0" prefWidth="700.0" BorderPane.alignment="CENTER">
+            <children>
+                <TableView fx:id="tablaUsuarios" layoutX="11.0" layoutY="107.0" prefHeight="675.0" prefWidth="560.0">
+                    <columns>
+                        <TableColumn fx:id="idColumn" prefWidth="68.0" text="ID" />
+                        <TableColumn fx:id="nombreColumn" prefWidth="130.0" text="NOMBRE" />
+                        <TableColumn fx:id="apellidoColumn" prefWidth="119.0" text="APELLIDO" />
+                        <TableColumn fx:id="emailColumn" prefWidth="160.0" text="EMAIL" />
+                        <TableColumn fx:id="rolColumn" prefWidth="84.0" text="ROL" />
+                    </columns>
+                </TableView>
+            </children></AnchorPane>
+   </center>
+</BorderPane>

@@ -75,12 +75,12 @@ public class Usuario {
         this.password = password;
    }
 
-   public Rol getIdRol() {
+    public Rol getRolId() {  // Cambiar aquí
         return rolId;
-   }
+    }
 
-   public void setIdRol(Rol rolId) {
+    public void setRolId(Rol rolId) {  // Y aquí
         this.rolId = rolId;
-   }
+    }
 
 }

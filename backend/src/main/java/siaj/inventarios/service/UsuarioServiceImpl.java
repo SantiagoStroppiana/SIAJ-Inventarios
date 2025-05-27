@@ -61,7 +61,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 
             Rol rolPorDefecto = new Rol();
             rolPorDefecto.setId(2);
-            usuario.setIdRol(rolPorDefecto);
+            usuario.setRolId(rolPorDefecto);
 
             String paswordEncriptada = BCrypt.hashpw(usuario.getPassword(), BCrypt.gensalt());
             usuario.setPassword(paswordEncriptada);

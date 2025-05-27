@@ -47,7 +47,7 @@ public class UsuarioDAOImpl implements UsuarioDAO{
 
             Rol rolAdmin = new Rol();
             rolAdmin.setId(1);
-            usuario.setIdRol(rolAdmin);
+            usuario.setRolId(rolAdmin);
 
             session.merge(usuario);
             session.getTransaction().commit();

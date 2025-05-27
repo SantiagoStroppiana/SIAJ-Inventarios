@@ -20,14 +20,28 @@ public class HelloApplication extends Application {
     private static final double MAIN_HEIGHT = 800;
 
 
-    @Override
-    public void start(Stage stage) throws  IOException{
+//    @Override
+//    public void start(Stage stage) throws  IOException{
+//
+//        try{
+//            login(stage);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
-        try{
-            login(stage);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    public void start(Stage stage) throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("usuarios-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
+
+        stage.setTitle("SIAJ Inventarios");
+        stage.setScene(scene);
+        stage.sizeToScene();
+        stage.show();
+
+
     }
 
     public void login(Stage stage) throws IOException {
@@ -63,7 +77,8 @@ public class HelloApplication extends Application {
 
     public void menuPrincipal(Stage stage) throws IOException {
         try{
-            FXMLLoader fxmlloader = new FXMLLoader(HelloApplication.class.getResource("productos-view.fxml"));
+//            FXMLLoader fxmlloader = new FXMLLoader(HelloApplication.class.getResource("productos-view.fxml"));
+            FXMLLoader fxmlloader = new FXMLLoader(HelloApplication.class.getResource("usuarios-view.fxml"));
             Scene scene = new Scene(fxmlloader.load(), MAIN_WIDTH, MAIN_HEIGHT);
 
             stage.setTitle("SIAJ Inventarios-Menu Principal");
