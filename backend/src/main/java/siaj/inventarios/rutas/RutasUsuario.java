@@ -31,7 +31,7 @@ public class RutasUsuario {
            ctx.json(respuesta);
         });
 
-        app.post("/api/actualizarRol", ctx -> {
+        app.put("/api/actualizarRol", ctx -> {
             Usuario usuario = ctx.bodyAsClass(Usuario.class);
             MensajesResultados respuesta = usuarioController.actualizarRol(usuario.getId());
             ctx.json(respuesta);
