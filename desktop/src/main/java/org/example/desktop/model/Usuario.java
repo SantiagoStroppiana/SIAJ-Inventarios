@@ -2,21 +2,25 @@ package org.example.desktop.model;
 
 public class Usuario {
 
+    private int id;
     private String nombre;
     private String apellido;
     private String email;
     private String password;
-    private Rol roles_id;
+    private Rol rolId;
 
     public Usuario() {}
 
-    public Usuario(String nombre, String apellido, String email, String password, Rol roles_id) {
+    public Usuario(int id, String nombre, String apellido, String email, String password, Rol rolId) {
+        this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
         this.password = password;
-        this.roles_id = roles_id;
+        this.rolId = rolId;
     }
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
     public String getNombre() {
         return nombre;
     }
@@ -41,10 +45,13 @@ public class Usuario {
     public void setPassword(String password) {
         this.password = password;
     }
-    public Rol getRoles_id() {
-        return roles_id;
+    public Rol getRolId() {
+        return rolId;
     }
-    public void setRoles_id(Rol roles_id) {
-        this.roles_id = roles_id;
+    public void setRolId(Rol rolId) {
+        this.rolId = rolId;
+    }
+    public String getNombreRol() {
+        return rolId != null ? rolId.getNombre() : "Sin Rol";
     }
 }

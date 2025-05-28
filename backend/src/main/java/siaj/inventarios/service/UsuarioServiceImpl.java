@@ -61,7 +61,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 
             Rol rolPorDefecto = new Rol();
             rolPorDefecto.setId(2);
-            usuario.setIdRol(rolPorDefecto);
+            usuario.setRolId(rolPorDefecto);
 
             String paswordEncriptada = BCrypt.hashpw(usuario.getPassword(), BCrypt.gensalt());
             usuario.setPassword(paswordEncriptada);
@@ -77,8 +77,16 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
-    public MensajesResultados actualizarUsuario(Usuario usuario) {
-        return new MensajesResultados(false, "Usuario actualizado correctamente");
+    public MensajesResultados actualizarRolAdmin(int idUsuario) {
+
+        try{
+
+            usuarioDAO.actualizarRolAdmin(idUsuario);
+            return new MensajesResultados(true, "Usuario actualizado correctamente");
+        }catch (Exception e){
+            System.out.println("Error al actualizar rol admin" + e.getMessage());
+            return new MensajesResultados(false, "Error al actualizar rol admin" + e.getMessage());
+        }
     }
 
     @Override
