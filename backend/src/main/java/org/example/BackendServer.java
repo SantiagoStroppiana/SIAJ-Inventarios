@@ -2,13 +2,17 @@ package org.example;
 
 import io.javalin.Javalin;
 import siaj.inventarios.controller.ProductoController;
-import siaj.inventarios.controller.ProveedorController;
 import siaj.inventarios.controller.UsuarioController;
-import siaj.inventarios.dao.*;
+import siaj.inventarios.dao.ProductoDAO;
+import siaj.inventarios.dao.ProductoDAOImpl;
+import siaj.inventarios.dao.UsuarioDAO;
+import siaj.inventarios.dao.UsuarioDAOImpl;
 import siaj.inventarios.rutas.RutasProducto;
-import siaj.inventarios.rutas.RutasProveedor;
 import siaj.inventarios.rutas.RutasUsuario;
-import siaj.inventarios.service.*;
+import siaj.inventarios.service.ProductoService;
+import siaj.inventarios.service.ProductoServiceImpl;
+import siaj.inventarios.service.UsuarioService;
+import siaj.inventarios.service.UsuarioServiceImpl;
 
 public class BackendServer {
 
@@ -18,7 +22,6 @@ public class BackendServer {
 
         configurarUsuarios(app);
         configurarProductos(app);
-        configurarProveedores(app);
 
     }
 
@@ -34,13 +37,6 @@ public class BackendServer {
         ProductoService productoService = new ProductoServiceImpl(productoDAO);
         ProductoController productoController = new ProductoController(productoService);
         new RutasProducto(productoController).rutaProducto(app);
-    }
-
-    public static void configurarProveedores(Javalin app) {
-        ProveedorDAO proveedorDAO = new ProveedorDAOImpl();
-        ProveedorService proveedorService = new ProveedorServiceImpl(proveedorDAO);
-        ProveedorController proveedorController = new ProveedorController(proveedorService);
-        new RutasProveedor(proveedorController).rutaProveedor(app);
     }
 
 
