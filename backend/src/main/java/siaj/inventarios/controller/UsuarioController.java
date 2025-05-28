@@ -3,6 +3,8 @@ package siaj.inventarios.controller;
 import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.model.Usuario;
 import siaj.inventarios.service.UsuarioService;
+import java.util.List;
+
 
 public class UsuarioController {
 
@@ -22,4 +24,7 @@ public class UsuarioController {
         return usuarioService.login(email, password);
     }
 
+    public MensajesResultados actualizarRol(int idUsuario) { return usuarioService.actualizarRolAdmin(idUsuario); }
+
+    public List<Usuario> listarUsuarios (){ return usuarioService.listarUsuarios(); }
 }
