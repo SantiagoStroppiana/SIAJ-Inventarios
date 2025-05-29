@@ -8,16 +8,20 @@ public class Proveedor {
     private String telefono;
     private String direccion;
     private boolean activo;
+    private long fecha_alta;
+
+
 
     public Proveedor() {}
 
-    public Proveedor(int id, String razonSocial, String email, String telefono, String direccion, boolean activo) {
+    public Proveedor(int id, String razonSocial, String email, String telefono, String direccion, boolean activo, long fecha_alta) {
         this.id = id;
         this.razonSocial = razonSocial;
         this.email = email;
         this.telefono = telefono;
         this.direccion = direccion;
         this.activo = activo;
+        this.fecha_alta = fecha_alta;
     }
     public int getId() {
         return id;
@@ -56,4 +60,37 @@ public class Proveedor {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
+
+    public long getFecha_alta() {
+        return fecha_alta;
+    }
+
+    @Override
+    public String toString() {
+        return "Proveedor{" +
+                "id=" + id +
+                ", razonSocial='" + razonSocial + '\'' +
+                ", email='" + email + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", direccion='" + direccion + '\'' +
+                ", activo=" + activo +
+                ", fecha_alta=" + fecha_alta +
+                '}';
+    }
+
+    public Proveedor(int id, String razonSocial, String email, String telefono, String direccion, boolean activo) {
+        this.id = id;
+        this.razonSocial = razonSocial;
+        this.email = email;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.activo = activo;
+    }
+
+    public void setFecha_alta(long fecha_alta) {
+        this.fecha_alta = fecha_alta;
+    }
+
+
+
 }
