@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.MenuController">
+
+    <left>
+        <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
+    </left>
+
+    <stylesheets>
+        <URL value="@estilos/estilos-globales.css" />
+        <URL value="@estilos/tabla.css" />
+    </stylesheets>
+   <right>
+      <AnchorPane prefHeight="790.0" prefWidth="999.0" BorderPane.alignment="CENTER">
+         <children>
+             <Button layoutX="81.0" layoutY="200.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2E7D32; -fx-background-radius: 8px;">
+                 <graphic>
+                     <VBox alignment="CENTER" spacing="10">
+                         <children>
+                             <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                     <Image url="@images/majesticons--shopping-cart.png" />
+                                 </image>
+                             </ImageView>
+                             <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Punto de Venta" textFill="WHITE" />
+                         </children>
+                     </VBox>
+                 </graphic>
+             </Button>
+             <Button layoutX="510.0" layoutY="200.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #8D4E2A; -fx-background-radius: 8px;">
+                 <graphic>
+                     <VBox alignment="CENTER" spacing="10">
+                         <children>
+                             <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                     <Image url="@images/weui--contacts-filled.png" />
+                                 </image>
+                             </ImageView>
+                             <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Proveedores" textFill="WHITE" />
+                         </children>
+                     </VBox>
+                 </graphic>
+             </Button>
+             <Button layoutX="295.0" layoutY="200.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #1565C0; -fx-background-radius: 8px;">
+                 <graphic>
+                     <VBox alignment="CENTER" spacing="10">
+                         <children>
+                             <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                     <Image url="@images/mage--package-box-fill.png" />
+                                 </image>
+                             </ImageView>
+                             <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Inventario/Productos" textFill="WHITE" />
+                         </children>
+                     </VBox>
+                 </graphic>
+             </Button>
+             <Button layoutX="724.0" layoutY="200.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F57C00; -fx-background-radius: 8px;">
+                 <graphic>
+                     <VBox alignment="CENTER" spacing="10">
+                         <children>
+                             <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                     <Image url="@images/icomoon-free--stats-bars.png" />
+                                 </image>
+                             </ImageView>
+                             <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Gráfico de Inventario" textFill="WHITE" />
+                         </children>
+                     </VBox>
+                 </graphic>
+             </Button>
+            <Label layoutX="81.0" layoutY="466.0" text="Informacion General" />
+            <Label layoutX="510.0" layoutY="466.0" text="Ultimos movimientos" />
+            <ImageView fitHeight="65.0" fitWidth="87.0" layoutX="81.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/ion--home.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="152.0" layoutY="98.0" text="Bienvenido, " />
+         </children>
+      </AnchorPane>
+   </right>
+</BorderPane>
