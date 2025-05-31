@@ -33,7 +33,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("usuarios-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu-view.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
 
@@ -78,8 +78,7 @@ public class HelloApplication extends Application {
 
     public void menuPrincipal(Stage stage) throws IOException {
         try{
-//            FXMLLoader fxmlloader = new FXMLLoader(HelloApplication.class.getResource("productos-view.fxml"));
-            FXMLLoader fxmlloader = new FXMLLoader(HelloApplication.class.getResource("usuarios-view.fxml"));
+            FXMLLoader fxmlloader = new FXMLLoader(HelloApplication.class.getResource("menu-view.fxml"));
             Scene scene = new Scene(fxmlloader.load(), MAIN_WIDTH, MAIN_HEIGHT);
 
             stage.setTitle("SIAJ Inventarios-Menu Principal");
