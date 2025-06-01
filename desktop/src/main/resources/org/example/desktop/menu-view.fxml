@@ -19,124 +19,85 @@
       <AnchorPane  styleClass="content-pane"  prefHeight="790.0" prefWidth="999.0" stylesheets="@estilos/menu-principal.css" BorderPane.alignment="CENTER">
          <children>
              <HBox layoutX="81.0" layoutY="85.0" alignment="CENTER_LEFT" spacing="15">
-                 <children>
-                     <ImageView fitHeight="65.0" fitWidth="87.0" layoutX="81.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
-                         <image>
-                             <Image url="@images/ion--home.png" />
-                         </image>
-                     </ImageView>
-                     <VBox>
-                         <children>
-                             <Label styleClass="welcome-title" text="Bienvenido, (user)"/>
-                             <Label styleClass="welcome-subtitle" text="Seleccione modulo" />
-                         </children>
-                     </VBox>
-                 </children>
+                 <ImageView fitHeight="65.0" fitWidth="87.0" layoutX="81.0" layoutY="85.0" pickOnBounds="true"
+                            preserveRatio="true">
+                     <Image url="@images/ion--home.png"/>
+                 </ImageView>
+                 <VBox>
+                     <Label styleClass="welcome-title" text="Bienvenido, (user)"/>
+                     <Label styleClass="welcome-subtitle" text="Seleccione modulo"/>
+                 </VBox>
              </HBox>
 
              <Button fx:id="bntPuntoVenta" layoutX="81.0" layoutY="200.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" styleClass="menu-button, punto-venta">
                  <graphic>
                      <VBox alignment="CENTER" spacing="10">
-                         <children>
-                             <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                     <Image url="@images/majesticons--shopping-cart.png" />
-                                 </image>
-                             </ImageView>
-                             <Label styleClass="button-text" text="Punto de Venta" textFill="WHITE" />
-                         </children>
+                         <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                             <Image url="@images/majesticons--shopping-cart.png"/>
+                         </ImageView>
+                         <Label styleClass="button-text" text="Punto de Venta" textFill="WHITE"/>
                      </VBox>
                  </graphic>
              </Button>
              <Button fx:id="btnInventario" layoutX="295.0" layoutY="200.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" styleClass="menu-button, inventario">
                  <graphic>
                      <VBox alignment="CENTER" spacing="10">
-                         <children>
-                             <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                     <Image url="@images/mage--package-box-fill.png" />
-                                 </image>
-                             </ImageView>
-                             <Label styleClass="button-text" text="Inventario/Productos" textFill="WHITE" />
-                         </children>
+                         <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                             <Image url="@images/mage--package-box-fill.png"/>
+                         </ImageView>
+                         <Label styleClass="button-text" text="Inventario/Productos" textFill="WHITE"/>
                      </VBox>
                  </graphic>
              </Button>
              <Button fx:id="btnProveedores" layoutX="510.0" layoutY="200.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" styleClass="menu-button, proveedores">
                  <graphic>
                      <VBox alignment="CENTER" spacing="10">
-                         <children>
-                             <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                     <Image url="@images/weui--contacts-filled.png" />
-                                 </image>
-                             </ImageView>
-                             <Label styleClass="button-text" text="Proveedores" textFill="WHITE" />
-                         </children>
+                         <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                             <Image url="@images/weui--contacts-filled.png"/>
+                         </ImageView>
+                         <Label styleClass="button-text" text="Proveedores" textFill="WHITE"/>
                      </VBox>
                  </graphic>
              </Button>
-             <Button layoutX="724.0" layoutY="200.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" styleClass="menu-button, productos">
+             <Button fx:id="btnGraficos" layoutX="724.0" layoutY="200.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" styleClass="menu-button, productos">
                  <graphic>
                      <VBox alignment="CENTER" spacing="10">
-                         <children>
-                             <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                     <Image url="@images/icomoon-free--stats-bars.png" />
-                                 </image>
-                             </ImageView>
-                             <Label styleClass="button-text" text="Gráfico de Inventario" textFill="WHITE" />
-                         </children>
+                         <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                             <Image url="@images/icomoon-free--stats-bars.png"/>
+                         </ImageView>
+                         <Label styleClass="button-text" text="Gráfico de Inventario" textFill="WHITE"/>
                      </VBox>
                  </graphic>
              </Button>
 
 
              <VBox layoutX="81.0" layoutY="450.0" prefWidth="400.0" styleClass="info-section">
-                 <children>
-                    <Label styleClass="section-header" text="Información General"/>
-                     <VBox styleClass="info-content" spacing="15">
-                         <children>
-                             <HBox styleClass="info-item" alignment="CENTER_LEFT" spacing="15">
-                                 <children>
-                                     <Label styleClass="info-icon, income-icon" text="💰"/>
-                                     <VBox spacing="2">
-                                         <children>
-                                             <Label styleClass="info-label" text="Ingresos hoy"/>
-                                             <Label styleClass="info-value" text="(ingresos fecha)"/>
-                                         </children>
-                                     </VBox>
-                                 </children>
-                             </HBox>
-                             <HBox styleClass="info-item" alignment="CENTER_LEFT" spacing="15">
-                                 <children>
-                                     <Label styleClass="info-icon, sales-icon" text="💰"/>
-                                     <VBox spacing="2">
-                                         <children>
-                                             <Label styleClass="info-label" text="Ventas hoy (fecha)"/>
-                                             <Label styleClass="info-value" text="(numero de ventas)"/>
-                                         </children>
-                                     </VBox>
-                                 </children>
-                             </HBox>
-                         </children>
-                     </VBox>
-                 </children>
+                 <Label styleClass="section-header" text="Información General"/>
+                 <VBox styleClass="info-content" spacing="15">
+                     <HBox styleClass="info-item" alignment="CENTER_LEFT" spacing="15">
+                         <Label styleClass="info-icon, income-icon" text="💰"/>
+                         <VBox spacing="2">
+                             <Label styleClass="info-label" text="Ingresos hoy"/>
+                             <Label styleClass="info-value" text="(ingresos fecha)"/>
+                         </VBox>
+                     </HBox>
+                     <HBox styleClass="info-item" alignment="CENTER_LEFT" spacing="15">
+                         <Label styleClass="info-icon, sales-icon" text="💰"/>
+                         <VBox spacing="2">
+                             <Label styleClass="info-label" text="Ventas hoy (fecha)"/>
+                             <Label styleClass="info-value" text="(numero de ventas)"/>
+                         </VBox>
+                     </HBox>
+                 </VBox>
              </VBox>
 
              <VBox layoutX="510.0" layoutY="450.0" prefWidth="400.0" styleClass="info-section">
-                 <children>
-                     <Label styleClass="section-header" text="Últimos movimientos"/>
-                     <VBox styleClass="info-content" spacing="10">
-                         <children>
-                             <Label styleClass="empty-message" text="No hay movimientos recientes"/>
 
-                         </children>
-                     </VBox>
-                 </children>
-
+                 <Label styleClass="section-header" text="Últimos movimientos"/>
+                 <VBox styleClass="info-content" spacing="10">
+                     <Label styleClass="empty-message" text="No hay movimientos recientes"/>
+                 </VBox>
              </VBox>
-
          </children>
       </AnchorPane>
    </right>
