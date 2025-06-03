@@ -8,8 +8,10 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
+import org.example.desktop.HelloApplication;
 import org.example.desktop.model.Categoria;
 import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Producto;
@@ -41,6 +43,7 @@ public class ProductoController implements Initializable {
     @FXML private Button agregar;
     @FXML private Button actualizar;
     @FXML private Button desactivar;
+    @FXML private Button ver;
     @FXML private SplitMenuButton menuCategorias;
     @FXML private SplitMenuButton menuProveedor;
     private Proveedor proveedorSeleccionado = null;
@@ -233,6 +236,7 @@ public class ProductoController implements Initializable {
         agregar.setOnAction(event -> crearProducto());
         desactivar.setOnAction(event -> cambiarEstado());
         actualizar.setOnAction(event -> actualizarProductos());
+        ver.setOnAction(event -> verProducto());
 
         mostrarProductos();
         mostrarCategorias();
@@ -277,6 +281,60 @@ public class ProductoController implements Initializable {
 
 
 
+    private Stage stage;
+    private HelloApplication application;
+
+    public void setMainStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public void setApplication(HelloApplication application) {
+        this.application = application;
+    }
+    @FXML
+    public void verProducto() {
+        Producto producto = tablaProductos.getSelectionModel().getSelectedItem();
+
+        if (producto == null) {
+            notificar("Seleccionar producto", "Debe seleccionar un producto en la tabla.", false);
+            return;
+        }
+
+        try {
+            producto.setActivo(!producto.isActivo()); // cambiar estado
+
+            String json = gson.toJson(producto);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:7000/api/modificarProducto"))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            String responseBody = response.body();
+
+            if (responseBody.trim().startsWith("{")) {
+                MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
+                if (resultado.isExito()) {
+                    notificar("Producto modificado", resultado.getMensaje(), true);
+                } else {
+                    notificar("Error al modificar producto", resultado.getMensaje(), false);
+                }
+            } else {
+                notificar("Respuesta del servidor incorrecta", responseBody, false);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            notificar("Error crítico", e.getMessage(), false);
+        }
+
+        mostrarProductos(); // refrescar la tabla
+    }
+
+
 
     @FXML
     public void cambiarEstado() {
@@ -295,7 +353,7 @@ public class ProductoController implements Initializable {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:7000/api/modificarProducto"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -514,7 +572,7 @@ public class ProductoController implements Initializable {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:7000/api/modificarProducto"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
