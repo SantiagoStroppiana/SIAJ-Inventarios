@@ -9,6 +9,7 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.example.desktop.controller.LoginController;
+import org.example.desktop.util.StageManager;
 
 import java.io.IOException;
 
@@ -16,119 +17,21 @@ public class HelloApplication extends Application {
 
     private static final double LOGIN_WIDTH = 700;
     private static final double LOGIN_HEIGHT = 500;
-    private static final double MAIN_WIDTH = 1200;
-    private static final double MAIN_HEIGHT = 800;
+
+    //COMENTAR Y MODIFICAR EL OTRO
+    @Override
+    public void start(Stage stage) throws  IOException{
+        StageManager.setPrimaryStage(stage);
+        StageManager.loadScene("/org/example/desktop/login-view.fxml", LOGIN_WIDTH, LOGIN_HEIGHT);
+    }
 
 
 //    @Override
 //    public void start(Stage stage) throws  IOException{
-//
-//        try{
-//            login(stage);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
+//        StageManager.setPrimaryStage(stage);
+    // En las XXXX pongan el nombre de la vista .fxml
+//        StageManager.loadScene("/org/example/desktop/XXXX");
 //    }
-
-    @Override
-    public void start(Stage stage) throws IOException {
-
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("productos-view.fxml"));
-
-        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
-
-        stage.setTitle("SIAJ Inventarios");
-        stage.setScene(scene);
-        stage.sizeToScene();
-        stage.show();
-
-
-    }
-
-    public void login(Stage stage) throws IOException {
-
-        try{
-            FXMLLoader fxmlloader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
-            Scene scene = new Scene(fxmlloader.load(), LOGIN_WIDTH, LOGIN_HEIGHT);
-
-
-//            Object controller = fxmlloader.getController();
-//            if(controller instanceof LoginController){
-//                ((LoginController) controller).setMainStage(stage);
-//                ((LoginController) controller).setApplication(this);
-//            }
-
-            LoginController controller = fxmlloader.getController();
-            controller.setMainStage(stage);
-            controller.setApplication(this);
-
-
-            stage.setTitle("SIAJ Inventarios-Login");
-            stage.setScene(scene);
-            stage.setResizable(false);
-
-            stage.show();
-            centrarEscena(stage);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    public void menuPrincipal(Stage stage) throws IOException {
-        try{
-//            FXMLLoader fxmlloader = new FXMLLoader(HelloApplication.class.getResource("productos-view.fxml"));
-            FXMLLoader fxmlloader = new FXMLLoader(HelloApplication.class.getResource("usuarios-view.fxml"));
-            Scene scene = new Scene(fxmlloader.load(), MAIN_WIDTH, MAIN_HEIGHT);
-
-            stage.setTitle("SIAJ Inventarios-Menu Principal");
-            stage.setScene(scene);
-            stage.setResizable(false);
-
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent event) {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Confirmación de Cierre");
-                    alert.setHeaderText("¿Estás seguro de que deseas cerrar la aplicación?");
-
-                    ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
-
-                    if (result == ButtonType.CANCEL) {
-                        event.consume();
-                    }
-                }
-            });
-
-            stage.show();
-            centrarEscena(stage);
-
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void cambiarVista(Stage stage, String fxmlFile, String titulo){
-        try{
-            FXMLLoader fxmlloader = new FXMLLoader(HelloApplication.class.getResource(fxmlFile));
-            Scene scene = new Scene(fxmlloader.load(), MAIN_WIDTH, MAIN_HEIGHT);
-            stage.setTitle(titulo);
-            stage.setScene(scene);
-            stage.setResizable(false);
-
-            centrarEscena(stage);
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public void centrarEscena(Stage stage) throws IOException {
-        stage.centerOnScreen();
-    }
-
-
 
     public static void main(String[] args) {
         launch();

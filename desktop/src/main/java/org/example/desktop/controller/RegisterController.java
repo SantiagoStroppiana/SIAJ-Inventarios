@@ -15,6 +15,7 @@ import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Usuario;
+import org.example.desktop.util.StageManager;
 
 import java.net.URI;
 import java.net.URL;
@@ -25,10 +26,6 @@ import java.net.http.HttpResponse;
 
 public class RegisterController {
 
-    @FXML
-    private Button registro;
-    @FXML
-    private Button iniciarSesion;
     @FXML
     private TextField nombre;
     @FXML
@@ -129,20 +126,7 @@ public class RegisterController {
 
     public void irALogin(javafx.event.ActionEvent actionEvent) {
         try{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/login-view.fxml"));
-
-            URL resourceUrl = getClass().getResource("/org/example/desktop/login-view.fxml");
-            System.out.println("URL del recurso: " + resourceUrl);
-            if (resourceUrl == null) {
-                System.out.println("No se pudo encontrar el recurso");
-                return;
-            }
-
-            Parent root = fxmlLoader.load();
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+            StageManager.loadScene("/org/example/desktop/login-view.fxml", 700, 500);
         }catch (Exception e){
             e.printStackTrace();
             notificar("Error", "No se pudo cargar la pantalla de productos: " + e.getMessage(), false);
