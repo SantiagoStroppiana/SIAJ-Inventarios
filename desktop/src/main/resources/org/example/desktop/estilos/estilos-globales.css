@@ -18,6 +18,7 @@
     -fx-text-tertiary: #999999;
 }
 
+
 /* Estilo específico para el sidebar */
 .side-menu {
     -fx-background-color: #121212; /* Color más oscuro para el sidebar */
