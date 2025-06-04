@@ -4,10 +4,14 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
@@ -17,13 +21,13 @@ import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Producto;
 import org.example.desktop.model.Proveedor;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class ProductoController implements Initializable {
@@ -236,7 +240,13 @@ public class ProductoController implements Initializable {
         agregar.setOnAction(event -> crearProducto());
         desactivar.setOnAction(event -> cambiarEstado());
         actualizar.setOnAction(event -> actualizarProductos());
-        ver.setOnAction(event -> verProducto());
+        ver.setOnAction(event -> {
+            try {
+                verProducto();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         mostrarProductos();
         mostrarCategorias();
@@ -292,46 +302,31 @@ public class ProductoController implements Initializable {
         this.application = application;
     }
     @FXML
-    public void verProducto() {
+    public void verProducto() throws IOException {
         Producto producto = tablaProductos.getSelectionModel().getSelectedItem();
 
         if (producto == null) {
             notificar("Seleccionar producto", "Debe seleccionar un producto en la tabla.", false);
-            return;
+        } else {
+
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/producto-detalle-view.fxml"));
+
+
+            Parent root = fxmlLoader.load();
+
+            ProductoDetalleController controller = fxmlLoader.getController();
+            controller.setProducto(producto);
+            controller.cargarProducto();
+
+            Stage stage = new Stage(); // Esto NO usa StageManager
+            stage.setScene(new Scene(root, 800, 550));
+            stage.setTitle("Detalle de Producto");
+            stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés
+            stage.showAndWait();
+
         }
 
-        try {
-            producto.setActivo(!producto.isActivo()); // cambiar estado
-
-            String json = gson.toJson(producto);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:7000/api/modificarProducto"))
-                    .header("Content-Type", "application/json")
-                    .PUT(HttpRequest.BodyPublishers.ofString(json))
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            String responseBody = response.body();
-
-            if (responseBody.trim().startsWith("{")) {
-                MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
-                if (resultado.isExito()) {
-                    notificar("Producto modificado", resultado.getMensaje(), true);
-                } else {
-                    notificar("Error al modificar producto", resultado.getMensaje(), false);
-                }
-            } else {
-                notificar("Respuesta del servidor incorrecta", responseBody, false);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            notificar("Error crítico", e.getMessage(), false);
-        }
-
-        mostrarProductos(); // refrescar la tabla
     }
 
 
