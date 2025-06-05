@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="600.0" prefWidth="210.0" spacing="10" styleClass="side-menu" stylesheets="@estilos/estilos-globales.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="600.0" prefWidth="210.0" spacing="10" styleClass="side-menu" stylesheets="@estilos/estilos-globales.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.SideMenuController" >
 
     <padding>
         <Insets bottom="15" left="15" right="15" top="15" />
@@ -23,7 +23,7 @@
 
     <Separator />
 
-    <Button fx:id="dashboardBtn" maxWidth="Infinity" text="Inicio">
+    <Button fx:id="dashboardBtn" maxWidth="Infinity" text="Menú Principal" onAction="#irMenuPrincipal">
         <styleClass>
             <String fx:value="button-primary" />
             <String fx:value="button" />
@@ -33,7 +33,7 @@
         </font>
     </Button>
 
-    <Button fx:id="productsBtn" maxWidth="Infinity" text="Productos">
+    <Button fx:id="productsBtn" maxWidth="Infinity" text="Productos" onAction="#irProductos">
         <styleClass>
             <String fx:value="button-primary" />
             <String fx:value="button" />
@@ -43,7 +43,7 @@
         </font>
     </Button>
 
-    <Button fx:id="ordersBtn" maxWidth="Infinity" text="Proveedores">
+    <Button fx:id="ordersBtn" maxWidth="Infinity" text="Proveedores" onAction="#irProveedores">
         <styleClass>
             <String fx:value="button-primary" />
             <String fx:value="button" />
@@ -53,7 +53,7 @@
         </font>
     </Button>
 
-    <Button fx:id="reportsBtn" maxWidth="Infinity" text="Reportes/Graficos">
+    <Button fx:id="reportsBtn" maxWidth="Infinity" text="Reportes/Graficos" onAction="#irReportes">
         <styleClass>
             <String fx:value="button-primary" />
             <String fx:value="button" />
@@ -63,7 +63,7 @@
         </font>
     </Button>
 
-    <Button fx:id="settingsBtn" maxWidth="Infinity" text="Punto de VENTA">
+    <Button fx:id="settingsBtn" maxWidth="Infinity" text="Punto de VENTA" onAction="#irPuntoVenta">
         <styleClass>
             <String fx:value="button-primary" />
             <String fx:value="button" />
@@ -72,19 +72,19 @@
             <Font name="System Bold" size="12.0" />
         </font>
     </Button>
-   <Button fx:id="settingsBtn1" layoutX="25.0" layoutY="307.0" maxWidth="Infinity" text="Usuarios">
-      <styleClass>
-         <String fx:value="button-primary" />
-         <String fx:value="button" />
-      </styleClass>
-      <font>
-         <Font name="System Bold" size="12.0" />
-      </font>
-   </Button>
+    <Button fx:id="settingsBtn1" layoutX="25.0" layoutY="307.0" maxWidth="Infinity" text="Usuarios" onAction="#irUsuarios">
+        <styleClass>
+            <String fx:value="button-primary" />
+            <String fx:value="button" />
+        </styleClass>
+        <font>
+            <Font name="System Bold" size="12.0" />
+        </font>
+    </Button>
 
     <Region prefHeight="185.0" prefWidth="180.0" VBox.vgrow="ALWAYS" />
 
-    <Button fx:id="logoutBtn" maxWidth="Infinity" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Cerrar Sesión">
+    <Button fx:id="logoutBtn" maxWidth="Infinity" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Cerrar Sesión" onAction="#logout">
         <font>
             <Font name="System Bold" size="12.0" />
         </font>
