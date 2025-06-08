@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane prefHeight="620.0" prefWidth="901.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.ProductoDetalleController">
+
+    <!-- Sidebar izquierdo: lo dejamos tal cual -->
+    <left>
+        <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
+    </left>
+
+    <!-- Estilos -->
+    <stylesheets>
+        <URL value="@estilos/estilos-globales.css" />
+        <URL value="@estilos/tabla.css" />
+    </stylesheets>
+
+    <!-- Contenido principal centrado -->
+    <center>
+        <AnchorPane prefHeight="594.0" prefWidth="593.0" BorderPane.alignment="CENTER">
+            <children>
+
+                <!-- Botón: Modificar -->
+                <Button fx:id="modificar" layoutX="349.0" layoutY="469.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Modificar" />
+
+                <!-- Botón: Guardar -->
+                <Button fx:id="guardar" layoutX="471.0" layoutY="469.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Guardar" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+
+
+                <!-- Datos del producto, centrados horizontalmente (ajustado con layoutX) -->
+                <TextField fx:id="txtSku" layoutX="330.0" layoutY="83.0" prefHeight="38.0" prefWidth="230.0" promptText="SKU" />
+                <Label layoutX="210.0" layoutY="97.0" text="SKU" textFill="WHITE">
+                    <font><Font name="System Bold" size="12.0" /></font>
+                </Label>
+
+                <TextField fx:id="txtNombre" layoutX="330.0" layoutY="129.0" prefHeight="38.0" prefWidth="230.0" promptText="Nombre producto" />
+                <Label layoutX="210.0" layoutY="138.0" text="Nombre Producto" textFill="WHITE">
+                    <font><Font name="System Bold" size="12.0" /></font>
+                </Label>
+
+                <TextField fx:id="txtStock" layoutX="330.0" layoutY="174.0" prefHeight="38.0" prefWidth="230.0" promptText="Stock" />
+                <Label layoutX="210.0" layoutY="186.0" text="Stock" textFill="WHITE">
+                    <font><Font name="System Bold" size="12.0" /></font>
+                </Label>
+
+                <TextField fx:id="txtPrecio" layoutX="330.0" layoutY="220.0" prefHeight="38.0" prefWidth="230.0" promptText="Precio" />
+                <Label layoutX="210.0" layoutY="229.0" text="Precio" textFill="WHITE">
+                    <font><Font name="System Bold" size="12.0" /></font>
+                </Label>
+
+                <SplitMenuButton fx:id="menuCategorias" layoutX="330.0" layoutY="268.0" prefHeight="30.0" prefWidth="230.0" text="Categorias" />
+                <Label layoutX="210.0" layoutY="273.0" text="Categorias" textFill="WHITE">
+                    <font><Font name="System Bold" size="12.0" /></font>
+                </Label>
+
+                <SplitMenuButton fx:id="menuEstado" layoutX="330.0" layoutY="309.0" prefHeight="30.0" prefWidth="230.0" text="Estado" />
+                <Label layoutX="210.0" layoutY="314.0" text="Estado" textFill="WHITE">
+                    <font><Font name="System Bold" size="12.0" /></font>
+                </Label>
+
+                <SplitMenuButton fx:id="menuProveedor" layoutX="330.0" layoutY="350.0" prefHeight="30.0" prefWidth="230.0" text="Proveedor" />
+                <Label layoutX="210.0" layoutY="360.0" text="Proveedor" textFill="WHITE">
+                    <font><Font name="System Bold" size="12.0" /></font>
+                </Label>
+
+            </children>
+        </AnchorPane>
+    </center>
+</BorderPane>

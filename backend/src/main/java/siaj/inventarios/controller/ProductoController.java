@@ -1,5 +1,6 @@
 package siaj.inventarios.controller;
 
+import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.model.Producto;
 import siaj.inventarios.service.ProductoService;
 
@@ -19,12 +20,12 @@ public class ProductoController {
 
     //sku, nombre, categoria, stock, activo, precio y proveedor VALIDACIONES?
 
-    public String crearProducto (Producto producto) {
+    public MensajesResultados crearProducto (Producto producto) {
 
         return productoService.crearProducto(producto);
     }
 
-    public String modificarProducto (Producto producto){
+    public MensajesResultados modificarProducto (Producto producto){
 
         return productoService.modificarProducto(producto);
     }
