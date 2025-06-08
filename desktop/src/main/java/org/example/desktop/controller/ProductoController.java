@@ -498,7 +498,7 @@ public class ProductoController implements Initializable {
         password.setText("");
     }*/
 
-    public void modificarProducto(int id){
+/*    public void modificarProducto(int id){
         try {
 
 
@@ -549,19 +549,6 @@ public class ProductoController implements Initializable {
             producto.setProveedorid(new Proveedor(1, null, null, null, null, true));
             producto.setImg("");
 
-            /*
-            Producto producto = new Producto();
-            producto.setSku(txtSku.getText());
-            producto.setNombre(txtNombre.getText());
-            producto.setStock(Integer.parseInt(txtStock.getText()));
-            producto.setPrecio(BigDecimal.valueOf(Double.parseDouble(txtPrecio.getText())));
-            //producto.setCategoria(producto.getCategoria());
-            producto.setActivo(true);
-            producto.setProveedorid(new Proveedor(1,null,null,null,null,true));
-            producto.setImg("");
-
-            */
-
             String json = gson.toJson(producto);
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -595,6 +582,6 @@ public class ProductoController implements Initializable {
             e.printStackTrace();
             notificar("Error critico", e.getMessage(), false);
         }
-    }
+    }*/
 
     }

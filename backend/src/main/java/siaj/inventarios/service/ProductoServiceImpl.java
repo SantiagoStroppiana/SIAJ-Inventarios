@@ -41,7 +41,7 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public String crearProducto (Producto producto) {
+    public MensajesResultados crearProducto (Producto producto) {
         BigDecimal precio = producto.getPrecio();
         MensajesResultados mr = validaciones(producto.getSku(), producto.getNombre(), producto.getStock(), precio.doubleValue()/*,categoria*/, producto.isActivo(),producto.getProveedorid().getId());
        if (mr.isExito()){
@@ -49,19 +49,20 @@ public class ProductoServiceImpl implements ProductoService {
            return productoDAO.crearProducto(producto);
 
         }else {
-           return mr.getMensaje();
-       }
 
+       }
+        return new MensajesResultados(false, "Error al querer crear el producto");
     }
     @Override
-    public String modificarProducto (Producto producto){
+    public MensajesResultados modificarProducto (Producto producto){
         BigDecimal precio = producto.getPrecio();
-        MensajesResultados mr = validacionesModificar(producto.getSku(), producto.getNombre(), producto.getStock(), precio.doubleValue()/*,categoria*/, producto.isActivo(),producto.getProveedorid().getId());
+        MensajesResultados mr = validacionesModificar(producto.getId(), producto.getSku(), producto.getNombre(), producto.getStock(), precio.doubleValue()/*,categoria*/, producto.isActivo(),producto.getProveedorid().getId());
         if (mr.isExito()){
             return productoDAO.modificarProducto(producto);
 
         }else {
-            return mr.getMensaje();
+
+            return mr;
         }
     }
 
@@ -108,9 +109,11 @@ public class ProductoServiceImpl implements ProductoService {
         return new MensajesResultados(true, "Validación exitosa");
     }
 
-    public MensajesResultados validacionesModificar(String sku, String nombre, int stock, double precio,/* String categoria,*/ boolean estado, Integer proveedorId) {
-
-
+    public MensajesResultados validacionesModificar(int id, String sku, String nombre, int stock, double precio,/* String categoria,*/ boolean estado, Integer proveedorId) {
+        Producto productoConSku = productoDAO.buscarPorSku(sku);
+        if (productoConSku != null && productoConSku.getId() != id) {
+            return new MensajesResultados(false, "Ya existe un producto con ese SKU");
+        }
         if (sku == null || sku.trim().isEmpty()) {
             return new MensajesResultados(false, "SKU no ingresado");
         }

@@ -23,8 +23,12 @@
         <AnchorPane prefHeight="594.0" prefWidth="593.0" BorderPane.alignment="CENTER">
             <children>
 
-                <!-- Botón único: Modificar -->
+                <!-- Botón: Modificar -->
                 <Button fx:id="modificar" layoutX="349.0" layoutY="469.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Modificar" />
+
+                <!-- Botón: Guardar -->
+                <Button fx:id="guardar" layoutX="471.0" layoutY="469.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Guardar" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+
 
                 <!-- Datos del producto, centrados horizontalmente (ajustado con layoutX) -->
                 <TextField fx:id="txtSku" layoutX="330.0" layoutY="83.0" prefHeight="38.0" prefWidth="230.0" promptText="SKU" />

@@ -35,7 +35,7 @@ public class ProductoDAOImpl implements ProductoDAO {
     }
 
     @Override
-    public String crearProducto (Producto producto){
+    public MensajesResultados crearProducto (Producto producto){
 
         Session session = HibernateUtil.getSession();
         String re;
@@ -44,18 +44,20 @@ public class ProductoDAOImpl implements ProductoDAO {
             session.beginTransaction();
             session.persist(producto);
             session.getTransaction().commit();
-            re= "Producto registtrado con exito";
+            return new MensajesResultados(true, "Producto registrado con exito");
+//            re= "Producto registtrado con exito";
 
         }catch (Exception e) {
 
             session.getTransaction().rollback();
-            re="Error al crear producto: " + e.getMessage();
+            return new MensajesResultados(false, "Error al crear producto: " + e.getMessage());
+//            re="Error al crear producto: " + e.getMessage();
 
-            throw new RuntimeException("Erorr al crear producto" + e.getMessage());
+//            throw new RuntimeException("Erorr al crear producto" + e.getMessage());
         }finally {
             session.close();
         }
-        return re;
+//        return re;
     }
 
 
@@ -75,7 +77,21 @@ public class ProductoDAOImpl implements ProductoDAO {
     }
 
     @Override
-    public String modificarProducto (Producto producto){
+    public Producto buscarPorSku(String sku) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "FROM Producto p WHERE p.sku = :sku", Producto.class)
+                    .setParameter("sku", sku)
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    @Override
+    public MensajesResultados modificarProducto (Producto producto){
 
         Session session = HibernateUtil.getSession();
         String re;
@@ -84,18 +100,20 @@ public class ProductoDAOImpl implements ProductoDAO {
             session.beginTransaction();
             session.merge(producto);
             session.getTransaction().commit();
-            re= "Producto editado con exito";
+            return new MensajesResultados(true, "Producto Modificado con exito");
+//            re= "Producto editado con exito";
 
         }catch (Exception e) {
 
             session.getTransaction().rollback();
-            re="Error al editar producto: " + e.getMessage();
+            return new MensajesResultados(false, "Error al modificar producto: " + e.getMessage());
+//            re="Error al editar producto: " + e.getMessage();
 
-            throw new RuntimeException("Erorr al editar producto" + e.getMessage());
+//            throw new RuntimeException("Erorr al editar producto" + e.getMessage());
         }finally {
             session.close();
         }
-        return re;
+//        return re;
     }
 
     @Override
