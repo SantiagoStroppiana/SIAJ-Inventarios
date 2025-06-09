@@ -13,6 +13,7 @@ import org.controlsfx.control.Notifications;
 import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Producto;
 import org.example.desktop.model.Proveedor;
+import org.example.desktop.util.VariablesEntorno;
 
 import java.math.BigDecimal;
 import java.net.URI;
@@ -169,7 +170,7 @@ public class ProductoDetalleController {
             String json = gson.toJson(producto2);
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:7000/api/modificarProducto"))
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/modificarProducto"))
                     .header("Content-Type", "application/json")
                     .PUT(HttpRequest.BodyPublishers.ofString(json))
                     .build();
@@ -235,7 +236,7 @@ public class ProductoDetalleController {
 
             try {
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create("http://localhost:7000/api/proveedores"))
+                        .uri(URI.create(VariablesEntorno.getServerURL() + "/api/proveedores"))
                         .GET()
                         .build();
 
