@@ -1,25 +1,19 @@
 package org.example.desktop.controller;
 
 import com.google.gson.Gson;
+import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
-import org.example.desktop.HelloApplication;
 import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Usuario;
 import org.example.desktop.util.StageManager;
+import org.example.desktop.util.VariablesEntorno;
 
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -30,6 +24,7 @@ public class LoginController {
     private TextField email;
     @FXML
     private TextField password;
+
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
@@ -51,7 +46,7 @@ public class LoginController {
                 String json = gson.toJson(usuario);
 
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create("http://localhost:7000/api/login"))
+                        .uri(URI.create(VariablesEntorno.getServerURL() + "/api/login"))
                         .header("Content-Type", "application/json")
                         .POST(HttpRequest.BodyPublishers.ofString(json))
                         .build();
@@ -113,8 +108,5 @@ public class LoginController {
             notificar("Error", "No se pudo cargar la pantalla de registro: " + e.getMessage(), false);
         }
     }
-
-
-
 
 }

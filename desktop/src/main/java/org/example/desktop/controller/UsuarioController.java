@@ -13,6 +13,7 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.model.Usuario;
+import org.example.desktop.util.VariablesEntorno;
 
 import java.net.URI;
 import java.net.URL;
@@ -40,7 +41,7 @@ public class UsuarioController implements Initializable {
 
         try{
           HttpRequest request = HttpRequest.newBuilder()
-                  .uri(URI.create("http://localhost:7000/api/usuarios"))
+                  .uri(URI.create(VariablesEntorno.getServerURL() + "/api/usuarios"))
                   .GET()
                   .build();
 
@@ -101,7 +102,7 @@ public class UsuarioController implements Initializable {
                                 String json = gson.toJson(usuarioRequest);
 
                                 HttpRequest request = HttpRequest.newBuilder()
-                                        .uri(URI.create("http://localhost:7000/api/actualizarRol"))
+                                        .uri(URI.create(VariablesEntorno.getServerURL() + "/api/actualizarRol"))
                                         .header("Content-Type", "application/json")
                                         .PUT(HttpRequest.BodyPublishers.ofString(json))
                                         .build();
