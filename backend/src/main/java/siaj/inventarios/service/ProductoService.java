@@ -9,11 +9,11 @@ public interface ProductoService {
 
     List<Producto> listarProductos();
 
-    String crearProducto(Producto producto);
+    MensajesResultados crearProducto(Producto producto);
 
     MensajesResultados validaciones (String sku, String nombre, int stock, double precio,/* String categoria,*/ boolean estado, Integer proveedorId);
 
-    String modificarProducto(Producto producto);
+    MensajesResultados modificarProducto(Producto producto);
 
     List<Producto> filtrarProveedor(int id);
 

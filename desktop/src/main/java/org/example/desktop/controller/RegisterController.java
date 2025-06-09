@@ -16,6 +16,7 @@ import org.controlsfx.control.Notifications;
 import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Usuario;
 import org.example.desktop.util.StageManager;
+import org.example.desktop.util.VariablesEntorno;
 
 import java.net.URI;
 import java.net.URL;
@@ -58,7 +59,7 @@ public class RegisterController {
                 String json = gson.toJson(usuario);
 
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create("http://localhost:7000/api/register"))
+                        .uri(URI.create(VariablesEntorno.getServerURL() + "/api/register"))
                         .header("Content-Type", "application/json")
                         .POST(HttpRequest.BodyPublishers.ofString(json))
                         .build();

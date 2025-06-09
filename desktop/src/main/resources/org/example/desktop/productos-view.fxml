@@ -47,6 +47,7 @@
             <Button fx:id="agregar" layoutX="14.0" layoutY="593.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Agregar" />
             <Button fx:id="actualizar" layoutX="163.0" layoutY="593.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Actualizar" />
             <Button fx:id="desactivar" layoutX="163.0" layoutY="654.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Desactivar" />
+             <Button fx:id="ver" layoutX="14.0" layoutY="654.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Ver" />
             <TextField fx:id="txtPrecio" layoutX="127.0" layoutY="371.0" prefHeight="38.0" prefWidth="150.0" promptText="Precio" />
             <SplitMenuButton fx:id="menuCategorias" layoutX="126.0" layoutY="419.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Categorias">
               <items>

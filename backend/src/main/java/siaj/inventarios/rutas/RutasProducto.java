@@ -28,13 +28,13 @@ public class RutasProducto {
 
         app.post("/api/crearProducto", ctx -> {
             Producto producto = ctx.bodyAsClass(Producto.class);
-            String respuesta = productoController.crearProducto(producto);
+            MensajesResultados respuesta = productoController.crearProducto(producto);
             ctx.json(respuesta);
         });
 
-        app.post("/api/modificarProducto", ctx -> {
+        app.put("/api/modificarProducto", ctx -> {
             Producto producto = ctx.bodyAsClass(Producto.class);
-            String respuesta = productoController.modificarProducto(producto);
+            MensajesResultados respuesta = productoController.modificarProducto(producto);
             ctx.json(respuesta);
         });
     }

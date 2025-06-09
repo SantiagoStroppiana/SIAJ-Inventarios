@@ -4,17 +4,25 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
+import org.example.desktop.HelloApplication;
 import org.example.desktop.model.Categoria;
 import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Producto;
 import org.example.desktop.model.Proveedor;
+import org.example.desktop.util.VariablesEntorno;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URL;
@@ -39,8 +47,14 @@ public class ProductoController implements Initializable {
     @FXML private TableColumn<Producto, String> proveedorColumn;
     @FXML private Button agregar;
     @FXML private Button actualizar;
+    @FXML private Button desactivar;
+    @FXML private Button ver;
     @FXML private SplitMenuButton menuCategorias;
     @FXML private SplitMenuButton menuProveedor;
+    private Proveedor proveedorSeleccionado = null;
+    private Boolean estadoSeleccionado = null;
+
+
 
 
     @FXML
@@ -48,7 +62,7 @@ public class ProductoController implements Initializable {
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:7000/api/productos"))
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/productos"))
                     .GET()
                     .build();
 
@@ -97,10 +111,20 @@ public class ProductoController implements Initializable {
             }
             */
 
-            for (String p : estados) {
+            /*for (String p : estados) {
 
                 MenuItem item = new MenuItem(p);
                 item.setOnAction(event -> {menuEstado.setText(p);});
+                menuEstado.getItems().add(item);
+            }*/
+
+            for (String estado : estados) {
+                MenuItem item = new MenuItem(estado);
+                item.setOnAction(event -> {
+                    menuEstado.setText(estado);
+                    // Asigno true si es "Activo", false si es "Inactivo"
+                    estadoSeleccionado = estado.equals("Activo");
+                });
                 menuEstado.getItems().add(item);
             }
 
@@ -121,7 +145,7 @@ public class ProductoController implements Initializable {
 
             try {
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create("http://localhost:7000/api/proveedores"))
+                        .uri(URI.create(VariablesEntorno.getServerURL() + "/api/proveedores"))
                         .GET()
                         .build();
 
@@ -133,10 +157,20 @@ public class ProductoController implements Initializable {
 
                 Proveedor[] proveedores = gson.fromJson(responseBody, Proveedor[].class);
 
+
+                /*
                 for (Proveedor p : proveedores) {
 
                     MenuItem item = new MenuItem(p.getRazonSocial());
                     item.setOnAction(event -> {menuProveedor.setText(p.getRazonSocial());});
+                    menuProveedor.getItems().add(item);
+                }*/
+                for (Proveedor p : proveedores) {
+                    MenuItem item = new MenuItem(p.getRazonSocial());
+                    item.setOnAction(event -> {
+                        menuProveedor.setText(p.getRazonSocial());
+                        proveedorSeleccionado = p;  // guardo el proveedor seleccionado
+                    });
                     menuProveedor.getItems().add(item);
                 }
 
@@ -159,7 +193,7 @@ public class ProductoController implements Initializable {
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:7000/api/categorias"))
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/categorias"))
                     .GET()
                     .build();
 
@@ -184,10 +218,6 @@ public class ProductoController implements Initializable {
             notificar("Error Crítico", e.getMessage(), false);
         }
 
-
-
-
-
 }
 
     @Override
@@ -205,14 +235,21 @@ public class ProductoController implements Initializable {
         });
 
         agregar.setOnAction(event -> crearProducto());
-        actualizar.setOnAction(event -> cambiarEstado(1));
+        desactivar.setOnAction(event -> cambiarEstado());
+        actualizar.setOnAction(event -> actualizarProductos());
+        ver.setOnAction(event -> {
+            try {
+                verProducto();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         mostrarProductos();
         mostrarCategorias();
         mostrarEstado();
         mostrarProveedores();
     }
-
 
 
     private void notificar(String titulo, String mensaje, boolean exito){
@@ -241,59 +278,95 @@ public class ProductoController implements Initializable {
  //   @FXML private SplitMenuButton menuProveedor;
 
 
+    public void actualizarProductos() {
+        mostrarProductos(); // refrescar la tabla
+    }
+
+
+
+
+    private Stage stage;
+    private HelloApplication application;
+
+    public void setMainStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public void setApplication(HelloApplication application) {
+        this.application = application;
+    }
     @FXML
-    public void cambiarEstado(int id) {
+    public void verProducto() throws IOException {
+        Producto producto = tablaProductos.getSelectionModel().getSelectedItem();
+
+        if (producto == null) {
+            notificar("Seleccionar producto", "Debe seleccionar un producto en la tabla.", false);
+        } else {
+
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/producto-detalle-view.fxml"));
+
+
+            Parent root = fxmlLoader.load();
+
+            ProductoDetalleController controller = fxmlLoader.getController();
+            controller.setProducto(producto);
+            controller.cargarProducto();
+
+            Stage stage = new Stage(); // Esto NO usa StageManager
+            stage.setScene(new Scene(root, 800, 550));
+            stage.setTitle("Detalle de Producto");
+            stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés
+            stage.setOnCloseRequest(event -> {mostrarProductos();});
+            stage.showAndWait();
+
+        }
+
+    }
+
+    @FXML
+    public void cambiarEstado() {
+        Producto producto = tablaProductos.getSelectionModel().getSelectedItem();
+
+        if (producto == null) {
+            notificar("Seleccionar producto", "Debe seleccionar un producto en la tabla.", false);
+            return;
+        }
+
         try {
-        Producto producto = tablaProductos.getItems().get(id);
-        boolean estado = producto.isActivo();
+            producto.setActivo(!producto.isActivo()); // cambiar estado
 
-        if (estado) {
-            producto.setActivo(false);
-        } else {
-            producto.setActivo(true);
-        }
+            String json = gson.toJson(producto);
 
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/modificarProducto"))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
 
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        String json = gson.toJson(producto);
+            String responseBody = response.body();
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:7000/api/modificarProducto"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        String responseBody = response.body();
-        System.out.println("Código de estado: " + response.statusCode());
-        System.out.println("Respuesta del servidor: " + response.body());
-        System.out.println("Datos enviados al servidor: " + json);
-
-        if (responseBody.trim().startsWith("{")) {
-            MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
-
-            if (resultado.isExito()) {
-                notificar("Producto modificado", resultado.getMensaje(), true);
-                // limpiarCampos();
-
+            if (responseBody.trim().startsWith("{")) {
+                MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
+                if (resultado.isExito()) {
+                    notificar("Producto modificado", resultado.getMensaje(), true);
+                } else {
+                    notificar("Error al modificar producto", resultado.getMensaje(), false);
+                }
             } else {
-                notificar("Error al modificar producto", resultado.getMensaje(), false);
+                notificar("Respuesta del servidor incorrecta", responseBody, false);
             }
-        } else {
-            notificar("Respuesta del servidor incorrecta", responseBody, false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            notificar("Error crítico", e.getMessage(), false);
         }
 
-    } catch (Exception e) {
-        e.printStackTrace();
-        notificar("Error critico", e.getMessage(), false);
+        mostrarProductos(); // refrescar la tabla
     }
 
-
-
-
-        mostrarProductos();
-    }
     @FXML
     public void crearProducto() {
         try {
@@ -335,33 +408,29 @@ public class ProductoController implements Initializable {
                 notificar("Error de formato", "El precio debe ser un número válido.", false);
                 return;
             }
+
+            if (proveedorSeleccionado == null) {
+                notificar("Error", "Debe seleccionar un proveedor.", false);
+                return;
+            }
+            if (estadoSeleccionado == null) {
+                notificar("Error", "Debe seleccionar un estado.", false);
+                return;
+            }
             Producto producto = new Producto();
             producto.setSku(sku);
             producto.setNombre(nombre);
             producto.setStock(stock);
             producto.setPrecio(precio);
-            //producto.setCategoria(producto.getCategoria());
-            producto.setActivo(true);
-            producto.setProveedorid(new Proveedor(1, null, null, null, null, true));
+            producto.setActivo(estadoSeleccionado);
+            producto.setProveedorid(proveedorSeleccionado);
             producto.setImg("");
-
-            /*
-            Producto producto = new Producto();
-            producto.setSku(txtSku.getText());
-            producto.setNombre(txtNombre.getText());
-            producto.setStock(Integer.parseInt(txtStock.getText()));
-            producto.setPrecio(BigDecimal.valueOf(Double.parseDouble(txtPrecio.getText())));
-            //producto.setCategoria(producto.getCategoria());
-            producto.setActivo(true);
-            producto.setProveedorid(new Proveedor(1,null,null,null,null,true));
-            producto.setImg("");
-
-            */
+            producto.setFecha_alta(System.currentTimeMillis());
 
             String json = gson.toJson(producto);
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:7000/api/crearProducto"))
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crearProducto"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
@@ -382,6 +451,8 @@ public class ProductoController implements Initializable {
                   /*  Thread.sleep(10000);
                     mostrarProductos();
 */
+                    mostrarProductos();
+
                     notificar("Producto creado", resultado.getMensaje(), true);
                     // limpiarCampos(); // si tenés esta función activa
                 } else {
@@ -398,111 +469,5 @@ public class ProductoController implements Initializable {
         }
     }
 
-   /*
-    private void limpiarCampos() {
-        nombre.setText("");
-        apellido.setText("");
-        email.setText("");
-        password.setText("");
-    }*/
-
-    public void modificarProducto(int id){
-        try {
-
-
-            String sku = txtSku.getText().trim();
-            String nombre = txtNombre.getText().trim();
-            String stockStr = txtStock.getText().trim();
-            String precioStr = txtPrecio.getText().trim();
-
-
-            if (sku.isEmpty() || nombre.isEmpty() ||  stockStr.isEmpty() || precioStr.isEmpty()) {
-                notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
-                return;
-            }
-
-
-            int stock;
-            try {
-                stock = Integer.parseInt(stockStr);
-                if (stock < 0) {
-                    notificar("Stock inválido", "El stock no puede ser negativo.", false);
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                notificar("Error de formato", "El stock debe ser un número entero.", false);
-                return;
-            }
-
-            BigDecimal precio;
-            try {
-                double precioDouble = Double.parseDouble(precioStr);
-                if (precioDouble < 0) {
-                    notificar("Precio inválido", "El precio no puede ser negativo.", false);
-                    return;
-                }
-                precio = BigDecimal.valueOf(precioDouble);
-            } catch (NumberFormatException e) {
-                notificar("Error de formato", "El precio debe ser un número válido.", false);
-                return;
-            }
-            Producto producto = new Producto();
-            producto.setId(id);
-            producto.setSku(sku);
-            producto.setNombre(nombre);
-            producto.setStock(stock);
-            producto.setPrecio(precio);
-            //producto.setCategoria(producto.getCategoria());
-            producto.setActivo(true);
-            producto.setProveedorid(new Proveedor(1, null, null, null, null, true));
-            producto.setImg("");
-
-            /*
-            Producto producto = new Producto();
-            producto.setSku(txtSku.getText());
-            producto.setNombre(txtNombre.getText());
-            producto.setStock(Integer.parseInt(txtStock.getText()));
-            producto.setPrecio(BigDecimal.valueOf(Double.parseDouble(txtPrecio.getText())));
-            //producto.setCategoria(producto.getCategoria());
-            producto.setActivo(true);
-            producto.setProveedorid(new Proveedor(1,null,null,null,null,true));
-            producto.setImg("");
-
-            */
-
-            String json = gson.toJson(producto);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:7000/api/modificarProducto"))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            String responseBody = response.body();
-            System.out.println("Código de estado: " + response.statusCode());
-            System.out.println("Respuesta del servidor: " + response.body());
-            System.out.println("Datos enviados al servidor: " + json);
-
-            if (responseBody.trim().startsWith("{")) {
-                MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
-
-                if (resultado.isExito()) {
-                    notificar("Producto modificado", resultado.getMensaje(), true);
-                    // limpiarCampos();
-
-                } else {
-                    notificar("Error al modificar producto", resultado.getMensaje(), false);
-                }
-            } else {
-                notificar("Respuesta del servidor incorrecta", responseBody, false);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            notificar("Error critico", e.getMessage(), false);
-        }
-    }
 
     }

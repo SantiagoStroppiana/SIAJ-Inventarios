@@ -25,7 +25,6 @@ public class HelloApplication extends Application {
         StageManager.loadScene("/org/example/desktop/login-view.fxml", LOGIN_WIDTH, LOGIN_HEIGHT);
     }
 
-
 //    @Override
 //    public void start(Stage stage) throws  IOException{
 //        StageManager.setPrimaryStage(stage);

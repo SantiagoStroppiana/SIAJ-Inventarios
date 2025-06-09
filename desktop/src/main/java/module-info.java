@@ -9,6 +9,7 @@ module org.example.desktop {
     requires java.desktop;
     requires java.net.http;
     requires com.google.gson;
+    requires java.dotenv;
 
     opens org.example.desktop.controller  to javafx.fxml;
     opens org.example.desktop.model to com.google.gson, javafx.base;

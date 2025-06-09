@@ -11,6 +11,7 @@ import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Proveedor;
+import org.example.desktop.util.VariablesEntorno;
 
 
 import java.net.URI;
@@ -46,7 +47,7 @@ public class ProveedorController implements Initializable {
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:7000/api/proveedores"))
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/proveedores"))
                     .GET()
                     .build();
 
@@ -147,12 +148,10 @@ public class ProveedorController implements Initializable {
                 proveedor.setActivo(true);
             }
 
-
-
             String json = gson.toJson(proveedor);
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:7000/api/modificarProveedor"))
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/modificarProveedor"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
@@ -184,8 +183,6 @@ public class ProveedorController implements Initializable {
         }
 
 
-
-
         mostrarProveedores();
     }
     @FXML
@@ -198,11 +195,11 @@ public class ProveedorController implements Initializable {
             String telefono = txtTelefono.getText().trim();
             String email = txtEmail.getText().trim();
             String direccion = txtDireccion.getText().trim();
-            String activo = txtActivo.getText().trim();
+            boolean activo = true;
             String fecha_alta = txtFecha_Alta.getText().trim();
 
 
-            if (id == null || razonsocial.isEmpty() ||  telefono.isEmpty() || email.isEmpty() || direccion.isEmpty() || activo.isEmpty() || fecha_alta.isEmpty()) {
+            if (id == null || razonsocial.isEmpty() ||  telefono.isEmpty() || email.isEmpty() || direccion.isEmpty() || fecha_alta.isEmpty()) {
                 notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
                 return;
             }
@@ -264,7 +261,7 @@ public class ProveedorController implements Initializable {
             String json = gson.toJson(proveedor);
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:7000/api/crearProveedor"))
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crearProveedor"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
@@ -361,7 +358,7 @@ public class ProveedorController implements Initializable {
             String json = gson.toJson(proveedor);
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:7000/api/modificarProveedor"))
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/actualizarProveedor"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();

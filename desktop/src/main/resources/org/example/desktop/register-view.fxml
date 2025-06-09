@@ -36,7 +36,7 @@
          </image>
       </ImageView>
 
-      <Label styleClass="form-title" text="Iniciar Sesión">
+      <Label styleClass="form-title" text="Registrarse">
 
       </Label>
 
@@ -67,7 +67,7 @@
             </children>
          </VBox>
    
-         <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#registrarse" prefHeight="45.0" styleClass="primary-button" text="Iniciar Sesión">
+         <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#registrarse" prefHeight="45.0" styleClass="primary-button" text="Registrarse">
             <VBox.margin>
                <Insets top="10.0" />
             </VBox.margin>
