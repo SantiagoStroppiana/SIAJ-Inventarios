@@ -81,12 +81,12 @@ public class ProveedorController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        //idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         razonSocialColumn.setCellValueFactory(new PropertyValueFactory<>("razonSocial"));
         telefonoColumn.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         direccionColumn.setCellValueFactory(new PropertyValueFactory<>("direccion"));
         activoColumn.setCellValueFactory(new PropertyValueFactory<>("activo"));
-        fecha_altaColumn.setCellValueFactory(new PropertyValueFactory<>("fecha_alta"));
+        //fecha_altaColumn.setCellValueFactory(new PropertyValueFactory<>("fecha_alta"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
 
 
@@ -190,22 +190,23 @@ public class ProveedorController implements Initializable {
         try {
 
 
-            Integer id = Integer.valueOf(txtId.getText().trim());
+            //Integer id = Integer.valueOf(txtId.getText().trim());
             String razonsocial = txtRazonSocial.getText().trim();
             String telefono = txtTelefono.getText().trim();
             String email = txtEmail.getText().trim();
             String direccion = txtDireccion.getText().trim();
             boolean activo = true;
-            String fecha_alta = txtFecha_Alta.getText().trim();
+            //String fecha_alta = txtFecha_Alta.getText().trim();
 
 
-            if (id == null || razonsocial.isEmpty() ||  telefono.isEmpty() || email.isEmpty() || direccion.isEmpty() || fecha_alta.isEmpty()) {
+
+            if (/*id == null ||*/ razonsocial.isEmpty() ||  telefono.isEmpty() || email.isEmpty() || direccion.isEmpty() /*|| fecha_alta.isEmpty()*/) {
                 notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
                 return;
             }
 
 
-            int idstr;
+            /*int idstr;
             try {
                 idstr = Integer.parseInt(String.valueOf(id));
                 if (id < 0) {
@@ -215,7 +216,7 @@ public class ProveedorController implements Initializable {
             } catch (NumberFormatException e) {
                 notificar("Error de formato", "El ID debe ser un número entero.", false);
                 return;
-            }
+            }*/
 
             String razonSocialstr;
             try {
@@ -231,7 +232,7 @@ public class ProveedorController implements Initializable {
             }
             Proveedor proveedor = new Proveedor();
 
-            proveedor.setId(id);
+            //proveedor.setId(id);
 
             proveedor.setRazonSocial(razonsocial);
 
@@ -243,7 +244,7 @@ public class ProveedorController implements Initializable {
 
             proveedor.setEmail(email);
 
-
+            proveedor.setFecha_alta(System.currentTimeMillis());
 
             /*
             Producto producto = new Producto();
@@ -282,6 +283,7 @@ public class ProveedorController implements Initializable {
                   /*  Thread.sleep(10000);
                     mostrarProveedores();
 */
+                    mostrarProveedores();
                     notificar("Proveedor creado", resultado.getMensaje(), true);
                     // limpiarCampos(); // si tenés esta función activa
                 } else {

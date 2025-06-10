@@ -25,10 +25,10 @@ public class ProveedorServiceImpl implements ProveedorService {
         Proveedor proveedor = proveedorDAO.buscarProveedorPorEmail(email);
 
         if (proveedor == null) {
-            mensaje = new MensajesResultados(false,"El proveedor no existe");
+            mensaje = new MensajesResultados(true,"El proveedor no existe");
             return mensaje;
         }else{
-            mensaje = new MensajesResultados(true,"El proveedor ya existe");
+            mensaje = new MensajesResultados(false,"El proveedor ya existe");
         }
         return mensaje;
     }
@@ -54,7 +54,8 @@ public class ProveedorServiceImpl implements ProveedorService {
     }
     @Override
     public MensajesResultados actualizarProveedor(Proveedor proveedor){
-        return new MensajesResultados(false,"El proveedor fue actualizado correctamente");
+        proveedorDAO.actualizarProveedor(proveedor);
+        return new MensajesResultados(true,"El proveedor fue actualizado correctamente");
 
     }
     @Override
