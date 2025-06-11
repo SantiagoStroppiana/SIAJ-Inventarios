@@ -61,7 +61,8 @@ public class LoginController {
                             if (resultado.isExito()) {
                                 notificar("Iniciar sesión exitoso", resultado.getMensaje(), true);
 
-                                StageManager.loadScene("/org/example/desktop/productos-view.fxml", 1200, 800);
+//                                StageManager.loadScene("/org/example/desktop/productos-view.fxml", 1200, 800);
+                                StageManager.loadScene("/org/example/desktop/menu-view.fxml", 1600, 900);
 
                             } else {
                                 notificar("Incorrecto", resultado.getMensaje(), false);
