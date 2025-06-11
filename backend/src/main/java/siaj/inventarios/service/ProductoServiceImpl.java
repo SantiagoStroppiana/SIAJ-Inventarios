@@ -49,9 +49,10 @@ public class ProductoServiceImpl implements ProductoService {
            return productoDAO.crearProducto(producto);
 
         }else {
-
+           return mr;
+           //return new MensajesResultados(false, "Error al querer crear el producto");
        }
-        return new MensajesResultados(false, "Error al querer crear el producto");
+
     }
     @Override
     public MensajesResultados modificarProducto (Producto producto){
