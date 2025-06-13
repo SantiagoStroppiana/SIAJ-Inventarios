@@ -214,6 +214,22 @@
 .button-danger:pressed {
     -fx-background-color: linear-gradient(to bottom, #d32f2f, #c62828);
 }
+/* Botón modificar (Naranja oscuro) */
+.button-modify {
+    -fx-background-color: linear-gradient(to bottom, #fb8c00, #ef6c00);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(251, 140, 0, 0.4), 5, 0, 0, 2);
+}
+
+.button-modify:hover {
+    -fx-background-color: linear-gradient(to bottom, #ffa726, #f57c00);
+    -fx-effect: dropshadow(gaussian, rgba(251, 140, 0, 0.6), 8, 0, 0, 3);
+}
+
+.button-modify:pressed {
+    -fx-background-color: linear-gradient(to bottom, #ef6c00, #e65100);
+}
+
 
 /* Botón de información (Ver) */
 .button-info {
@@ -230,6 +246,23 @@
 .button-info:pressed {
     -fx-background-color: linear-gradient(to bottom, #f57c00, #ef6c00);
 }
+
+/* Botón para Categoría (Amarillo pastel suave) */
+.button-categoria {
+    -fx-background-color: linear-gradient(to bottom, #fffde7, #fff9c4);
+    -fx-text-fill: black;
+    -fx-effect: dropshadow(gaussian, rgba(255, 249, 196, 0.3), 4, 0, 0, 1.5);
+}
+
+.button-categoria:hover {
+    -fx-background-color: linear-gradient(to bottom, #fff9c4, #fff59d);
+    -fx-effect: dropshadow(gaussian, rgba(255, 249, 196, 0.5), 6, 0, 0, 2.5);
+}
+
+.button-categoria:pressed {
+    -fx-background-color: linear-gradient(to bottom, #fff59d, #ffe082);
+}
+
 
 /* ===== SIDEBAR ===== */
 .side-menu {

@@ -89,8 +89,9 @@
 
                 <!-- Botones con orden correcto -->
                 <Button fx:id="agregar" layoutX="20.0" layoutY="450.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="AGREGAR" styleClass="button-primary" />
+                <Button fx:id="ver" layoutX="20.0" layoutY="570.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="MODIFICAR" styleClass="button-modify" />
                 <Button fx:id="actualizar" layoutX="20.0" layoutY="510.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="ACTUALIZAR" styleClass="button-secondary" />
-                <Button fx:id="desactivar" layoutX="20.0" layoutY="570.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="DESACTIVAR" styleClass="button-danger" />
+                <Button fx:id="desactivar" layoutX="20.0" layoutY="630.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="DESACTIVAR" styleClass="button-danger" />
             </children>
         </AnchorPane>
     </center>
