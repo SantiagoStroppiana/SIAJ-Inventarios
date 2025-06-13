@@ -3,6 +3,7 @@ package siaj.inventarios.rutas;
 import io.javalin.Javalin;
 import siaj.inventarios.controller.CategoriaController;
 import siaj.inventarios.controller.ProductoController;
+import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.model.Categoria;
 import siaj.inventarios.model.Producto;
 
@@ -23,21 +24,21 @@ public class RutasCategoria {
             List<Categoria> mostrar = categoriaController.mostrarCategorias();
             ctx.json(mostrar);
         });
-/*
-        app.post("/api/crearProducto", ctx -> {
-            Producto producto = ctx.bodyAsClass(Producto.class);
-            String respuesta = productoController.crearProducto(producto);
+
+        app.post("/api/crearCategoria", ctx -> {
+            Categoria categoria = ctx.bodyAsClass(Categoria.class);
+            MensajesResultados respuesta = categoriaController.crearCategoria(categoria);
             ctx.json(respuesta);
         });
 
-        app.post("/api/modificarProducto", ctx -> {
-            Producto producto = ctx.bodyAsClass(Producto.class);
-            String respuesta = productoController.modificarProducto(producto);
+        app.put("/api/modificarCategoria", ctx -> {
+            Categoria categoria = ctx.bodyAsClass(Categoria.class);
+            MensajesResultados respuesta = categoriaController.modificarCategoria(categoria);
             ctx.json(respuesta);
         });
-    }*/
+    }
 
 
 
 
-}}
+}

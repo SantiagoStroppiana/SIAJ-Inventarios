@@ -7,7 +7,7 @@
 
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.ProveedorController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.ProveedorController">
 
     <left>
         <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
@@ -89,8 +89,9 @@
 
                 <!-- Botones con orden correcto -->
                 <Button fx:id="agregar" layoutX="20.0" layoutY="450.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="AGREGAR" styleClass="button-primary" />
+                <Button fx:id="ver" layoutX="20.0" layoutY="570.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="MODIFICAR" styleClass="button-modify" />
                 <Button fx:id="actualizar" layoutX="20.0" layoutY="510.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="ACTUALIZAR" styleClass="button-secondary" />
-                <Button fx:id="desactivar" layoutX="20.0" layoutY="570.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="DESACTIVAR" styleClass="button-danger" />
+                <Button fx:id="desactivar" layoutX="20.0" layoutY="630.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="DESACTIVAR" styleClass="button-danger" />
             </children>
         </AnchorPane>
     </center>

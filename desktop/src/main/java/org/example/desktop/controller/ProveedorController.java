@@ -3,17 +3,24 @@ package org.example.desktop.controller;
 import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.model.MensajesResultados;
+import org.example.desktop.model.Producto;
 import org.example.desktop.model.Proveedor;
 import org.example.desktop.util.VariablesEntorno;
 
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
@@ -41,6 +48,8 @@ public class ProveedorController implements Initializable {
 
     @FXML private Button agregar;
     @FXML private Button actualizar;
+    @FXML private Button desactivar;
+    @FXML private Button ver;
 
     @FXML
     public void mostrarProveedores() {
@@ -100,8 +109,15 @@ public class ProveedorController implements Initializable {
         });*/
 
         agregar.setOnAction(event -> crearProveedor());
-        actualizar.setOnAction(event -> cambiarEstado(1));
-
+        desactivar.setOnAction(event -> cambiarEstado());
+        actualizar.setOnAction(event -> mostrarProveedores());
+        ver.setOnAction(event -> {
+            try {
+                verProveedor();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         mostrarProveedores();
     }
 
@@ -137,9 +153,10 @@ public class ProveedorController implements Initializable {
 
 
     @FXML
-    public void cambiarEstado(int id) {
+    public void cambiarEstado() {
+        Proveedor proveedor = tablaProveedores.getSelectionModel().getSelectedItem();
+
         try {
-            Proveedor proveedor = tablaProveedores.getItems().get(id);
             boolean estado = proveedor.isActivo();
 
             if (estado) {
@@ -153,7 +170,7 @@ public class ProveedorController implements Initializable {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(VariablesEntorno.getServerURL() + "/api/modificarProveedor"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -246,25 +263,13 @@ public class ProveedorController implements Initializable {
 
             proveedor.setFecha_alta(System.currentTimeMillis());
 
-            /*
-            Producto producto = new Producto();
-            producto.setSku(txtSku.getText());
-            producto.setNombre(txtNombre.getText());
-            producto.setStock(Integer.parseInt(txtStock.getText()));
-            producto.setPrecio(BigDecimal.valueOf(Double.parseDouble(txtPrecio.getText())));
-            //producto.setCategoria(producto.getCategoria());
-            producto.setActivo(true);
-            producto.setProveedorid(new Proveedor(1,null,null,null,null,true));
-            producto.setImg("");
-
-            */
 
             String json = gson.toJson(proveedor);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crearProveedor"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -307,6 +312,36 @@ public class ProveedorController implements Initializable {
         email.setText("");
         password.setText("");
     }*/
+
+
+    @FXML
+    public void verProveedor() throws IOException {
+        Proveedor proveedor = tablaProveedores.getSelectionModel().getSelectedItem();
+
+        if (proveedor == null) {
+            notificar("Seleccionar proveedor", "Debe seleccionar un proveedor en la tabla.", false);
+        } else {
+
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/proveedor-detalle-view.fxml"));
+
+
+            Parent root = fxmlLoader.load();
+
+            ProveedorDetalleController controller = fxmlLoader.getController();
+            controller.setProveedor(proveedor);
+            controller.cargarProveedor();
+
+            Stage stage = new Stage(); // Esto NO usa StageManager
+            stage.setScene(new Scene(root, 800, 550));
+            stage.setTitle("Detalle de Proveedor");
+            stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés
+            stage.setOnCloseRequest(event -> {mostrarProveedores();});
+            stage.showAndWait();
+
+        }
+
+    }
 
     public void modificarProveedor(int id){
         try {
@@ -362,7 +397,7 @@ public class ProveedorController implements Initializable {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(VariablesEntorno.getServerURL() + "/api/actualizarProveedor"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());

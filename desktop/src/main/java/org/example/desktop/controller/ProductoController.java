@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -30,6 +31,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProductoController implements Initializable {
 
@@ -49,10 +52,13 @@ public class ProductoController implements Initializable {
     @FXML private Button actualizar;
     @FXML private Button desactivar;
     @FXML private Button ver;
-    @FXML private SplitMenuButton menuCategorias;
-    @FXML private SplitMenuButton menuProveedor;
+    @FXML private Button categorias;
+    @FXML private ComboBox<String> menuCategorias;
+    @FXML private ComboBox<String> menuEstado;
+    @FXML private ComboBox<Proveedor> menuProveedor;
     private Proveedor proveedorSeleccionado = null;
     private Boolean estadoSeleccionado = null;
+    private static final Logger logger = Logger.getLogger(ProductoController.class.getName());
 
 
 
@@ -99,98 +105,73 @@ public class ProductoController implements Initializable {
 
 
     public void mostrarEstado() {
-
         try {
+            String[] estados = { "Activo", "Inactivo" };
 
-            String [] estados ={"Activo","Inactivo"};
-/*
-            for (int i = 0 ; i < estados.length; i++) {
-                MenuItem item = new MenuItem(estados[i]);
-                item.setOnAction(event -> {menuEstado.setText(item.getText());});
-                menuEstado.getItems().add(item);
-            }
-            */
-
-            /*for (String p : estados) {
-
-                MenuItem item = new MenuItem(p);
-                item.setOnAction(event -> {menuEstado.setText(p);});
-                menuEstado.getItems().add(item);
-            }*/
-
+            menuEstado.getItems().clear();
             for (String estado : estados) {
-                MenuItem item = new MenuItem(estado);
-                item.setOnAction(event -> {
-                    menuEstado.setText(estado);
-                    // Asigno true si es "Activo", false si es "Inactivo"
-                    estadoSeleccionado = estado.equals("Activo");
-                });
-                menuEstado.getItems().add(item);
+                menuEstado.getItems().add(estado);
             }
 
+            menuEstado.getSelectionModel().clearSelection(); // No seleccionar por defecto
+            menuEstado.setPromptText("Estado"); // Mostrar texto inicial
+
+            menuEstado.setOnAction(event -> {
+                Object selected = menuEstado.getValue();
+                if (selected instanceof String selectedText) {
+                    estadoSeleccionado = selectedText.equals("Activo");
+                }
+            });
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error en mostrarEstado", e);
             notificar("Error Crítico", e.getMessage(), false);
         }
-
-
-
-
-
     }
+
     public void mostrarProveedores() {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/proveedores"))
+                    .GET()
+                    .build();
 
-        {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+            Proveedor[] proveedores = gson.fromJson(responseBody, Proveedor[].class);
 
-            try {
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(VariablesEntorno.getServerURL() + "/api/proveedores"))
-                        .GET()
-                        .build();
+            menuProveedor.getItems().clear();
+            menuProveedor.getItems().addAll(proveedores);
+            menuProveedor.getSelectionModel().clearSelection(); // No seleccionar por defecto
+            menuProveedor.setPromptText("Proveedor");
 
-                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-                System.out.println(response);
-
-                String responseBody = response.body();
-                System.out.println(responseBody);
-
-                Proveedor[] proveedores = gson.fromJson(responseBody, Proveedor[].class);
-
-
-                /*
-                for (Proveedor p : proveedores) {
-
-                    MenuItem item = new MenuItem(p.getRazonSocial());
-                    item.setOnAction(event -> {menuProveedor.setText(p.getRazonSocial());});
-                    menuProveedor.getItems().add(item);
-                }*/
-                for (Proveedor p : proveedores) {
-                    MenuItem item = new MenuItem(p.getRazonSocial());
-                    item.setOnAction(event -> {
-                        menuProveedor.setText(p.getRazonSocial());
-                        proveedorSeleccionado = p;  // guardo el proveedor seleccionado
-                    });
-                    menuProveedor.getItems().add(item);
+            menuProveedor.setCellFactory(lv -> new ListCell<Proveedor>() {
+                @Override
+                protected void updateItem(Proveedor item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? null : item.getRazonSocial());
                 }
+            });
+            menuProveedor.setButtonCell(new ListCell<Proveedor>() {
+                @Override
+                protected void updateItem(Proveedor item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? null : item.getRazonSocial());
+                }
+            });
 
+            menuProveedor.setOnAction(event -> {
+                Proveedor seleccionado = menuProveedor.getValue();
+                proveedorSeleccionado = seleccionado;
+            });
 
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                notificar("Error Crítico", e.getMessage(), false);
-            }
-
-
-
-
-
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error al mostrar proveedores", e);
+            notificar("Error Crítico", e.getMessage(), false);
         }
     }
 
     public void mostrarCategorias() {
-
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(VariablesEntorno.getServerURL() + "/api/categorias"))
@@ -198,27 +179,25 @@ public class ProductoController implements Initializable {
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response);
-
             String responseBody = response.body();
-            System.out.println(responseBody);
-
             Categoria[] categorias = gson.fromJson(responseBody, Categoria[].class);
 
-            for (Categoria p : categorias) {
-                System.out.println("Categoria: " + p.getNombre());
-                MenuItem item = new MenuItem(p.getNombre());
-                item.setOnAction(event -> {menuCategorias.setText(p.getNombre());});
-                menuCategorias.getItems().add(item);
+            menuCategorias.getItems().clear();
+            menuCategorias.setPromptText("Categoría"); // Texto inicial
+
+            for (Categoria categoria : categorias) {
+                menuCategorias.getItems().add(categoria.getNombre());
             }
 
+            menuCategorias.getSelectionModel().clearSelection(); // No seleccionar por defecto
 
         } catch (Exception e) {
             e.printStackTrace();
             notificar("Error Crítico", e.getMessage(), false);
         }
+    }
 
-}
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -234,9 +213,19 @@ public class ProductoController implements Initializable {
             );
         });
 
+        setupKeyboardNavigation();
+
+
         agregar.setOnAction(event -> crearProducto());
         desactivar.setOnAction(event -> cambiarEstado());
         actualizar.setOnAction(event -> actualizarProductos());
+        categorias.setOnAction(event -> {
+            try {
+                verCategorias();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         ver.setOnAction(event -> {
             try {
                 verProducto();
@@ -273,8 +262,6 @@ public class ProductoController implements Initializable {
     @FXML private TextField txtNombre;
     @FXML private TextField txtStock;
     @FXML private TextField txtPrecio;
-    @FXML private SplitMenuButton menuCategoria;
-    @FXML private SplitMenuButton menuEstado;
  //   @FXML private SplitMenuButton menuProveedor;
 
 
@@ -468,6 +455,83 @@ public class ProductoController implements Initializable {
             notificar("Error critico", e.getMessage(), false);
         }
     }
+    private void setupKeyboardNavigation() {
+        // Configurar navegación con Enter en campos de texto
+        txtSku.setOnAction(e -> txtNombre.requestFocus());
+        txtNombre.setOnAction(e -> txtStock.requestFocus());
+        txtStock.setOnAction(e -> txtPrecio.requestFocus());
+        txtPrecio.setOnAction(e -> menuCategorias.requestFocus());
 
+        // Para ComboBox, usar setOnKeyPressed
+        menuCategorias.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.TAB) || e.getCode().equals(KeyCode.ENTER)) {
+                menuEstado.requestFocus();
+            }
+        });
+
+        menuEstado.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.TAB) || e.getCode().equals(KeyCode.ENTER)) {
+                menuProveedor.requestFocus();
+            }
+        });
+
+        menuProveedor.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.TAB) || e.getCode().equals(KeyCode.ENTER)) {
+                agregar.requestFocus();
+            }
+        });
+
+        // Configurar navegación entre botones
+        agregar.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.TAB)) {
+                ver.requestFocus();
+            }
+        });
+
+        ver.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.TAB)) {
+                actualizar.requestFocus();
+            }
+        });
+
+        actualizar.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.TAB)) {
+                desactivar.requestFocus();
+            }
+        });
+
+        desactivar.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.TAB)) {
+                txtBuscarProducto.requestFocus();
+            }
+        });
+
+        txtBuscarProducto.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.TAB)) {
+                tablaProductos.requestFocus();
+            }
+        });
+    }
+
+
+    @FXML
+    public void verCategorias() throws IOException {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/categorias-view.fxml"));
+
+
+            Parent root = fxmlLoader.load();
+
+
+
+            Stage stage = new Stage(); // Esto NO usa StageManager
+            stage.setScene(new Scene(root, 800, 550));
+            stage.setTitle("Detalle de Categorias");
+            stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés
+            //stage.setOnCloseRequest(event -> {mostrarProductos();});
+            stage.showAndWait();
+
+
+
+    }
 
     }
