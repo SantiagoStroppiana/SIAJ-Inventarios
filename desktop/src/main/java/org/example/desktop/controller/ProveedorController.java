@@ -3,17 +3,24 @@ package org.example.desktop.controller;
 import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.model.MensajesResultados;
+import org.example.desktop.model.Producto;
 import org.example.desktop.model.Proveedor;
 import org.example.desktop.util.VariablesEntorno;
 
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
@@ -41,6 +48,8 @@ public class ProveedorController implements Initializable {
 
     @FXML private Button agregar;
     @FXML private Button actualizar;
+    @FXML private Button desactivar;
+    @FXML private Button ver;
 
     @FXML
     public void mostrarProveedores() {
@@ -81,12 +90,12 @@ public class ProveedorController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        //idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         razonSocialColumn.setCellValueFactory(new PropertyValueFactory<>("razonSocial"));
         telefonoColumn.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         direccionColumn.setCellValueFactory(new PropertyValueFactory<>("direccion"));
         activoColumn.setCellValueFactory(new PropertyValueFactory<>("activo"));
-        fecha_altaColumn.setCellValueFactory(new PropertyValueFactory<>("fecha_alta"));
+        //fecha_altaColumn.setCellValueFactory(new PropertyValueFactory<>("fecha_alta"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
 
 
@@ -100,8 +109,15 @@ public class ProveedorController implements Initializable {
         });*/
 
         agregar.setOnAction(event -> crearProveedor());
-        actualizar.setOnAction(event -> cambiarEstado(1));
-
+        desactivar.setOnAction(event -> cambiarEstado());
+        actualizar.setOnAction(event -> mostrarProveedores());
+        ver.setOnAction(event -> {
+            try {
+                verProveedor();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         mostrarProveedores();
     }
 
@@ -137,9 +153,10 @@ public class ProveedorController implements Initializable {
 
 
     @FXML
-    public void cambiarEstado(int id) {
+    public void cambiarEstado() {
+        Proveedor proveedor = tablaProveedores.getSelectionModel().getSelectedItem();
+
         try {
-            Proveedor proveedor = tablaProveedores.getItems().get(id);
             boolean estado = proveedor.isActivo();
 
             if (estado) {
@@ -153,7 +170,7 @@ public class ProveedorController implements Initializable {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(VariablesEntorno.getServerURL() + "/api/modificarProveedor"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -190,22 +207,23 @@ public class ProveedorController implements Initializable {
         try {
 
 
-            Integer id = Integer.valueOf(txtId.getText().trim());
+            //Integer id = Integer.valueOf(txtId.getText().trim());
             String razonsocial = txtRazonSocial.getText().trim();
             String telefono = txtTelefono.getText().trim();
             String email = txtEmail.getText().trim();
             String direccion = txtDireccion.getText().trim();
             boolean activo = true;
-            String fecha_alta = txtFecha_Alta.getText().trim();
+            //String fecha_alta = txtFecha_Alta.getText().trim();
 
 
-            if (id == null || razonsocial.isEmpty() ||  telefono.isEmpty() || email.isEmpty() || direccion.isEmpty() || fecha_alta.isEmpty()) {
+
+            if (/*id == null ||*/ razonsocial.isEmpty() ||  telefono.isEmpty() || email.isEmpty() || direccion.isEmpty() /*|| fecha_alta.isEmpty()*/) {
                 notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
                 return;
             }
 
 
-            int idstr;
+            /*int idstr;
             try {
                 idstr = Integer.parseInt(String.valueOf(id));
                 if (id < 0) {
@@ -215,7 +233,7 @@ public class ProveedorController implements Initializable {
             } catch (NumberFormatException e) {
                 notificar("Error de formato", "El ID debe ser un número entero.", false);
                 return;
-            }
+            }*/
 
             String razonSocialstr;
             try {
@@ -231,7 +249,7 @@ public class ProveedorController implements Initializable {
             }
             Proveedor proveedor = new Proveedor();
 
-            proveedor.setId(id);
+            //proveedor.setId(id);
 
             proveedor.setRazonSocial(razonsocial);
 
@@ -243,27 +261,15 @@ public class ProveedorController implements Initializable {
 
             proveedor.setEmail(email);
 
+            proveedor.setFecha_alta(System.currentTimeMillis());
 
-
-            /*
-            Producto producto = new Producto();
-            producto.setSku(txtSku.getText());
-            producto.setNombre(txtNombre.getText());
-            producto.setStock(Integer.parseInt(txtStock.getText()));
-            producto.setPrecio(BigDecimal.valueOf(Double.parseDouble(txtPrecio.getText())));
-            //producto.setCategoria(producto.getCategoria());
-            producto.setActivo(true);
-            producto.setProveedorid(new Proveedor(1,null,null,null,null,true));
-            producto.setImg("");
-
-            */
 
             String json = gson.toJson(proveedor);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crearProveedor"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -282,6 +288,7 @@ public class ProveedorController implements Initializable {
                   /*  Thread.sleep(10000);
                     mostrarProveedores();
 */
+                    mostrarProveedores();
                     notificar("Proveedor creado", resultado.getMensaje(), true);
                     // limpiarCampos(); // si tenés esta función activa
                 } else {
@@ -305,6 +312,36 @@ public class ProveedorController implements Initializable {
         email.setText("");
         password.setText("");
     }*/
+
+
+    @FXML
+    public void verProveedor() throws IOException {
+        Proveedor proveedor = tablaProveedores.getSelectionModel().getSelectedItem();
+
+        if (proveedor == null) {
+            notificar("Seleccionar proveedor", "Debe seleccionar un proveedor en la tabla.", false);
+        } else {
+
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/proveedor-detalle-view.fxml"));
+
+
+            Parent root = fxmlLoader.load();
+
+            ProveedorDetalleController controller = fxmlLoader.getController();
+            controller.setProveedor(proveedor);
+            controller.cargarProveedor();
+
+            Stage stage = new Stage(); // Esto NO usa StageManager
+            stage.setScene(new Scene(root, 800, 550));
+            stage.setTitle("Detalle de Proveedor");
+            stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés
+            stage.setOnCloseRequest(event -> {mostrarProveedores();});
+            stage.showAndWait();
+
+        }
+
+    }
 
     public void modificarProveedor(int id){
         try {
@@ -360,7 +397,7 @@ public class ProveedorController implements Initializable {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(VariablesEntorno.getServerURL() + "/api/actualizarProveedor"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());

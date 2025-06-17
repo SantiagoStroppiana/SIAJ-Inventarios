@@ -33,7 +33,7 @@ public class RutasProveedor {
             ctx.json(respuesta);
         });
 
-        app.post("/api/actualizarProveedor", ctx -> {
+        app.put("/api/modificarProveedor", ctx -> {
             Proveedor proveedor = ctx.bodyAsClass(Proveedor.class);
             MensajesResultados respuesta = proveedorController.actualizarProveedor(proveedor);
             ctx.json(respuesta);

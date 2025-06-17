@@ -90,7 +90,9 @@ public class Proveedor {
     public void setFecha_alta(long fecha_alta) {
         this.fecha_alta = fecha_alta;
     }
-
+    public boolean getEstado() {
+        return isActivo();
+    }
 
 
 }

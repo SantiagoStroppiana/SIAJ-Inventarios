@@ -57,6 +57,7 @@ public class ProductoDetalleController {
         txtStock.setText(String.valueOf(producto.getStock()));
         menuProveedor.setText(producto.getProveedor());
         menuEstado.setText(producto.getEstado() ? "Activo" : "Inactivo");
+
         menuProveedor.setDisable(true);
         menuCategorias.setDisable(true);
         menuEstado.setDisable(true);
