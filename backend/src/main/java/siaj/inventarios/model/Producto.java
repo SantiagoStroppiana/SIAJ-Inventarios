@@ -1,5 +1,6 @@
 package siaj.inventarios.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="productos")
@@ -35,7 +37,26 @@ public class Producto {
     @JsonProperty("proveedor_id")
     @ManyToOne
     @JoinColumn(name = "proveedores_id", nullable=false)
+
+
     private Proveedor proveedorid;
+
+    public List<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(List<Categoria> categorias) {
+        this.categorias = categorias;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "producto_categoria", // nombre de la tabla intermedia
+            joinColumns = @JoinColumn(name = "producto_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
+    @JsonIgnore
+    private List<Categoria> categorias;
 
     public Producto(int id, String nombre, BigDecimal precio, String sku, boolean activo, String img, Date fecha_alta, int stock, int stock_minimo,Proveedor proveedorid) {
         this.id = id;

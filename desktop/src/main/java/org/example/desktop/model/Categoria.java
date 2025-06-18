@@ -5,6 +5,7 @@ public class Categoria {
     private int id;
     private String nombre;
     private String descripcion;
+    private int grupoId; // ← Agrega esto
 
     public int getId() {
         return id;
@@ -30,10 +31,11 @@ public class Categoria {
         this.descripcion = descripcion;
     }
 
-    public Categoria(int id, String nombre, String descripcion) {
+    public Categoria(int id, String nombre, String descripcion, int grupoId) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.grupoId = grupoId;
     }
 
     @Override
