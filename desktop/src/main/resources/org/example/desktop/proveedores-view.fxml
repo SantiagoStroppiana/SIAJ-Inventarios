@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.ProveedorController">
+<?import java.net.URL?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.ProveedorController">
 
     <left>
         <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
     </left>
 
     <right>
-        <AnchorPane prefHeight="800.0" prefWidth="700.0" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="800.0" prefWidth="900.0" BorderPane.alignment="CENTER">
             <children>
-                <TextField fx:id="txtBuscarProveedor" layoutX="10.0" layoutY="14.0" prefHeight="35.0" prefWidth="280.0" promptText="Buscar Proveedor..." styleClass="search-field" />
-                <TableView fx:id="tablaProveedores" layoutX="10.0" layoutY="66.0" prefHeight="720.0" prefWidth="680.0" styleClass="data-table">
+                <TextField fx:id="txtBuscarProveedor" layoutX="10.0" layoutY="14.0" prefHeight="35.0" prefWidth="380.0" promptText="Buscar Proveedor..." styleClass="search-field" />
+                <TableView fx:id="tablaProveedores" layoutX="10.0" layoutY="66.0" prefHeight="720.0" prefWidth="880.0" styleClass="data-table">
                     <columns>
-                        <TableColumn fx:id="razonSocialColumn" prefWidth="163.0" text="RAZÓN SOCIAL" />
-                        <TableColumn fx:id="telefonoColumn" prefWidth="82.0" text="TELÉFONO" />
-                        <TableColumn fx:id="direccionColumn" prefWidth="194.0" text="DIRECCIÓN" />
-                        <TableColumn fx:id="activoColumn" prefWidth="75.0" text="ACTIVO" />
-                        <TableColumn fx:id="emailColumn" prefWidth="165.0" text="EMAIL" />
+                        <TableColumn fx:id="razonSocialColumn" prefWidth="220.0" text="RAZÓN SOCIAL" />
+                        <TableColumn fx:id="telefonoColumn" prefWidth="120.0" text="TELÉFONO" />
+                        <TableColumn fx:id="direccionColumn" prefWidth="280.0" text="DIRECCIÓN" />
+                        <TableColumn fx:id="activoColumn" prefWidth="100.0" text="ACTIVO" />
+                        <TableColumn fx:id="emailColumn" prefWidth="160.0" text="EMAIL" />
                     </columns>
                 </TableView>
             </children>
@@ -31,54 +37,54 @@
     </right>
 
     <center>
-        <AnchorPane prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="CENTER" styleClass="form-container">
+        <AnchorPane prefHeight="200.0" prefWidth="350.0" styleClass="form-container" BorderPane.alignment="CENTER">
             <children>
                 <!-- Formulario con orden de tabulación correcto -->
-                <Label layoutX="20.0" layoutY="35.0" text="DATOS DEL PROVEEDOR" styleClass="form-title">
+                <Label layoutX="20.0" layoutY="35.0" styleClass="form-title" text="DATOS DEL PROVEEDOR">
                     <font>
                         <Font name="System Bold" size="16.0" />
                     </font>
                 </Label>
 
                 <!-- Campo 1: Razón Social -->
-                <Label layoutX="20.0" layoutY="80.0" text="Razón Social" styleClass="field-label">
+                <Label layoutX="20.0" layoutY="80.0" styleClass="field-label" text="Razón Social">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Label>
-                <TextField fx:id="txtRazonSocial" layoutX="20.0" layoutY="100.0" prefHeight="38.0" prefWidth="260.0" promptText="Ingrese la razón social"/>
+                <TextField fx:id="txtRazonSocial" layoutX="20.0" layoutY="100.0" prefHeight="39.0" prefWidth="360.0" promptText="Ingrese la razón social" />
 
                 <!-- Campo 2: Dirección -->
-                <Label layoutX="20.0" layoutY="150.0" text="Dirección" styleClass="field-label">
+                <Label layoutX="20.0" layoutY="150.0" styleClass="field-label" text="Dirección">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Label>
-                <TextField fx:id="txtDireccion" layoutX="20.0" layoutY="170.0" prefHeight="38.0" prefWidth="260.0" promptText="Ingrese la dirección" />
+                <TextField fx:id="txtDireccion" layoutX="20.0" layoutY="170.0" prefHeight="39.0" prefWidth="360.0" promptText="Ingrese la dirección" />
 
                 <!-- Campo 3: Teléfono -->
-                <Label layoutX="20.0" layoutY="220.0" text="Teléfono" styleClass="field-label">
+                <Label layoutX="20.0" layoutY="220.0" styleClass="field-label" text="Teléfono">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Label>
-                <TextField fx:id="txtTelefono" layoutX="20.0" layoutY="240.0" prefHeight="38.0" prefWidth="260.0" promptText="Ingrese el teléfono" />
+                <TextField fx:id="txtTelefono" layoutX="20.0" layoutY="240.0" prefHeight="39.0" prefWidth="360.0" promptText="Ingrese el teléfono" />
 
                 <!-- Campo 4: Email -->
-                <Label layoutX="20.0" layoutY="290.0" text="Email" styleClass="field-label">
+                <Label layoutX="20.0" layoutY="290.0" styleClass="field-label" text="Email">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Label>
-                <TextField fx:id="txtEmail" layoutX="20.0" layoutY="310.0" prefHeight="38.0" prefWidth="260.0" promptText="Ingrese el email" />
+                <TextField fx:id="txtEmail" layoutX="20.0" layoutY="310.0" prefHeight="39.0" prefWidth="359.0" promptText="Ingrese el email" />
 
                 <!-- Campo 5: Estado -->
-                <Label layoutX="20.0" layoutY="360.0" text="Estado" styleClass="field-label">
+                <Label layoutX="20.0" layoutY="360.0" styleClass="field-label" text="Estado">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Label>
-                <ComboBox fx:id="menuEstado" layoutX="20.0" layoutY="380.0" prefHeight="38.0" prefWidth="260.0" promptText="Seleccione estado" styleClass="combo-field">
+                <ComboBox fx:id="menuEstado" layoutX="20.0" layoutY="380.0" prefHeight="47.0" prefWidth="360.0" promptText="Seleccione estado" styleClass="combo-field">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Activo" />
@@ -88,10 +94,10 @@
                 </ComboBox>
 
                 <!-- Botones con orden correcto -->
-                <Button fx:id="agregar" layoutX="20.0" layoutY="450.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="AGREGAR" styleClass="button-primary" />
-                <Button fx:id="ver" layoutX="20.0" layoutY="570.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="MODIFICAR" styleClass="button-modify" />
-                <Button fx:id="actualizar" layoutX="20.0" layoutY="510.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="ACTUALIZAR" styleClass="button-secondary" />
-                <Button fx:id="desactivar" layoutX="20.0" layoutY="630.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="260.0" text="DESACTIVAR" styleClass="button-danger" />
+                <Button fx:id="agregar" layoutX="45.0" layoutY="450.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-primary" text="AGREGAR" />
+                <Button fx:id="actualizar" layoutX="45.0" layoutY="510.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-secondary" text="ACTUALIZAR" />
+                <Button fx:id="ver" layoutX="45.0" layoutY="570.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-modify" text="MODIFICAR" />
+                <Button fx:id="desactivar" layoutX="45.0" layoutY="630.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-danger" text="DESACTIVAR" />
             </children>
         </AnchorPane>
     </center>
