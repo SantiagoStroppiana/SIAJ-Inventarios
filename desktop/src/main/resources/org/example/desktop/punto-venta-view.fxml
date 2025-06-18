@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<?import javafx.scene.text.Font?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="800.0" prefWidth="1400.0"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.desktop.controller.PuntoVentaController"
+            styleClass="pv-root">
+
+    <left>
+        <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
+    </left>
+
+    <center>
+        <HBox styleClass="pv-main-container" spacing="30.0">
+            <children>
+                <!-- Panel de productos -->
+                <VBox styleClass="pv-product-panel" prefWidth="800.0">
+                    <children>
+                        <Label text="📋 Catálogo de Productos" styleClass="pv-panel-title">
+                            <font>
+                                <Font name="System Bold" size="20.0" />
+                            </font>
+                        </Label>
+
+                        <ScrollPane fitToWidth="true" styleClass="pv-products-scroll" prefHeight="600.0">
+                            <content>
+                                <GridPane fx:id="productGrid" hgap="20.0" vgap="20.0" styleClass="pv-products-grid">
+                                    <children>
+                                        <!-- Producto 1: Auriculares -->
+                                        <VBox styleClass="pv-product-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                            <children>
+                                                <Label text="Auriculares Inalámbricos" styleClass="pv-product-name">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Electrónicos" styleClass="pv-product-category" />
+                                                <Label text="90" styleClass="pv-product-price">
+                                                    <font>
+                                                        <Font name="System Bold" size="18.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Stock: 25 unidades" styleClass="pv-product-stock" />
+                                                <Button text="+ Agregar al Carrito" styleClass="pv-add-btn"
+                                                         userData="1" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Producto 2: Taza -->
+                                        <VBox styleClass="pv-product-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                            <children>
+                                                <Label text="Taza de Café" styleClass="pv-product-name">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Hogar" styleClass="pv-product-category" />
+                                                <Label text="13" styleClass="pv-product-price">
+                                                    <font>
+                                                        <Font name="System Bold" size="18.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Stock: 50 unidades" styleClass="pv-product-stock" />
+                                                <Button text="+ Agregar al Carrito" styleClass="pv-add-btn"
+                                                         userData="2" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Producto 3: Cuaderno -->
+                                        <VBox styleClass="pv-product-card" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                            <children>
+                                                <Label text="Cuaderno Ejecutivo" styleClass="pv-product-name">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Oficina" styleClass="pv-product-category" />
+                                                <Label text="9" styleClass="pv-product-price">
+                                                    <font>
+                                                        <Font name="System Bold" size="18.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Stock: 100 unidades" styleClass="pv-product-stock" />
+                                                <Button text="+ Agregar al Carrito" styleClass="pv-add-btn"
+                                                         userData="3" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Producto 4: Funda -->
+                                        <VBox styleClass="pv-product-card" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                            <children>
+                                                <Label text="Funda para Smartphone" styleClass="pv-product-name">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Electrónicos" styleClass="pv-product-category" />
+                                                <Label text="25" styleClass="pv-product-price">
+                                                    <font>
+                                                        <Font name="System Bold" size="18.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Stock: 30 unidades" styleClass="pv-product-stock" />
+                                                <Button text="+ Agregar al Carrito" styleClass="pv-add-btn"
+                                                         userData="4" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Producto 5: Lámpara -->
+                                        <VBox styleClass="pv-product-card" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                            <children>
+                                                <Label text="Lámpara de Escritorio" styleClass="pv-product-name">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Oficina" styleClass="pv-product-category" />
+                                                <Label text="45" styleClass="pv-product-price">
+                                                    <font>
+                                                        <Font name="System Bold" size="18.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Stock: 15 unidades" styleClass="pv-product-stock" />
+                                                <Button text="+ Agregar al Carrito" styleClass="pv-add-btn"
+                                                         userData="5" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Producto 6: Botella -->
+                                        <VBox styleClass="pv-product-card" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                            <children>
+                                                <Label text="Botella de Agua" styleClass="pv-product-name">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Hogar" styleClass="pv-product-category" />
+                                                <Label text="19" styleClass="pv-product-price">
+                                                    <font>
+                                                        <Font name="System Bold" size="18.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Stock: 40 unidades" styleClass="pv-product-stock" />
+                                                <Button text="+ Agregar al Carrito" styleClass="pv-add-btn"
+                                                         userData="6" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </GridPane>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                </VBox>
+
+                <!-- Panel del carrito -->
+                <VBox styleClass="pv-cart-panel" prefWidth="400.0">
+                    <children>
+                        <Label fx:id="cartTitleLabel" text="🛒 Carrito de Compras (0)" styleClass="pv-panel-title">
+                            <font>
+                                <Font name="System Bold" size="20.0" />
+                            </font>
+                        </Label>
+
+                        <ScrollPane fx:id="cartScrollPane" fitToWidth="true" styleClass="pv-cart-scroll"
+                                    prefHeight="400.0">
+                            <content>
+                                <VBox fx:id="cartContent" spacing="10.0" styleClass="pv-cart-content">
+                                    <children>
+                                        <Label text="El carrito está vacío" styleClass="pv-empty-cart-message" />
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+
+                        <!-- Footer del carrito -->
+                        <VBox spacing="15.0" styleClass="pv-cart-footer">
+                            <children>
+                                <Separator styleClass="pv-separator" />
+
+                                <HBox alignment="CENTER_RIGHT" spacing="15.0" styleClass="pv-total-section">
+                                    <children>
+                                        <Label text="Total:" styleClass="pv-total-label">
+                                            <font>
+                                                <Font name="System Bold" size="18.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="totalLabel" text="0.00" styleClass="pv-total-amount">
+                                            <font>
+                                                <Font name="System Bold" size="22.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+
+                                <VBox spacing="10.0" styleClass="pv-action-buttons">
+                                    <children>
+                                        <Button fx:id="btnProcesarVenta" text="💳 Procesar Venta"
+                                                styleClass="pv-action-btn, pv-process-btn"
+                                                prefHeight="45.0"  />
+                                        <Button fx:id="btnLimpiarCarrito" text="🗑️ Limpiar Carrito"
+                                                styleClass="pv-action-btn, pv-clear-btn"
+                                                prefHeight="35.0" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </center>
+
+<!--    <stylesheets>-->
+<!--        <URL value="@estilos/punto-venta.css" />-->
+<!--    </stylesheets>-->
+</BorderPane>

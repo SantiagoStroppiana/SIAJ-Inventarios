@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+    <left>
+        <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
+    </left>
+
+    <center>
+        <VBox spacing="20" styleClass="main-content">
+            <padding>
+                <Insets bottom="30" left="40" right="40" top="30" />
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Text style="-fx-font-size: 24px;" text="📋" />
+                <Text styleClass="page-title" text="Formulario Orden de Compra">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Text>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="30">
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                    <Label styleClass="field-label" text="Proveedor">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                    </Label>
+                    <ComboBox fx:id="supplierComboBox" prefWidth="300" promptText="Seleccione un proveedor" styleClass="custom-combo-box" />
+                </VBox>
+
+                <VBox spacing="8">
+                    <Label styleClass="field-label" text="Fecha orden">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                    </Label>
+                    <DatePicker fx:id="orderDatePicker" prefWidth="200" styleClass="custom-date-picker" />
+                </VBox>
+            </HBox>
+
+            <VBox spacing="15" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Label styleClass="section-title" text="Items">
+                        <font>
+                            <Font name="System Bold" size="18.0" />
+                        </font>
+                    </Label>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button fx:id="addItemButton" styleClass="add-button" text="+ Agregar Item" />
+                </HBox>
+
+                <VBox styleClass="items-container" VBox.vgrow="ALWAYS">
+                    <padding>
+                        <Insets bottom="20" left="20" right="20" top="20" />
+                    </padding>
+
+                    <VBox fx:id="emptyStateContainer" alignment="CENTER" spacing="10" VBox.vgrow="ALWAYS">
+                        <Text styleClass="empty-state-text" text="No hay items agregados">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+
+                    <TableView fx:id="itemsTableView" managed="false" visible="false" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="productColumn" prefWidth="200.0" text="Product" />
+                            <TableColumn fx:id="quantityColumn" prefWidth="100.0" text="Quantity" />
+                            <TableColumn fx:id="unitPriceColumn" prefWidth="120.0" text="Unit Price" />
+                            <TableColumn fx:id="totalColumn" prefWidth="120.0" text="Total" />
+                            <TableColumn fx:id="actionsColumn" prefWidth="100.0" text="Actions" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+
+            <VBox spacing="8">
+                <Label styleClass="field-label" text="Notas">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <TextArea fx:id="notesTextArea" prefRowCount="3" promptText="Agregue instrucciones a su proveedor" styleClass="custom-text-area" wrapText="true" />
+            </VBox>
+
+            <!-- Bottom Actions -->
+            <HBox alignment="CENTER_RIGHT" spacing="15">
+                <Button fx:id="clearAllButton" styleClass="secondary-button" text="Limpiar Items" />
+                <Button fx:id="generateOrderButton" disable="true" styleClass="primary-button" text="Generar Orden Compra" />
+            </HBox>
+        </VBox>
+    </center>
+
+<!--    <stylesheets>-->
+<!--        <URL value="@styles/purchase-order.css" />-->
+<!--    </stylesheets>-->
+</BorderPane>
