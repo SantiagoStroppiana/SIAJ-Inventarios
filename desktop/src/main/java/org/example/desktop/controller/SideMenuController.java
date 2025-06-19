@@ -27,7 +27,11 @@ public class SideMenuController {
     }
 
     public void irPuntoVenta(ActionEvent actionEvent){
-        StageManager.loadScene("/org/example/desktop/menu-view.fxml", 1600, 900);
+        StageManager.loadScene("/org/example/desktop/punto-venta-view.fxml", 1600, 900);
+    }
+
+    public void irOrdenCompra(ActionEvent actionEvent){
+        StageManager.loadScene("/org/example/desktop/orden-compra-view.fxml", 1600, 900);
     }
 
     public void logout(ActionEvent actionEvent){
