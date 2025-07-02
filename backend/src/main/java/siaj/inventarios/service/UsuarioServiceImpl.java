@@ -3,7 +3,9 @@ package siaj.inventarios.service;
 import org.mindrot.jbcrypt.BCrypt;
 import siaj.inventarios.dao.UsuarioDAO;
 import siaj.inventarios.dao.UsuarioDAOImpl;
+import siaj.inventarios.dto.LoginResponseDTO;
 import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.dto.UsuarioDTO;
 import siaj.inventarios.model.Rol;
 import siaj.inventarios.model.Usuario;
 
@@ -19,24 +21,53 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
 
-    @Override
-    public MensajesResultados login(String email, String password) {
+//    @Override
+//    public MensajesResultados login(String email, String password) {
+//
+//        if(email == null || password == null || email.isEmpty() || password.isEmpty()){
+//            return  new MensajesResultados(false, "Email o password no pueden estar vacio");
+//        }
+//
+//        Usuario usuario = usuarioDAO.buscarUsuarioPorEmail(email);
+//
+//        if(usuario == null){
+//            return  new MensajesResultados(false, "Usuario no encontrado");
+//        }
+//
+//        if (!BCrypt.checkpw(password, usuario.getPassword())) {
+//            return new MensajesResultados(false, "Contraseña incorrecta");
+//        }
+//
+//        return new MensajesResultados(true, "Inicio de sesion correcta");
+//
+//    }
 
-        if(email == null || password == null || email.isEmpty() || password.isEmpty()){
-            return  new MensajesResultados(false, "Email o password no pueden estar vacio");
+    @Override
+    public LoginResponseDTO login(String email, String password) {
+
+        if (email == null || password == null) {
+            return new LoginResponseDTO(false, "Email o password no pueden estar vacios", null);
         }
 
         Usuario usuario = usuarioDAO.buscarUsuarioPorEmail(email);
 
-        if(usuario == null){
-            return  new MensajesResultados(false, "Usuario no encontrado");
+        if (usuario == null) {
+            return new LoginResponseDTO(false, "Usuario no encontrado", null);
         }
 
         if (!BCrypt.checkpw(password, usuario.getPassword())) {
-            return new MensajesResultados(false, "Contraseña incorrecta");
+            return new LoginResponseDTO(false, "Password incorrecta", null);
         }
 
-        return new MensajesResultados(true, "Inicio de sesion correcta");
+        UsuarioDTO usuarioDTO = new UsuarioDTO(
+                usuario.getId(),
+                usuario.getNombre(),
+                usuario.getApellido(),
+                usuario.getEmail(),
+                usuario.getRolId().getNombre()
+        );
+
+        return new LoginResponseDTO(true, "Usuario encontrado", usuarioDTO);
 
     }
 
@@ -92,6 +123,11 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Override
     public List<Usuario> listarUsuarios() {
         return usuarioDAO.listarUsuarios();
+    }
+
+    @Override
+    public MensajesResultados cambiarPassword(String oldPassword, String newPassword) {
+        return new MensajesResultados(true, "Cambiando password");
     }
 
 }

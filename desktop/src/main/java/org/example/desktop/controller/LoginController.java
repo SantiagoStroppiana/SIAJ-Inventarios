@@ -1,14 +1,13 @@
 package org.example.desktop.controller;
 
 import com.google.gson.Gson;
-import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
-import org.example.desktop.model.MensajesResultados;
+import org.example.desktop.model.LoginResponse;
 import org.example.desktop.model.Usuario;
 import org.example.desktop.util.StageManager;
 import org.example.desktop.util.VariablesEntorno;
@@ -44,7 +43,6 @@ public class LoginController {
         new Thread(() -> {
             try {
                 String json = gson.toJson(usuario);
-
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(VariablesEntorno.getServerURL() + "/api/login"))
                         .header("Content-Type", "application/json")
@@ -55,18 +53,24 @@ public class LoginController {
                 String responseBody = response.body();
 
                 Platform.runLater(() -> {
+
                     try {
+
                         if(responseBody.trim().startsWith("{")){
-                            MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
-                            if (resultado.isExito()) {
-                                notificar("Iniciar sesión exitoso", resultado.getMensaje(), true);
+                            LoginResponse resultado = gson.fromJson(responseBody, LoginResponse.class);
+                            System.out.println(resultado);
+                            System.out.println("responde bodu" + responseBody);
 
-//                                StageManager.loadScene("/org/example/desktop/productos-view.fxml", 1200, 800);
+                            if(resultado.isSuccess()){
+                                Usuario usuarioLogueado = resultado.getUsuario();
+                                notificar("Iniciar sesión exitoso", resultado.getMessage(), true);
+
                                 StageManager.loadScene("/org/example/desktop/menu-view.fxml", 1600, 900);
-
-                            } else {
-                                notificar("Incorrecto", resultado.getMensaje(), false);
+                            }else {
+                                notificar("Incorrecto", resultado.getMessage(), false);
+                                System.out.println("ESTOY x el segundo else me cago en todooooo");
                             }
+
                         } else {
                             notificar("Error", responseBody, false);
                         }
@@ -75,6 +79,7 @@ public class LoginController {
                         notificar("Error", "Error al procesar la respuesta: " + e.getMessage(), false);
                     }
                 });
+
             } catch (Exception e) {
                 e.printStackTrace();
                 final String errorMsg = e.getMessage();

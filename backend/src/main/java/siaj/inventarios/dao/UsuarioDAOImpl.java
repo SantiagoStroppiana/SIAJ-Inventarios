@@ -99,4 +99,11 @@ public class UsuarioDAOImpl implements UsuarioDAO{
         return usuario;
     }
 
+    @Override
+    public void cambiarPassword(String oldPassword, String newPassword) {
+
+        
+
+    }
+
 }

@@ -2,6 +2,7 @@ package siaj.inventarios.rutas;
 
 import io.javalin.Javalin;
 import siaj.inventarios.controller.UsuarioController;
+import siaj.inventarios.dto.LoginResponseDTO;
 import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.model.Usuario;
 
@@ -25,10 +26,16 @@ public class RutasUsuario {
             ctx.json(respuesta);
         });
 
+//        app.post("/api/login", ctx -> {
+//           Usuario usuario = ctx.bodyAsClass(Usuario.class);
+//           MensajesResultados respuesta = usuarioController.login(usuario.getEmail(), usuario.getPassword());
+//           ctx.json(respuesta);
+//        });
+
         app.post("/api/login", ctx -> {
-           Usuario usuario = ctx.bodyAsClass(Usuario.class);
-           MensajesResultados respuesta = usuarioController.login(usuario.getEmail(), usuario.getPassword());
-           ctx.json(respuesta);
+            Usuario usuario = ctx.bodyAsClass(Usuario.class);
+            LoginResponseDTO respuesta = usuarioController.login(usuario.getEmail(), usuario.getPassword());
+            ctx.json(respuesta);
         });
 
         app.put("/api/actualizarRol", ctx -> {
