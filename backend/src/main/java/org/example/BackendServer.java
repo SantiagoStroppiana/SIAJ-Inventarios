@@ -17,6 +17,7 @@ public class BackendServer {
         configurarCategorias(app);
         configurarProveedores(app);
         configurarVentas(app);
+        configurarDetallesVentas(app);
 
 
     }
@@ -54,6 +55,13 @@ public class BackendServer {
        VentaService ventaService = new VentaServiceImpl(ventaDAO);
        VentaController ventaController = new VentaController(ventaService);
         new RutasVenta(ventaController).rutaVenta(app);
+    }
+
+    public static void configurarDetallesVentas(Javalin app) {
+        DetalleVentaDAO detalleVentaDAO = new DetalleVentaDAOImpl();
+        DetalleVentaService detalleVentaService = new DetalleVentaServiceImpl(detalleVentaDAO);
+        DetalleVentaController detalleVentaController = new DetalleVentaController(detalleVentaService);
+        new RutasDetalleVenta(detalleVentaController).rutaDetalleVenta(app);
     }
 
 }

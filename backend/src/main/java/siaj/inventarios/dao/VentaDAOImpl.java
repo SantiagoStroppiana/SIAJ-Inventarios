@@ -8,6 +8,7 @@ import siaj.inventarios.util.HibernateUtil;
 
 import java.util.List;
 
+
 public class VentaDAOImpl implements VentaDAO{
 
 
@@ -48,6 +49,15 @@ public class VentaDAOImpl implements VentaDAO{
 
 
         }finally {
+            session.close();
+        }
+    }
+    @Override
+    public Venta obtenerPorId(int id) {
+        Session session = HibernateUtil.getSession();
+        try {
+            return session.get(Venta.class, id);
+        } finally {
             session.close();
         }
     }

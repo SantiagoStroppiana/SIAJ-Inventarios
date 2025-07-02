@@ -12,5 +12,7 @@ public interface VentaDAO {
     MensajesResultados agregarVenta(Venta venta);
     MensajesResultados actualizarVenta(Venta venta);
  //   void eliminarVenta(Venta venta);
+    Venta obtenerPorId(int id);
+
 
 }

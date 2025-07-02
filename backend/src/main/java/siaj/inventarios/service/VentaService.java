@@ -1,6 +1,7 @@
 package siaj.inventarios.service;
 
 import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.dto.VentaDTO;
 import siaj.inventarios.model.Venta;
 
 import java.math.BigDecimal;
@@ -11,7 +12,7 @@ public interface VentaService{
 
 
 
-    List<Venta> obtenerTodasLasVentas();
+    List<VentaDTO> obtenerTodasLasVentas();
     Venta obtenerVentaPorId(int id);
     MensajesResultados registrarVenta(Venta venta);
     void actualizarEstado(int id, Venta.EstadoVenta nuevoEstado);

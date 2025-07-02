@@ -1,12 +1,13 @@
 package siaj.inventarios.service;
 
-import siaj.inventarios.dao.ProductoDAO;
 import siaj.inventarios.dao.VentaDAO;
 import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.dto.VentaDTO;
 import siaj.inventarios.model.Venta;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class VentaServiceImpl implements VentaService{
 
@@ -19,8 +20,19 @@ public class VentaServiceImpl implements VentaService{
 
 
     @Override
-    public List<Venta> obtenerTodasLasVentas() {
-        return ventaDAO.obtenerTodasLasVentas();
+    public List<VentaDTO> obtenerTodasLasVentas() {
+        List<Venta> ventas = ventaDAO.obtenerTodasLasVentas();
+
+        return ventas.stream().map(v -> {
+            VentaDTO dto = new VentaDTO();
+            dto.setId(v.getId());
+            dto.setTotal(v.getTotal());
+            dto.setEstado(v.getEstado().name());
+            dto.setFechaPago(v.getFechaPago().toString());
+            dto.setUsuarioNombre(v.getUsuario().getNombre());
+            dto.setMedioPagoNombre(v.getMedioPago().getNombre());
+            return dto;
+        }).collect(Collectors.toList()).reversed();
     }
 
     @Override

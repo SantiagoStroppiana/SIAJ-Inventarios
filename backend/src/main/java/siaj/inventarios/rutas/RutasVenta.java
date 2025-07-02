@@ -4,6 +4,7 @@ import io.javalin.Javalin;
 import siaj.inventarios.controller.ProveedorController;
 import siaj.inventarios.controller.VentaController;
 import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.dto.VentaDTO;
 import siaj.inventarios.model.Proveedor;
 import siaj.inventarios.model.Venta;
 
@@ -24,7 +25,7 @@ public class RutasVenta {
     public void rutaVenta(Javalin app) {
 
         app.get("/api/ventas", ctx -> {
-            List<Venta> mostrar = ventaController.getVentas();
+            List<VentaDTO> mostrar = ventaController.getVentas();
             ctx.json(mostrar);
         });
 

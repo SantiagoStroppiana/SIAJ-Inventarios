@@ -1,6 +1,7 @@
 package siaj.inventarios.controller;
 
 import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.dto.VentaDTO;
 import siaj.inventarios.model.Venta;
 import siaj.inventarios.service.VentaService;
 
@@ -25,7 +26,7 @@ public class VentaController {
         return ventaService.registrarVenta(venta);
     }
 
-    public List<Venta> getVentas(){
+    public List<VentaDTO> getVentas(){
         return ventaService.obtenerTodasLasVentas();
     }
 }

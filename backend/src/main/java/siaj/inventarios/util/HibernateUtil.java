@@ -34,6 +34,9 @@ public class HibernateUtil {
             configuration.addAnnotatedClass(siaj.inventarios.model.Proveedor.class);
             configuration.addAnnotatedClass(siaj.inventarios.model.Categoria.class);
             configuration.addAnnotatedClass(siaj.inventarios.model.CategoriaProducto.class);
+            configuration.addAnnotatedClass(siaj.inventarios.model.Venta.class);
+            configuration.addAnnotatedClass(siaj.inventarios.model.MedioPago.class);
+
 
             sessionFactory = configuration.buildSessionFactory();
 

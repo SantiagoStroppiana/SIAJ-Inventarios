@@ -37,11 +37,11 @@ import java.util.Date;
         @Column(name = "fecha_pago")
         private LocalDateTime fechaPago;
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne
         @JoinColumn(name = "usuarios_id", nullable = false)
         private Usuario usuario;
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne
         @JoinColumn(name = "medio_pago_id", nullable = false)
         private MedioPago medioPago;
 
