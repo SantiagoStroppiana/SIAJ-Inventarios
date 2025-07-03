@@ -2,6 +2,8 @@ package org.example.desktop.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import org.example.desktop.model.Usuario;
+import org.example.desktop.util.UserSession;
 //import org.example.desktop.util.StageManager;
 
 public class MenuController {

@@ -10,6 +10,7 @@ import org.controlsfx.control.Notifications;
 import org.example.desktop.model.LoginResponse;
 import org.example.desktop.model.Usuario;
 import org.example.desktop.util.StageManager;
+import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
 
 import java.net.URI;
@@ -63,6 +64,8 @@ public class LoginController {
 
                             if(resultado.isSuccess()){
                                 Usuario usuarioLogueado = resultado.getUsuario();
+                                UserSession.iniciarSesion(usuarioLogueado);
+
                                 notificar("Iniciar sesión exitoso", resultado.getMessage(), true);
 
                                 StageManager.loadScene("/org/example/desktop/menu-view.fxml", 1600, 900);
