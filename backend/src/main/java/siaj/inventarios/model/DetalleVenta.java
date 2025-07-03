@@ -26,6 +26,7 @@ import java.math.BigDecimal;
         @JoinColumn(name = "productos_id", nullable = false)
         private Producto producto;
 
+        
         public DetalleVenta() {
         }
 

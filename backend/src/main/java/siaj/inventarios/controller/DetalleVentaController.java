@@ -1,6 +1,7 @@
 package siaj.inventarios.controller;
 
 import siaj.inventarios.dto.DetalleVentaDTO;
+import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.model.DetalleVenta;
 import siaj.inventarios.service.DetalleVentaService;
 import siaj.inventarios.service.DetalleVentaServiceImpl;
@@ -20,11 +21,15 @@ public class DetalleVentaController {
         this.detalleVentaService = detalleVentaService;
     }
 
-    public void crear(DetalleVentaDTO detalleVenta) {
-        detalleVentaService.registrarDetalle(detalleVenta);
+    public MensajesResultados crear(DetalleVenta detalleVenta) {
+      return detalleVentaService.registrarDetalle(detalleVenta);
     }
 
     public List<DetalleVenta> obtenerPorVenta(int ventaId) {
         return detalleVentaService.obtenerPorVenta(ventaId);
+    }
+
+    public List <DetalleVentaDTO> obtenerDetalles() {
+        return detalleVentaService.obtenerDetalles();
     }
 }

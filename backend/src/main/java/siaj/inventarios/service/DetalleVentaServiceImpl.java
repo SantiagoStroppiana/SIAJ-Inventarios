@@ -3,6 +3,7 @@ package siaj.inventarios.service;
 
 import siaj.inventarios.dao.*;
 import siaj.inventarios.dto.DetalleVentaDTO;
+import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.dto.VentaDTO;
 import siaj.inventarios.model.DetalleVenta;
 import siaj.inventarios.model.Producto;
@@ -22,28 +23,32 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
     }
 
     @Override
-    public void registrarDetalle(DetalleVentaDTO dto) {
-        Venta venta = ventaDAO.obtenerPorId(dto.getVentaId());
+    public MensajesResultados registrarDetalle(DetalleVenta detalleVenta) {
+        Venta venta = new Venta();
+        venta.setId(detalleVenta.getId());
+       // Venta venta = ventaDAO.obtenerPorId(detalleVenta.getVenta().getId());
         if (venta == null) {
-            throw new RuntimeException("Venta no encontrada con ID: " + dto.getVentaId());
+            throw new RuntimeException("Venta no encontrada con ID: " + detalleVenta.getVenta().getId());
         }
+        Producto producto = new Producto();
+        producto.setId(detalleVenta.getProducto().getId());
 
-        Producto producto = productoDAO.obtenerPorId(dto.getProductoId());
+        //Producto producto = productoDAO.obtenerPorId(detalleVenta.getProducto().getId());
         if (producto == null) {
-            throw new RuntimeException("Producto no encontrado con ID: " + dto.getProductoId());
+            throw new RuntimeException("Producto no encontrado con ID: " + detalleVenta.getProducto().getId());
         }
 
-        DetalleVenta detalle = new DetalleVenta();
-        detalle.setVenta(venta);
-        detalle.setProducto(producto);
-        detalle.setCantidad(dto.getCantidad());
-        detalle.setPrecioUnitario(BigDecimal.valueOf(dto.getPrecioUnitario()));
 
-        detalleVentaDAO.agregarDetalle(detalle);
+
+        return detalleVentaDAO.agregarDetalle(detalleVenta);
     }
 
+    @Override
+    public List <DetalleVentaDTO> obtenerDetalles (){
 
+        return detalleVentaDAO.obtenerDetalles();
 
+    }
 
     @Override
     public List<DetalleVenta> obtenerPorVenta(int ventaId) {
