@@ -8,9 +8,9 @@ public class UsuarioDTO {
     private String nombre;
     private String apellido;
     private String email;
-    private String rol;
+    private Rol rol;
 
-    public UsuarioDTO(int id, String nombre, String apellido, String email , String rol) {
+    public UsuarioDTO(int id, String nombre, String apellido, String email , Rol rol) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -43,10 +43,10 @@ public class UsuarioDTO {
         this.email = email;
     }
 
-    public String getRol() {
+    public Rol getRol() {
         return rol;
     }
-    public void setRol(String rol) {
+    public void setRol(Rol rol) {
         this.rol = rol;
     }
 }

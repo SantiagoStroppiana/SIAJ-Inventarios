@@ -55,14 +55,14 @@ public class UsuarioController implements Initializable {
 
 
             for (Usuario u : usuarios){
-                System.out.println(u.getNombre() + " " + u.getRolId());
+                System.out.println(u.getNombre() + " " + u.getRol());
             }
 
             System.out.println("Respuesta del backend:");
             System.out.println(responseBody);
 
             for (Usuario u : usuarios){
-                System.out.println(u.getNombre() + " " + u.getRolId().getNombre());
+                System.out.println(u.getNombre() + " " + u.getRol().getNombre());
             }
 
         } catch (Exception e) {

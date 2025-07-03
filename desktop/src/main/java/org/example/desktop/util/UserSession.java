@@ -8,7 +8,7 @@ public class UserSession {
     private Usuario usuario;
 
     private UserSession(Usuario usuario) {
-        this.usuario = new Usuario();
+        this.usuario = usuario;
     };
 
     public static void iniciarSesion(Usuario usuario) {
@@ -28,8 +28,6 @@ public class UserSession {
     public static boolean haySesionActiva(){
         return instance != null;
     }
-
-
 
 
 }

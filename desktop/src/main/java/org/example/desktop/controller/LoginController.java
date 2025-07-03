@@ -59,19 +59,17 @@ public class LoginController {
 
                         if(responseBody.trim().startsWith("{")){
                             LoginResponse resultado = gson.fromJson(responseBody, LoginResponse.class);
-                            System.out.println(resultado);
-                            System.out.println("responde bodu" + responseBody);
+
 
                             if(resultado.isSuccess()){
                                 Usuario usuarioLogueado = resultado.getUsuario();
+
                                 UserSession.iniciarSesion(usuarioLogueado);
 
                                 notificar("Iniciar sesión exitoso", resultado.getMessage(), true);
-
                                 StageManager.loadScene("/org/example/desktop/menu-view.fxml", 1600, 900);
                             }else {
                                 notificar("Incorrecto", resultado.getMessage(), false);
-                                System.out.println("ESTOY x el segundo else me cago en todooooo");
                             }
 
                         } else {

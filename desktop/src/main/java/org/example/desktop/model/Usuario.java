@@ -7,17 +7,17 @@ public class Usuario {
     private String apellido;
     private String email;
     private String password;
-    private Rol rolId;
+    private Rol rol;
 
     public Usuario() {}
 
-    public Usuario(int id, String nombre, String apellido, String email, String password, Rol rolId) {
+    public Usuario(int id, String nombre, String apellido, String email, String password, Rol rol) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
         this.password = password;
-        this.rolId = rolId;
+        this.rol = rol;
     }
     public int getId() {return id;}
     public void setId(int id) {this.id = id;}
@@ -45,13 +45,24 @@ public class Usuario {
     public void setPassword(String password) {
         this.password = password;
     }
-    public Rol getRolId() {
-        return rolId;
+    public Rol getRol() {
+        return rol;
     }
-    public void setRolId(Rol rolId) {
-        this.rolId = rolId;
+    public void setRol(Rol rol) {
+        this.rol = rol;
     }
     public String getNombreRol() {
-        return rolId != null ? rolId.getNombre() : "Sin Rol";
+        return rol != null ? rol.getNombre() : "Sin Rol";
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", email='" + email + '\'' +
+                ", rol=" + rol +
+                '}';
     }
 }
