@@ -377,7 +377,7 @@
 }
 
 /* === ANIMATIONS === */
-.pv-product-card,
+/*.pv-product-card,
 .pv-cart-item {
     -fx-opacity: 0;
     -fx-translate-y: 20;
@@ -387,7 +387,13 @@
 .pv-cart-item:hover {
     -fx-opacity: 1;
     -fx-translate-y: 0;
+}*/
+
+.pv-product-card:hover,
+.pv-cart-item:hover {
+    -fx-translate-y: -2; /* pequeño movimiento al hacer hover */
 }
+
 
 /* === RESPONSIVE ADJUSTMENTS === */
 /*.pv-root:width-smaller-than-1200 .pv-main-container {*/
@@ -427,4 +433,35 @@
 .pv-action-btn:disabled:hover {
     -fx-translate-y: 0;
     -fx-effect: none;
+}
+.root {
+    -fx-background-color: #1a1a1a;
+}
+
+.pv-products-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.pv-products-scroll {
+    -fx-background-color: transparent;
+}
+
+.pv-product-panel {
+    -fx-background-color: #1e1e1e; /* O tu color base oscuro */
+    -fx-padding: 15px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+.pv-main-container {
+    -fx-background-color: #1e1e1e;
+    -fx-padding: 20px;
+    -fx-background-radius: 12px;
+}
+
+.pv-cart-scroll .viewport {
+    -fx-background-color: transparent;
+}
+.pv-cart-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
 }

@@ -28,9 +28,11 @@ public class Venta {
 
 
 
-    private String fechaPago; //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    private String fechaPago;
+    //LocalDateTime fechaPago = LocalDateTime.parse(fechaPago);
 
-//LocalDateTime fechaPago = LocalDateTime.parse(fechaPago);
+    //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
     private Usuario usuario;
 
 
