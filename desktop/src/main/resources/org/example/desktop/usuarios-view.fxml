@@ -49,9 +49,8 @@
         <VBox prefHeight="900.0" prefWidth="380.0" spacing="20.0" styleClass="usuarios-right-pane" BorderPane.alignment="CENTER">
             <children>
                 <Label styleClass="usuarios-perfil-title" text="Perfil Usuario" />
-                <Label styleClass="usuarios-perfil-nombre" text="(nombre usuario)" />
 
-                <VBox prefHeight="326.0" prefWidth="338.0" spacing="15.0" styleClass="usuarios-perfil-card">
+                <VBox prefHeight="217.0" prefWidth="338.0" spacing="15.0" styleClass="usuarios-perfil-card">
                     <children>
                         <Label styleClass="usuarios-perfil-title" text="Información del Usuario" />
                         <VBox spacing="10.0">
@@ -59,25 +58,25 @@
                                 <HBox prefWidth="296.0" spacing="10.0">
                                     <children>
                                         <Label styleClass="usuarios-perfil-info-label" text="ID:" />
-                                        <Label styleClass="usuarios-perfil-info-value" text="001" />
+                                        <Label fx:id="labelId" styleClass="usuarios-perfil-info-value" text="(id)" />
                                     </children>
                                 </HBox>
                                 <HBox spacing="10.0">
                                     <children>
                                         <Label styleClass="usuarios-perfil-info-label" text="Nombre:" />
-                                        <Label styleClass="usuarios-perfil-info-value" text="Juan Pérez" />
+                                        <Label fx:id="labelNombreCompleto" styleClass="usuarios-perfil-info-value" text="(nombre completo)" />
                                     </children>
                                 </HBox>
                                 <HBox spacing="10.0">
                                     <children>
                                         <Label styleClass="usuarios-perfil-info-label" text="Email:" />
-                                        <Label styleClass="usuarios-perfil-info-value" text="juan@ejemplo.com" />
+                                        <Label fx:id="labelEmail" styleClass="usuarios-perfil-info-value" text="email" />
                                     </children>
                                 </HBox>
                                 <HBox spacing="10.0">
                                     <children>
                                         <Label styleClass="usuarios-perfil-info-label" text="Rol:" />
-                                        <Label styleClass="usuarios-perfil-info-value" text="Administrador" />
+                                        <Label fx:id="labelRol" styleClass="usuarios-perfil-info-value" text="(rol nombre)" />
                                     </children>
                                 </HBox>
                             </children>

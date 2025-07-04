@@ -4,6 +4,7 @@ import io.javalin.Javalin;
 import siaj.inventarios.controller.UsuarioController;
 import siaj.inventarios.dto.LoginResponseDTO;
 import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.dto.UsuarioDTO;
 import siaj.inventarios.model.Usuario;
 
 import java.util.List;
@@ -44,10 +45,16 @@ public class RutasUsuario {
             ctx.json(respuesta);
         });
 
+//        app.get("/api/usuarios", ctx -> {
+//            List<Usuario> mostrar = usuarioController.listarUsuarios();
+//            ctx.json(mostrar);
+//        });
+
         app.get("/api/usuarios", ctx -> {
-            List<Usuario> mostrar = usuarioController.listarUsuarios();
+            List<UsuarioDTO> mostrar = usuarioController.listarUsuariosDTO();
             ctx.json(mostrar);
         });
+
 
     }
 }

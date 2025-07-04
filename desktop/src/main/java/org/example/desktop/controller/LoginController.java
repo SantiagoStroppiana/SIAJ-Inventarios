@@ -7,8 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
+import org.example.desktop.dto.UsuarioDTO;
 import org.example.desktop.model.LoginResponse;
-import org.example.desktop.model.Usuario;
 import org.example.desktop.util.StageManager;
 import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
@@ -25,25 +25,24 @@ public class LoginController {
     @FXML
     private TextField password;
 
-
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
 
     @FXML
     public void iniciarSesion(javafx.event.ActionEvent actionEvent) {
 
-        if(email.getText().isEmpty() || password.getText().isEmpty()){
+        if (email.getText().isEmpty() || password.getText().isEmpty()) {
             notificar("Error", "Por favor, complete todos los campos", false);
             return;
         }
 
-        Usuario usuario = new Usuario();
-        usuario.setEmail(email.getText());
-        usuario.setPassword(password.getText());
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setEmail(email.getText());
+        usuarioDTO.setPassword(password.getText());
 
         new Thread(() -> {
             try {
-                String json = gson.toJson(usuario);
+                String json = gson.toJson(usuarioDTO);
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(VariablesEntorno.getServerURL() + "/api/login"))
                         .header("Content-Type", "application/json")
@@ -54,21 +53,19 @@ public class LoginController {
                 String responseBody = response.body();
 
                 Platform.runLater(() -> {
-
                     try {
-
-                        if(responseBody.trim().startsWith("{")){
+                        if (responseBody.trim().startsWith("{")) {
                             LoginResponse resultado = gson.fromJson(responseBody, LoginResponse.class);
 
-
-                            if(resultado.isSuccess()){
-                                Usuario usuarioLogueado = resultado.getUsuario();
-
+                            if (resultado.isSuccess()) {
+                                UsuarioDTO usuarioLogueado = resultado.getUsuario(); // ✅ ya es UsuarioDTO
                                 UserSession.iniciarSesion(usuarioLogueado);
+
+                                System.out.println("JSON de respuesta LOGIN: " + responseBody);
 
                                 notificar("Iniciar sesión exitoso", resultado.getMessage(), true);
                                 StageManager.loadScene("/org/example/desktop/menu-view.fxml", 1600, 900);
-                            }else {
+                            } else {
                                 notificar("Incorrecto", resultado.getMessage(), false);
                             }
 
@@ -91,29 +88,27 @@ public class LoginController {
         }).start();
     }
 
-    private void notificar(String titulo, String mensaje, boolean exito){
+    private void notificar(String titulo, String mensaje, boolean exito) {
         Platform.runLater(() -> {
             Notifications notificacion = Notifications.create()
                     .title(titulo)
                     .text(mensaje)
                     .position(Pos.TOP_CENTER)
                     .hideAfter(Duration.seconds(4));
-            if(exito){
+            if (exito) {
                 notificacion.showInformation();
-            }else {
+            } else {
                 notificacion.showError();
             }
         });
     }
 
-
     public void irARegistro(javafx.event.ActionEvent actionEvent) {
-        try{
+        try {
             StageManager.loadScene("/org/example/desktop/register-view.fxml", 700, 650);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             notificar("Error", "No se pudo cargar la pantalla de registro: " + e.getMessage(), false);
         }
     }
-
 }

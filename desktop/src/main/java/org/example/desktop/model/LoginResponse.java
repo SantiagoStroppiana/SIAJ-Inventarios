@@ -1,12 +1,14 @@
 package org.example.desktop.model;
 
+import org.example.desktop.dto.UsuarioDTO;
+
 public class LoginResponse {
 
     private boolean success;
     private String message;
-    private Usuario usuario;
+    private UsuarioDTO usuario;
 
-    public LoginResponse(boolean success, String message, Usuario usuario) {
+    public LoginResponse(boolean success, String message, UsuarioDTO usuario) {
         this.success = success;
         this.message = message;
         this.usuario = usuario;
@@ -28,11 +30,11 @@ public class LoginResponse {
         this.message = message;
     }
 
-    public Usuario getUsuario() {
+    public UsuarioDTO getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(UsuarioDTO usuario) {
         this.usuario = usuario;
     }
 

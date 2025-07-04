@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import org.example.desktop.dto.UsuarioDTO;
 import org.example.desktop.model.Usuario;
 import org.example.desktop.util.StageManager;
 import org.example.desktop.util.UserSession;
@@ -22,25 +23,22 @@ public class SideMenuController {
 
     @FXML
     public void initialize() {
-        Usuario usuario = UserSession.getUsuarioActual();
-        if (usuario != null && usuario.getRol() != null) {
-            String rol = usuario.getRol().getNombre();
-            if (!rol.equals("Administrador")) {
-                btnUsuarios.setVisible(false);
-                btnUsuarios.setManaged(false);
-                btnOrdenCompra.setVisible(false);
-                btnOrdenCompra.setManaged(false);
-                btnVentas.setVisible(true);
-                btnVentas.setManaged(true);
-            } else {
-                btnUsuarios.setVisible(true);
-                btnUsuarios.setManaged(true);
-                btnOrdenCompra.setVisible(true);
-                btnOrdenCompra.setManaged(true);
-                btnVentas.setVisible(false);
-                btnVentas.setManaged(false);
-            }
+        UsuarioDTO usuario = UserSession.getUsuarioActual();
 
+        if(usuario != null && usuario.getNombreRol().equals("Administrador")) {
+            btnUsuarios.setVisible(true);
+            btnUsuarios.setManaged(true);
+            btnOrdenCompra.setVisible(true);
+            btnOrdenCompra.setManaged(true);
+            btnVentas.setVisible(false);
+            btnVentas.setManaged(false);
+        } else if (usuario != null && usuario.getNombreRol().equals("Vendedor")) {
+            btnUsuarios.setVisible(false);
+            btnUsuarios.setManaged(false);
+            btnOrdenCompra.setVisible(false);
+            btnOrdenCompra.setManaged(false);
+            btnVentas.setVisible(true);
+            btnVentas.setManaged(true);
         }
     }
 

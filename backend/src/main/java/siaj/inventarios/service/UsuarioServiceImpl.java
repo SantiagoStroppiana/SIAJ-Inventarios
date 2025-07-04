@@ -64,7 +64,8 @@ public class UsuarioServiceImpl implements UsuarioService{
                 usuario.getNombre(),
                 usuario.getApellido(),
                 usuario.getEmail(),
-                usuario.getRolId()
+//                usuario.getRolId()
+                usuario.getNombreRol()
         );
 
         return new LoginResponseDTO(true, "Usuario encontrado", usuarioDTO);

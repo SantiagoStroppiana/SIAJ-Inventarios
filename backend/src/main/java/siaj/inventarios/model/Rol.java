@@ -33,6 +33,7 @@ public class Rol {
         this.nombre = nombre;
     }
 
+
     @Override
     public String toString() {
         return "Rol{" +

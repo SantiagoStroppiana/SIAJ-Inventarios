@@ -12,9 +12,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
+import org.example.desktop.dto.UsuarioDTO;
+import org.example.desktop.model.Rol;
 import org.example.desktop.model.Usuario;
+import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
 
+import javax.swing.*;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
@@ -27,14 +31,35 @@ public class UsuarioController implements Initializable {
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
 
-    @FXML private TableView<Usuario> tablaUsuarios;
-    @FXML private TableColumn<Usuario, String> idColumn;
-    @FXML private TableColumn<Usuario, String> nombreColumn;
-    @FXML private TableColumn<Usuario, String> apellidoColumn;
-    @FXML private TableColumn<Usuario, String> emailColumn;
-    @FXML private TableColumn<Usuario, String> rolColumn;
+    @FXML private TableView<UsuarioDTO> tablaUsuarios;
+    @FXML private TableColumn<UsuarioDTO, String> idColumn;
+    @FXML private TableColumn<UsuarioDTO, String> nombreColumn;
+    @FXML private TableColumn<UsuarioDTO, String> apellidoColumn;
+    @FXML private TableColumn<UsuarioDTO, String> emailColumn;
+    @FXML private TableColumn<UsuarioDTO, String> rolColumn;
     @FXML private TableColumn<Usuario, Void> accionColumn;
 
+    @FXML private Label labelId;
+    @FXML private Label labelNombreCompleto;
+    @FXML private Label labelEmail;
+    @FXML private Label labelRol;
+
+    @FXML
+    public void perfilUsuario(){
+        UsuarioDTO usuario = UserSession.getUsuarioActual();
+        if(usuario != null){
+            int idUsuario = usuario.getId();
+            String nombreCompleto = usuario.getNombre() + " " + usuario.getApellido();
+            String email = usuario.getEmail();
+//            Rol rol = usuario.getRol();
+            String rol = usuario.getNombreRol();
+
+            labelId.setText(String.valueOf(idUsuario));
+            labelNombreCompleto.setText(nombreCompleto);
+            labelEmail.setText(email);
+            labelRol.setText(rol);
+        }
+    }
 
     @FXML
     public void mostrarUsuarios() {
@@ -48,22 +73,16 @@ public class UsuarioController implements Initializable {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
 
-            Usuario[] usuarios = gson.fromJson(responseBody, Usuario[].class);
+//            Usuario[] usuarios = gson.fromJson(responseBody, Usuario[].class);
+//
+//            tablaUsuarios.getItems().clear();
+//            tablaUsuarios.getItems().addAll(usuarios);
+
+            UsuarioDTO[] usuarios = gson.fromJson(response.body(), UsuarioDTO[].class);
 
             tablaUsuarios.getItems().clear();
             tablaUsuarios.getItems().addAll(usuarios);
 
-
-            for (Usuario u : usuarios){
-                System.out.println(u.getNombre() + " " + u.getRol());
-            }
-
-            System.out.println("Respuesta del backend:");
-            System.out.println(responseBody);
-
-            for (Usuario u : usuarios){
-                System.out.println(u.getNombre() + " " + u.getRol().getNombre());
-            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,14 +93,15 @@ public class UsuarioController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
+        perfilUsuario();
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         apellidoColumn.setCellValueFactory(new PropertyValueFactory<>("apellido"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         rolColumn.setCellValueFactory(new PropertyValueFactory<>("nombreRol"));
+
         columanAccion();
         mostrarUsuarios();
-
     }
 
     public void columanAccion(){
@@ -113,9 +133,6 @@ public class UsuarioController implements Initializable {
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
-
-                            System.out.println("USUARIO"+ id);
-
 
                         });
                     }
@@ -149,7 +166,5 @@ public class UsuarioController implements Initializable {
             }
         });
     }
-
-
 
 }
