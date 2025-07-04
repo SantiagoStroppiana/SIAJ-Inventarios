@@ -1,7 +1,9 @@
 package org.example.desktop.controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import org.example.desktop.model.Usuario;
 import org.example.desktop.util.StageManager;
@@ -10,6 +12,37 @@ import org.example.desktop.util.UserSession;
 import java.util.Optional;
 
 public class SideMenuController {
+
+    @FXML
+    private Button btnUsuarios;
+    @FXML
+    private Button btnOrdenCompra;
+    @FXML
+    private Button btnVentas;
+
+    @FXML
+    public void initialize() {
+        Usuario usuario = UserSession.getUsuarioActual();
+        if (usuario != null && usuario.getRol() != null) {
+            String rol = usuario.getRol().getNombre();
+            if (!rol.equals("Administrador")) {
+                btnUsuarios.setVisible(false);
+                btnUsuarios.setManaged(false);
+                btnOrdenCompra.setVisible(false);
+                btnOrdenCompra.setManaged(false);
+                btnVentas.setVisible(true);
+                btnVentas.setManaged(true);
+            } else {
+                btnUsuarios.setVisible(true);
+                btnUsuarios.setManaged(true);
+                btnOrdenCompra.setVisible(true);
+                btnOrdenCompra.setManaged(true);
+                btnVentas.setVisible(false);
+                btnVentas.setManaged(false);
+            }
+
+        }
+    }
 
     public void irMenuPrincipal(ActionEvent actionEvent) {
         StageManager.loadScene("/org/example/desktop/menu-view.fxml", 1600, 900);

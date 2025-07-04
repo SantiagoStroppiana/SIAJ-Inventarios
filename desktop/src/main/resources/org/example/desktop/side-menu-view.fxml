@@ -63,7 +63,7 @@
         </font>
     </Button>
 
-    <Button fx:id="settingsBtn" maxWidth="Infinity" text="Punto de VENTA" onAction="#irPuntoVenta">
+    <Button fx:id="btnVentas" maxWidth="Infinity" text="Punto de VENTA" onAction="#irPuntoVenta">
         <styleClass>
             <String fx:value="button-primary" />
             <String fx:value="button" />
@@ -72,7 +72,7 @@
             <Font name="System Bold" size="12.0" />
         </font>
     </Button>
-    <Button fx:id="settingsBtn2" maxWidth="Infinity" text="Orden COMPRA" onAction="#irOrdenCompra">
+    <Button fx:id="btnOrdenCompra" maxWidth="Infinity" text="Orden COMPRA" onAction="#irOrdenCompra">
         <styleClass>
             <String fx:value="button-primary" />
             <String fx:value="button" />
@@ -81,7 +81,7 @@
             <Font name="System Bold" size="12.0" />
         </font>
     </Button>
-    <Button fx:id="settingsBtn1" layoutX="25.0" layoutY="307.0" maxWidth="Infinity" text="Usuarios" onAction="#irUsuarios">
+    <Button fx:id="btnUsuarios" layoutX="25.0" layoutY="307.0" maxWidth="Infinity" text="Usuarios" onAction="#irUsuarios">
         <styleClass>
             <String fx:value="button-primary" />
             <String fx:value="button" />
