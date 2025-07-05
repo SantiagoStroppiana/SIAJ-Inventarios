@@ -26,9 +26,11 @@ public class UsuarioController {
         return usuarioService.login(email, password);
     }
 
-    public MensajesResultados actualizarRol(int idUsuario) { return usuarioService.actualizarRolAdmin(idUsuario); }
+    public MensajesResultados actualizarRol(int idUsuario, String nuevoRol) {
 
-//    public List<Usuario> listarUsuarios (){ return usuarioService.listarUsuarios(); }
+        return usuarioService.actualizarRol(idUsuario, nuevoRol);
+    }
+
     public List<UsuarioDTO> listarUsuariosDTO() {
     List<Usuario> usuarios = usuarioService.listarUsuarios(); // o como lo estés obteniendo
 

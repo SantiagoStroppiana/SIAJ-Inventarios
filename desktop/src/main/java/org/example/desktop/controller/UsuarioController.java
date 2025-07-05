@@ -2,8 +2,6 @@ package org.example.desktop.controller;
 
 import com.google.gson.Gson;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -13,11 +11,10 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.UsuarioDTO;
-import org.example.desktop.model.Rol;
 import org.example.desktop.model.Usuario;
+import org.example.desktop.util.StageManager;
 import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
-
 import javax.swing.*;
 import java.net.URI;
 import java.net.URL;
@@ -37,12 +34,17 @@ public class UsuarioController implements Initializable {
     @FXML private TableColumn<UsuarioDTO, String> apellidoColumn;
     @FXML private TableColumn<UsuarioDTO, String> emailColumn;
     @FXML private TableColumn<UsuarioDTO, String> rolColumn;
-    @FXML private TableColumn<Usuario, Void> accionColumn;
+    @FXML private TableColumn<UsuarioDTO, Void> accionColumn;
+
 
     @FXML private Label labelId;
     @FXML private Label labelNombreCompleto;
     @FXML private Label labelEmail;
     @FXML private Label labelRol;
+
+    @FXML public void irRegistro(){
+        StageManager.loadScene("/org/example/desktop/register-view.fxml", 700, 650);
+    };
 
     @FXML
     public void perfilUsuario(){
@@ -51,7 +53,6 @@ public class UsuarioController implements Initializable {
             int idUsuario = usuario.getId();
             String nombreCompleto = usuario.getNombre() + " " + usuario.getApellido();
             String email = usuario.getEmail();
-//            Rol rol = usuario.getRol();
             String rol = usuario.getNombreRol();
 
             labelId.setText(String.valueOf(idUsuario));
@@ -72,14 +73,7 @@ public class UsuarioController implements Initializable {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
-
-//            Usuario[] usuarios = gson.fromJson(responseBody, Usuario[].class);
-//
-//            tablaUsuarios.getItems().clear();
-//            tablaUsuarios.getItems().addAll(usuarios);
-
             UsuarioDTO[] usuarios = gson.fromJson(response.body(), UsuarioDTO[].class);
-
             tablaUsuarios.getItems().clear();
             tablaUsuarios.getItems().addAll(usuarios);
 
@@ -104,22 +98,27 @@ public class UsuarioController implements Initializable {
         mostrarUsuarios();
     }
 
-    public void columanAccion(){
-        Callback<TableColumn<Usuario, Void>, TableCell<Usuario, Void>> cellFactory = new Callback<>() {
+    public void columanAccion() {
+        Callback<TableColumn<UsuarioDTO, Void>, TableCell<UsuarioDTO, Void>> cellFactory = new Callback<>() {
             @Override
-            public TableCell<Usuario, Void> call(final TableColumn<Usuario, Void> param) {
+            public TableCell<UsuarioDTO, Void> call(final TableColumn<UsuarioDTO, Void> param) {
                 return new TableCell<>() {
                     private final Button btn = new Button("CAMBIAR ROL");
+
                     {
                         btn.setOnAction(event -> {
-                            Usuario usuario = getTableView().getItems().get(getIndex());
-                            int id = usuario.getId();
+                            UsuarioDTO usuario = getTableView().getItems().get(getIndex());
 
-                            Usuario usuarioRequest = new Usuario();
-                            usuarioRequest.setId(id);
+                            UsuarioDTO updateDTO = new UsuarioDTO();
+                            updateDTO.setId(usuario.getId());
+                            if(usuario.getNombreRol().equalsIgnoreCase("Administrador")){
+                                updateDTO.setNombreRol("Vendedor");
+                            }else if(usuario.getNombreRol().equalsIgnoreCase("Vendedor")){
+                                updateDTO.setNombreRol("Administrador");
+                            }
 
-                            try{
-                                String json = gson.toJson(usuarioRequest);
+                            try {
+                                String json = gson.toJson(updateDTO);
 
                                 HttpRequest request = HttpRequest.newBuilder()
                                         .uri(URI.create(VariablesEntorno.getServerURL() + "/api/actualizarRol"))
@@ -128,20 +127,26 @@ public class UsuarioController implements Initializable {
                                         .build();
 
                                 HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-                                mostrarUsuarios();
+
+                                if (response.statusCode() == 200) {
+                                    mostrarUsuarios();
+                                    notificar("Éxito", "Rol actualizado correctamente", true);
+                                } else {
+                                    notificar("Error", "No se pudo actualizar el rol", false);
+                                }
 
                             } catch (Exception e) {
-                                throw new RuntimeException(e);
+                                notificar("Error crítico", e.getMessage(), false);
                             }
-
                         });
                     }
+
                     @Override
                     protected void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
                         if (empty) {
                             setGraphic(null);
-                        }else{
+                        } else {
                             setGraphic(btn);
                         }
                     }
@@ -151,6 +156,7 @@ public class UsuarioController implements Initializable {
 
         accionColumn.setCellFactory(cellFactory);
     }
+
 
     private void notificar(String titulo, String mensaje, boolean exito){
         Platform.runLater(() -> {

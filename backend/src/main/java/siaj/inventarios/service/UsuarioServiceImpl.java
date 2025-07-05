@@ -20,28 +20,6 @@ public class UsuarioServiceImpl implements UsuarioService{
         this.usuarioDAO = usuarioDAO;
     }
 
-
-//    @Override
-//    public MensajesResultados login(String email, String password) {
-//
-//        if(email == null || password == null || email.isEmpty() || password.isEmpty()){
-//            return  new MensajesResultados(false, "Email o password no pueden estar vacio");
-//        }
-//
-//        Usuario usuario = usuarioDAO.buscarUsuarioPorEmail(email);
-//
-//        if(usuario == null){
-//            return  new MensajesResultados(false, "Usuario no encontrado");
-//        }
-//
-//        if (!BCrypt.checkpw(password, usuario.getPassword())) {
-//            return new MensajesResultados(false, "Contraseña incorrecta");
-//        }
-//
-//        return new MensajesResultados(true, "Inicio de sesion correcta");
-//
-//    }
-
     @Override
     public LoginResponseDTO login(String email, String password) {
 
@@ -64,7 +42,6 @@ public class UsuarioServiceImpl implements UsuarioService{
                 usuario.getNombre(),
                 usuario.getApellido(),
                 usuario.getEmail(),
-//                usuario.getRolId()
                 usuario.getNombreRol()
         );
 
@@ -109,11 +86,10 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
-    public MensajesResultados actualizarRolAdmin(int idUsuario) {
+    public MensajesResultados actualizarRol(int idUsuario, String nuevoRol) {
 
         try{
-
-            usuarioDAO.actualizarRolAdmin(idUsuario);
+            usuarioDAO.actualizarRol(idUsuario, nuevoRol);
             return new MensajesResultados(true, "Usuario actualizado correctamente");
         }catch (Exception e){
             System.out.println("Error al actualizar rol admin" + e.getMessage());

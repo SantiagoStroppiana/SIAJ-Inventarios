@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UsuarioDAO {
     void registrarUsuario(Usuario usuario);
-    void actualizarRolAdmin(int idUsuario);
+    void actualizarRol(int idUsuario, String nuevoRol);
     List<Usuario> listarUsuarios();
     Usuario buscarUsuarioPorEmail(@NotBlank String email);
     void cambiarPassword(String oldPassword,String newPassword);

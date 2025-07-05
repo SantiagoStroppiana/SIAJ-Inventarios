@@ -24,7 +24,7 @@
                     <children>
                         <Label styleClass="usuarios-panel-title" text="Panel de Usuarios" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <Button styleClass="usuarios-btn-agregar" text="Agregar Usuarios" />
+                        <Button styleClass="usuarios-btn-agregar" text="Agregar Usuarios" fx:id="btnAgregarUsuario" onAction="#irRegistro"/>
                     </children>
                 </HBox>
 

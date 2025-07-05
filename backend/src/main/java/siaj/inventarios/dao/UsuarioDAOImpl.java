@@ -33,7 +33,7 @@ public class UsuarioDAOImpl implements UsuarioDAO{
     }
 
     @Override
-    public void actualizarRolAdmin(int idUsuario) {
+    public void actualizarRol(int idUsuario, String nuevoRol) {
 
         Session session = HibernateUtil.getSession();
 
@@ -41,13 +41,19 @@ public class UsuarioDAOImpl implements UsuarioDAO{
             session.beginTransaction();
 
             Usuario usuario = session.get(Usuario.class, idUsuario);
-            if(usuario == null){
+            if (usuario == null) {
                 throw new RuntimeException("Usuario no encontrado");
             }
 
-            Rol rolAdmin = new Rol();
-            rolAdmin.setId(1);
-            usuario.setRolId(rolAdmin);
+            Rol rol = (Rol) session.createQuery("FROM Rol WHERE nombre = :nombreRol")
+                    .setParameter("nombreRol", nuevoRol)
+                    .uniqueResult();
+
+            if (rol == null) {
+                throw new RuntimeException("Rol no encontrado: " + nuevoRol);
+            }
+
+            usuario.setRolId(rol);
 
             session.merge(usuario);
             session.getTransaction().commit();

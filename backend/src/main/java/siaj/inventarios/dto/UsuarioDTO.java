@@ -1,24 +1,13 @@
 package siaj.inventarios.dto;
-
-import siaj.inventarios.model.Rol;
-
 public class UsuarioDTO {
 
     private int id;
     private String nombre;
     private String apellido;
     private String email;
-//
     private String nombreRol;
 
-
-//    public UsuarioDTO(int id, String nombre, String apellido, String email , Rol rol) {
-//        this.id = id;
-//        this.nombre = nombre;
-//        this.apellido = apellido;
-//        this.email = email;
-//        this.rol = rol;
-//    }
+    public UsuarioDTO() {}
 
     public UsuarioDTO(int id, String nombre, String apellido, String email, String rol){
         this.id = id;
@@ -59,11 +48,4 @@ public class UsuarioDTO {
     public void setNombreRol(String nombreRol) {
         this.nombreRol = nombreRol;
     }
-
-//    public Rol getRol() {
-//        return rol;
-//    }
-//    public void setRol(Rol rol) {
-//        this.rol = rol;
-//    }
 }

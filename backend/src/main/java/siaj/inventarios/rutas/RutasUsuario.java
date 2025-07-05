@@ -5,6 +5,7 @@ import siaj.inventarios.controller.UsuarioController;
 import siaj.inventarios.dto.LoginResponseDTO;
 import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.dto.UsuarioDTO;
+import siaj.inventarios.dto.UsuarioRolDTO;
 import siaj.inventarios.model.Usuario;
 
 import java.util.List;
@@ -40,15 +41,14 @@ public class RutasUsuario {
         });
 
         app.put("/api/actualizarRol", ctx -> {
-            Usuario usuario = ctx.bodyAsClass(Usuario.class);
-            MensajesResultados respuesta = usuarioController.actualizarRol(usuario.getId());
+            UsuarioRolDTO usuarioRolDTO = ctx.bodyAsClass(UsuarioRolDTO.class);
+
+            int id = usuarioRolDTO.getId();
+            String nuevoRol = usuarioRolDTO.getNuevoRol();
+
+            MensajesResultados respuesta = usuarioController.actualizarRol(id, nuevoRol);
             ctx.json(respuesta);
         });
-
-//        app.get("/api/usuarios", ctx -> {
-//            List<Usuario> mostrar = usuarioController.listarUsuarios();
-//            ctx.json(mostrar);
-//        });
 
         app.get("/api/usuarios", ctx -> {
             List<UsuarioDTO> mostrar = usuarioController.listarUsuariosDTO();
