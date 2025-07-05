@@ -58,7 +58,7 @@ public class LoginController {
                             LoginResponse resultado = gson.fromJson(responseBody, LoginResponse.class);
 
                             if (resultado.isSuccess()) {
-                                UsuarioDTO usuarioLogueado = resultado.getUsuario(); // ✅ ya es UsuarioDTO
+                                UsuarioDTO usuarioLogueado = resultado.getUsuario();
                                 UserSession.iniciarSesion(usuarioLogueado);
 
                                 System.out.println("JSON de respuesta LOGIN: " + responseBody);

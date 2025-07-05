@@ -2,6 +2,7 @@ package siaj.inventarios.service;
 
 import siaj.inventarios.dto.LoginResponseDTO;
 import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.dto.UsuarioPasswordDTO;
 import siaj.inventarios.model.Usuario;
 import java.util.List;
 public interface UsuarioService {
@@ -10,5 +11,5 @@ public interface UsuarioService {
     MensajesResultados registrarUsuario(Usuario usuario);
     MensajesResultados actualizarRol(int idUsuario, String nuevoRol);
     List<Usuario> listarUsuarios();
-    MensajesResultados cambiarPassword(String oldPassword, String newPassword);
+    MensajesResultados cambiarPassword(UsuarioPasswordDTO usuarioPasswordDTO);
 }

@@ -2,10 +2,7 @@ package siaj.inventarios.rutas;
 
 import io.javalin.Javalin;
 import siaj.inventarios.controller.UsuarioController;
-import siaj.inventarios.dto.LoginResponseDTO;
-import siaj.inventarios.dto.MensajesResultados;
-import siaj.inventarios.dto.UsuarioDTO;
-import siaj.inventarios.dto.UsuarioRolDTO;
+import siaj.inventarios.dto.*;
 import siaj.inventarios.model.Usuario;
 
 import java.util.List;
@@ -28,12 +25,6 @@ public class RutasUsuario {
             ctx.json(respuesta);
         });
 
-//        app.post("/api/login", ctx -> {
-//           Usuario usuario = ctx.bodyAsClass(Usuario.class);
-//           MensajesResultados respuesta = usuarioController.login(usuario.getEmail(), usuario.getPassword());
-//           ctx.json(respuesta);
-//        });
-
         app.post("/api/login", ctx -> {
             Usuario usuario = ctx.bodyAsClass(Usuario.class);
             LoginResponseDTO respuesta = usuarioController.login(usuario.getEmail(), usuario.getPassword());
@@ -53,6 +44,11 @@ public class RutasUsuario {
         app.get("/api/usuarios", ctx -> {
             List<UsuarioDTO> mostrar = usuarioController.listarUsuariosDTO();
             ctx.json(mostrar);
+        });
+
+        app.put("/api/cambiarPassword", ctx -> {
+            UsuarioPasswordDTO usuarioPasswordDTO = ctx.bodyAsClass(UsuarioPasswordDTO.class);
+            ctx.json(usuarioController.cambiarPassWord(usuarioPasswordDTO));
         });
 
 

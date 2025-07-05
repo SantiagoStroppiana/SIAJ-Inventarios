@@ -12,33 +12,17 @@ public class MenuController {
 
     @FXML private Label labelBienvenida;
 
+    @FXML
+    public void initialize() {
+        UsuarioDTO usuario = UserSession.getUsuarioActual();
+        System.out.println("Usuario en sesión (desde initialize): " + usuario);
 
-//    @FXML
-//    public void initialize() {
-//        Usuario usuario = UserSession.getUsuarioActual();
-//        if (usuario != null && usuario.getRol() != null) {
-//            String nombreCompleto = usuario.getNombre() + " " + usuario.getApellido();
-////            labelBienvenida.setText("Bienvenido, " + nombreCompleto + " (" + usuario.getRol().getNombre() + ")");
-//            labelBienvenida.setText("Bienvenido, " + nombreCompleto);
-//            System.out.println("Usuario en sesión: " + UserSession.getUsuarioActual());
-//            System.out.println("Rol: " + UserSession.getUsuarioActual().getRol());
-//
-//        } else {
-//            labelBienvenida.setText("Bienvenido");
-//        }
-//    }
+        if(usuario != null){
+            String nombreCompleto = usuario.getNombre() + " " + usuario.getApellido();
+            labelBienvenida.setText("Bienvenido, " + nombreCompleto + " (" + usuario.getNombreRol() + ")");
 
-@FXML
-public void initialize() {
-    UsuarioDTO usuario = UserSession.getUsuarioActual();
-    System.out.println("Usuario en sesión (desde initialize): " + usuario);
-
-    if(usuario != null){
-        String nombreCompleto = usuario.getNombre() + " " + usuario.getApellido();
-        labelBienvenida.setText("Bienvenido, " + nombreCompleto + " (" + usuario.getNombreRol() + ")");
-
+        }
     }
-}
 
 
     @FXML

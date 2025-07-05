@@ -3,6 +3,7 @@ package siaj.inventarios.controller;
 import siaj.inventarios.dto.LoginResponseDTO;
 import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.dto.UsuarioDTO;
+import siaj.inventarios.dto.UsuarioPasswordDTO;
 import siaj.inventarios.model.Usuario;
 import siaj.inventarios.service.UsuarioService;
 import java.util.List;
@@ -45,5 +46,5 @@ public class UsuarioController {
             .toList();
 }
 
-    public MensajesResultados cambiarPassWord(String oldPassword, String newPassword) { return usuarioService.cambiarPassword(oldPassword, newPassword); }
+    public MensajesResultados cambiarPassWord(UsuarioPasswordDTO usuarioPasswordDTO) { return usuarioService.cambiarPassword(usuarioPasswordDTO); }
 }

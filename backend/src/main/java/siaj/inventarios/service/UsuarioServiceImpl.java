@@ -6,6 +6,7 @@ import siaj.inventarios.dao.UsuarioDAOImpl;
 import siaj.inventarios.dto.LoginResponseDTO;
 import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.dto.UsuarioDTO;
+import siaj.inventarios.dto.UsuarioPasswordDTO;
 import siaj.inventarios.model.Rol;
 import siaj.inventarios.model.Usuario;
 
@@ -103,8 +104,14 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
-    public MensajesResultados cambiarPassword(String oldPassword, String newPassword) {
-        return new MensajesResultados(true, "Cambiando password");
+    public MensajesResultados cambiarPassword(UsuarioPasswordDTO usuarioPasswordDTO) {
+
+        try{
+            usuarioDAO.cambiarPassword(usuarioPasswordDTO.getId(), usuarioPasswordDTO.getOldPassword(), usuarioPasswordDTO.getNewPassword());
+            return new MensajesResultados(true, "Password cambiada correctamente");
+        } catch (Exception e) {
+            return new MensajesResultados(false, "Error al cambiar password");
+        }
     }
 
 }

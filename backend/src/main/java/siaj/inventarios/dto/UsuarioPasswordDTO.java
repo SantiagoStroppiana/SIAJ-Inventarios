@@ -1,4 +1,4 @@
-package org.example.desktop.dto;
+package siaj.inventarios.dto;
 
 public class UsuarioPasswordDTO {
 
@@ -31,4 +31,5 @@ public class UsuarioPasswordDTO {
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
+
 }
