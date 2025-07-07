@@ -12,10 +12,10 @@
     </left>
 
     <stylesheets>
-        <URL value="@estilos/estilos-globales.css" />
-        <URL value="@estilos/tabla.css" />
-        <URL value="@estilos/users.css" />
-    </stylesheets>
+    <URL value="@estilos/estilos-globales.css" />
+    <URL value="@estilos/tabla.css" />
+    <URL value="@estilos/users.css" />
+</stylesheets>
 
     <center>
         <VBox prefHeight="900.0" prefWidth="700.0" spacing="20.0" styleClass="usuarios-center-pane" BorderPane.alignment="CENTER">
@@ -24,8 +24,7 @@
                     <children>
                         <Label styleClass="usuarios-panel-title" text="Panel de Usuarios" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <Button styleClass="usuarios-btn-agregar" text="Agregar Usuarios" fx:id="btnAgregarUsuario" onAction="#irRegistro"/>
-                        <Button styleClass="usuarios-btn-agregar" text="Cambiar PASSWORD" fx:id="btnCambiarContra" onAction="#irCambiarPassword"/>
+                        <Button fx:id="btnAgregarUsuario" onAction="#irRegistro" styleClass="usuarios-btn-agregar" text="Agregar Usuarios" />
                     </children>
                 </HBox>
 

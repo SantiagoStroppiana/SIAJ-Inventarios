@@ -105,12 +105,16 @@ public class UsuarioServiceImpl implements UsuarioService{
 
     @Override
     public MensajesResultados cambiarPassword(UsuarioPasswordDTO usuarioPasswordDTO) {
+        if (usuarioPasswordDTO.getOldPassword() == null || usuarioPasswordDTO.getOldPassword().isBlank()
+                || usuarioPasswordDTO.getNewPassword() == null || usuarioPasswordDTO.getNewPassword().isBlank()) {
+            return new MensajesResultados(false, "Los campos de contraseña no pueden estar vacíos.");
+        }
 
-        try{
+        try {
             usuarioDAO.cambiarPassword(usuarioPasswordDTO.getId(), usuarioPasswordDTO.getOldPassword(), usuarioPasswordDTO.getNewPassword());
-            return new MensajesResultados(true, "Password cambiada correctamente");
+            return new MensajesResultados(true, "Contraseña actualizada correctamente.");
         } catch (Exception e) {
-            return new MensajesResultados(false, "Error al cambiar password");
+            return new MensajesResultados(false, e.getMessage());
         }
     }
 

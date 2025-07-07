@@ -10,6 +10,7 @@ import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.UsuarioDTO;
 import org.example.desktop.dto.UsuarioPasswordDTO;
+import org.example.desktop.util.StageManager;
 import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
 
@@ -30,17 +31,22 @@ public class PasswordController {
 
     @FXML
     public void olvidePassword(ActionEvent event) {
-
         UsuarioDTO usuario = UserSession.getUsuarioActual();
 
-        if (usuario!=null){
-            try{
+        if (usuario != null) {
+            String oldPass = oldPassword.getText();
+            String newPass = newPassword.getText();
 
+            if (oldPass.isEmpty() || newPass.isEmpty()) {
+                notificar("Campos vacíos", "Debes completar ambos campos de contraseña.", false);
+                return;
+            }
+
+            try {
                 UsuarioPasswordDTO usuarioPasswordDTO = new UsuarioPasswordDTO();
                 usuarioPasswordDTO.setId(usuario.getId());
-                usuarioPasswordDTO.setOldPassword(oldPassword.getText());
-                usuarioPasswordDTO.setNewPassword(newPassword.getText());
-
+                usuarioPasswordDTO.setOldPassword(oldPass);
+                usuarioPasswordDTO.setNewPassword(newPass);
 
                 String json = gson.toJson(usuarioPasswordDTO);
 
@@ -58,14 +64,17 @@ public class PasswordController {
                     notificar("Error", "No se pudo cambiar la contraseña", false);
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 notificar("Error", "No se pudo cambiar la contraseña", false);
-
             }
-
         }
     }
 
+
+    @FXML
+    public void volver(ActionEvent event) {
+        StageManager.loadScene("/org/example/desktop/menu-view.fxml" , 1600, 900);
+    }
 
     private void notificar(String titulo, String mensaje, boolean exito) {
         Platform.runLater(() -> {

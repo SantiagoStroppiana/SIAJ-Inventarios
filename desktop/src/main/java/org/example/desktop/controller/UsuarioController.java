@@ -42,10 +42,6 @@ public class UsuarioController implements Initializable {
     @FXML private Label labelEmail;
     @FXML private Label labelRol;
 
-    @FXML public void irCambiarPassword(){
-        StageManager.loadScene("/org/example/desktop/cambiar-password-view.fxml", 700, 500);
-    }
-
     @FXML public void irRegistro(){
         StageManager.loadScene("/org/example/desktop/register-view.fxml", 700, 650);
     };
