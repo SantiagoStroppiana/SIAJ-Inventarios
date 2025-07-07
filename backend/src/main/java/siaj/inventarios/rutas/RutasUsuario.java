@@ -51,6 +51,11 @@ public class RutasUsuario {
             ctx.json(usuarioController.cambiarPassWord(usuarioPasswordDTO));
         });
 
+        app.put("/api/olvidePassword", ctx -> {
+            UsuarioForgetPasswordDTO usuarioForgetPasswordDTO = ctx.bodyAsClass(UsuarioForgetPasswordDTO.class);
+            ctx.json(usuarioController.olvidePassword(usuarioForgetPasswordDTO));
+        });
+
 
     }
 }

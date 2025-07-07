@@ -3,10 +3,7 @@ package siaj.inventarios.service;
 import org.mindrot.jbcrypt.BCrypt;
 import siaj.inventarios.dao.UsuarioDAO;
 import siaj.inventarios.dao.UsuarioDAOImpl;
-import siaj.inventarios.dto.LoginResponseDTO;
-import siaj.inventarios.dto.MensajesResultados;
-import siaj.inventarios.dto.UsuarioDTO;
-import siaj.inventarios.dto.UsuarioPasswordDTO;
+import siaj.inventarios.dto.*;
 import siaj.inventarios.model.Rol;
 import siaj.inventarios.model.Usuario;
 
@@ -116,6 +113,11 @@ public class UsuarioServiceImpl implements UsuarioService{
         } catch (Exception e) {
             return new MensajesResultados(false, e.getMessage());
         }
+    }
+
+    @Override
+    public MensajesResultados olvidePassword(UsuarioForgetPasswordDTO UsuarioForgetPasswordDTO){
+        return new MensajesResultados(true, "El usuario ya existe");
     }
 
 }

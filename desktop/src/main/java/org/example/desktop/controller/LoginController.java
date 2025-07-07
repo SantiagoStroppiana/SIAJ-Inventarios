@@ -2,6 +2,7 @@ package org.example.desktop.controller;
 
 import com.google.gson.Gson;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
@@ -27,6 +28,11 @@ public class LoginController {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
+
+    @FXML
+    public void olvidePassword(ActionEvent event) {
+        StageManager.loadScene("/org/example/desktop/cambiar-password-view.fxml", 700, 500);
+    }
 
     @FXML
     public void iniciarSesion(javafx.event.ActionEvent actionEvent) {

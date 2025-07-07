@@ -110,28 +110,6 @@ public class UsuarioDAOImpl implements UsuarioDAO{
     @Override
     public void cambiarPassword(int idUsuario, String oldPassword, String newPassword) {
 
-//        Session session = HibernateUtil.getSession();
-//
-//        try{
-//            session.beginTransaction();
-//            Usuario usuario = session.get(Usuario.class, idUsuario);
-//            if (usuario == null) {
-//                throw new RuntimeException("Usuario no encontrado");
-//            }
-//
-//            if (!usuario.getPassword().equals(oldPassword)) {
-//                throw new RuntimeException("La contraseña actual no coinciden");
-//            }
-//            String paswordEncriptada = BCrypt.hashpw(newPassword, BCrypt.gensalt());
-//            usuario.setPassword(paswordEncriptada);
-//
-//            session.merge(usuario);
-//            session.getTransaction().commit();
-//
-//        }catch (Exception e) {
-//            session.getTransaction().rollback();
-//            throw new RuntimeException("Erorr al cambiar password" + e.getMessage());
-//        }
         Session session = HibernateUtil.getSession();
 
         try {
@@ -142,12 +120,10 @@ public class UsuarioDAOImpl implements UsuarioDAO{
                 throw new RuntimeException("Usuario no encontrado");
             }
 
-            // Compara la vieja contraseña hasheada
             if (!BCrypt.checkpw(oldPassword, usuario.getPassword())) {
                 throw new RuntimeException("La contraseña actual no es correcta");
             }
 
-            // Hashea la nueva y guarda
             String hashedNueva = BCrypt.hashpw(newPassword, BCrypt.gensalt());
             usuario.setPassword(hashedNueva);
 
@@ -160,6 +136,39 @@ public class UsuarioDAOImpl implements UsuarioDAO{
         } finally {
             session.close();
         }
+    }
+
+    @Override
+    public  void olvidePassword(String email, String newPassword, String repetirPassword){
+
+//        Session session = HibernateUtil.getSession();
+//
+//        try {
+//            session.beginTransaction();
+//
+//            Usuario usuario = session.get(Usuario.class, idUsuario);
+//            if (usuario == null) {
+//                throw new RuntimeException("Usuario no encontrado");
+//            }
+//
+//            if (!BCrypt.checkpw(oldPassword, usuario.getPassword())) {
+//                throw new RuntimeException("La contraseña actual no es correcta");
+//            }
+//
+//            String hashedNueva = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+//            usuario.setPassword(hashedNueva);
+//
+//            session.merge(usuario);
+//            session.getTransaction().commit();
+//
+//        } catch (Exception e) {
+//            session.getTransaction().rollback();
+//            throw new RuntimeException("Error al cambiar contraseña: " + e.getMessage());
+//        } finally {
+//            session.close();
+//        }
+
+
     }
 
 }
