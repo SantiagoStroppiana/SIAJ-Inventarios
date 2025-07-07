@@ -76,8 +76,17 @@
                                                 <Font name="System Bold" size="22.0" />
                                             </font>
                                         </Label>
+
                                     </children>
                                 </HBox>
+
+                                <!-- Medio de Pago -->
+                                <VBox spacing="6.0" styleClass="pv-payment-container">
+                                    <children>
+                                        <Label text="💰 Medio de Pago" styleClass="pv-payment-label" />
+                                        <ComboBox fx:id="comboMedioPago" styleClass="pv-payment-combobox" prefWidth="220.0" />
+                                    </children>
+                                </VBox>
 
                                 <VBox spacing="10.0" styleClass="pv-action-buttons">
                                     <children>

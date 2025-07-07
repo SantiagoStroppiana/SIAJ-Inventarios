@@ -101,4 +101,16 @@ import java.util.Date;
             this.usuario = usuario;
             this.medioPago = medioPago;
         }
+
+        @Override
+        public String toString() {
+            return "Venta{" +
+                    "id=" + id +
+                    ", total=" + total +
+                    ", estado=" + estado +
+                    ", fechaPago=" + fechaPago +
+                    ", usuario=" + usuario +
+                    ", medioPago=" + medioPago +
+                    '}';
+        }
     }

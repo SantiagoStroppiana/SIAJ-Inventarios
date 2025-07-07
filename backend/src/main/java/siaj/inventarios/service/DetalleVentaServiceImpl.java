@@ -1,6 +1,7 @@
 package siaj.inventarios.service;
 
 
+import org.hibernate.Session;
 import siaj.inventarios.dao.*;
 import siaj.inventarios.dto.DetalleVentaDTO;
 import siaj.inventarios.dto.MensajesResultados;
@@ -8,6 +9,7 @@ import siaj.inventarios.dto.VentaDTO;
 import siaj.inventarios.model.DetalleVenta;
 import siaj.inventarios.model.Producto;
 import siaj.inventarios.model.Venta;
+import siaj.inventarios.util.HibernateUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,7 +24,7 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
     public DetalleVentaServiceImpl(DetalleVentaDAO detalleVentaDAO) {
     }
 
-    @Override
+    /*@Override
     public MensajesResultados registrarDetalle(DetalleVenta detalleVenta) {
         Venta venta = new Venta();
         venta.setId(detalleVenta.getId());
@@ -38,10 +40,55 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
             throw new RuntimeException("Producto no encontrado con ID: " + detalleVenta.getProducto().getId());
         }
 
-
+        descontarStock(producto, detalleVenta.getCantidad());
 
         return detalleVentaDAO.agregarDetalle(detalleVenta);
+    }*/
+
+
+
+    @Override
+    public MensajesResultados registrarDetalle(DetalleVenta detalleVenta) {
+        Session session = HibernateUtil.getSession();
+        try {
+            session.beginTransaction();
+
+            Venta venta = session.get(Venta.class, detalleVenta.getVenta().getId());
+            Producto producto = session.get(Producto.class, detalleVenta.getProducto().getId());
+
+            if (venta == null || producto == null) {
+                throw new RuntimeException("Venta o producto no encontrado");
+            }
+
+            // Asignar instancias persistidas
+            detalleVenta.setVenta(venta);
+            detalleVenta.setProducto(producto);
+
+            // Descontar stock
+            int stockNuevo = producto.getStock() - detalleVenta.getCantidad();
+            if (stockNuevo < 0) {
+                throw new RuntimeException("Stock insuficiente");
+            }
+            producto.setStock(stockNuevo);
+            session.merge(producto);
+
+            // Guardar el detalle
+            session.persist(detalleVenta);
+
+            session.getTransaction().commit();
+            return new MensajesResultados(true, "Detalle de venta guardado con éxito");
+
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RuntimeException("Error en registrarConStock: " + e.getMessage());
+        } finally {
+            session.close();
+        }
     }
+
+
+
+
 
     @Override
     public List <DetalleVentaDTO> obtenerDetalles (){
@@ -54,4 +101,13 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
     public List<DetalleVenta> obtenerPorVenta(int ventaId) {
         return detalleVentaDAO.obtenerPorVentaId(ventaId);
     }
+
+
+    @Override
+    public void descontarStock (Producto producto, int cantidad){
+        producto.setStock(producto.getStock() - cantidad);
+        productoDAO.modificarProducto(producto);
+    }
+
 }
+

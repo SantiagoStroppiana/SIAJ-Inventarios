@@ -7,13 +7,13 @@ public class MedioPago {
     private int id;
 
 
-    private String nombre;
+    private String tipo;
 
     public MedioPago() {
     }
 
-    public MedioPago(String nombre) {
-        this.nombre = nombre;
+    public MedioPago(String tipo) {
+        this.tipo = tipo;
     }
 
 
@@ -25,16 +25,24 @@ public class MedioPago {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
-    public MedioPago(int id, String nombre) {
+    public MedioPago(int id, String tipo) {
         this.id = id;
-        this.nombre = nombre;
+        this.tipo = tipo;
+    }
+
+    @Override
+    public String toString() {
+        return "MedioPago{" +
+                "id=" + id +
+                ", tipo='" + tipo + '\'' +
+                '}';
     }
 }

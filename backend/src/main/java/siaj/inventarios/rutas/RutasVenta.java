@@ -31,7 +31,7 @@ public class RutasVenta {
 
         app.post("/api/crearVenta", ctx -> {
             Venta venta = ctx.bodyAsClass(Venta.class);
-            MensajesResultados respuesta = ventaController.crearVenta(venta);
+            VentaDTO respuesta = ventaController.crearVenta(venta);
             ctx.json(respuesta);
         });
 

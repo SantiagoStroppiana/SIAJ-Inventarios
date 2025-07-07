@@ -30,7 +30,7 @@ public class VentaServiceImpl implements VentaService{
             dto.setEstado(v.getEstado().name());
             dto.setFechaPago(v.getFechaPago().toString());
             dto.setUsuarioNombre(v.getUsuario().getNombre());
-            dto.setMedioPagoNombre(v.getMedioPago().getNombre());
+            dto.setMedioPagoNombre(v.getMedioPago().getTipo());
             return dto;
         }).collect(Collectors.toList()).reversed();
     }
@@ -41,7 +41,7 @@ public class VentaServiceImpl implements VentaService{
     }
 
     @Override
-    public MensajesResultados registrarVenta(Venta venta) {
+    public VentaDTO registrarVenta(Venta venta) {
 
        return ventaDAO.agregarVenta(venta);
     }

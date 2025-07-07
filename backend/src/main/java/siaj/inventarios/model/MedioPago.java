@@ -11,13 +11,13 @@ public class MedioPago {
     private int id;
 
     @Column(nullable = false, unique = true)
-    private String nombre;
+    private String tipo;
 
     public MedioPago() {
     }
 
-    public MedioPago(String nombre) {
-        this.nombre = nombre;
+    public MedioPago(String tipo) {
+        this.tipo = tipo;
     }
 
     // Getters y setters
@@ -30,16 +30,16 @@ public class MedioPago {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
-    public MedioPago(int id, String nombre) {
+    public MedioPago(int id, String tipo) {
         this.id = id;
-        this.nombre = nombre;
+        this.tipo = tipo;
     }
 }

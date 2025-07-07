@@ -86,6 +86,14 @@ public class Venta {
         this.medioPago = medioPago;
     }
 
+    public Venta(double total, EstadoVenta estado, String fechaPago, Usuario usuario, MedioPago medioPago) {
+        this.total = total;
+        this.estado = estado;
+        this.fechaPago = fechaPago;
+        this.usuario = usuario;
+        this.medioPago = medioPago;
+    }
+
     public Venta(int id, double total, EstadoVenta estado, String fechaPago, Usuario usuario, MedioPago medioPago) {
         this.id = id;
         this.total = total;

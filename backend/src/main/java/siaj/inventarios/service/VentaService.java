@@ -14,7 +14,7 @@ public interface VentaService{
 
     List<VentaDTO> obtenerTodasLasVentas();
     Venta obtenerVentaPorId(int id);
-    MensajesResultados registrarVenta(Venta venta);
+    VentaDTO registrarVenta(Venta venta);
     void actualizarEstado(int id, Venta.EstadoVenta nuevoEstado);
    // void eliminarVenta(int id);
     MensajesResultados actualizarVenta(Venta venta);

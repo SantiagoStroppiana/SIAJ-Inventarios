@@ -465,3 +465,62 @@
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
+.pv-payment-section {
+    -fx-background-color: #1e1e1e;
+    -fx-padding: 10 15 10 15;
+    -fx-border-color: #2e7d32;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+
+.pv-payment-container {
+    -fx-background-color: #1e1e1e;
+    -fx-padding: 10 12 10 12;
+    -fx-border-color: #2e7d32;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+
+.pv-payment-label {
+    -fx-text-fill: #a8e6a3;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 3 2;
+}
+
+/* Contenedor visual del ComboBox */
+.pv-payment-combobox {
+    -fx-background-color: #2b2b2b;
+    -fx-border-color: #4caf50;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-pref-height: 36px;
+}
+
+/* Estilo cuando está desplegado (lista) */
+.combo-box-popup .list-view {
+    -fx-background-color: #1f1f1f;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: #1f1f1f;
+    -fx-text-fill: #eeeeee;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #333333;
+}
+
+/* Estilo del ítem seleccionado */
+.combo-box .cell {
+    -fx-text-fill: #ffffff;
+}
+
+
+.label.pv-payment-label {
+    -fx-text-fill: #a8e6a3;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}

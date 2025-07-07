@@ -22,7 +22,7 @@ public class VentaController {
         return ventaService.actualizarVenta(venta);
     }
 
-    public MensajesResultados crearVenta (Venta venta){
+    public VentaDTO crearVenta (Venta venta){
         return ventaService.registrarVenta(venta);
     }
 
