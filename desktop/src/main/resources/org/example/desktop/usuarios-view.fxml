@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.UsuarioController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="usuarios-border-pane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.UsuarioController">
 
     <left>
         <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
     </left>
 
     <stylesheets>
-        <URL value="@estilos/estilos-globales.css" />
-        <URL value="@estilos/tabla.css" />
-    </stylesheets>
-   <center>
-        <AnchorPane prefHeight="800.0" prefWidth="700.0" BorderPane.alignment="CENTER">
+    <URL value="@estilos/estilos-globales.css" />
+    <URL value="@estilos/tabla.css" />
+    <URL value="@estilos/users.css" />
+</stylesheets>
+
+    <center>
+        <VBox prefHeight="900.0" prefWidth="700.0" spacing="20.0" styleClass="usuarios-center-pane" BorderPane.alignment="CENTER">
             <children>
-                <TableView fx:id="tablaUsuarios" layoutX="210.0" layoutY="91.0" prefHeight="719.0" prefWidth="950.0">
+                <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="20.0">
+                    <children>
+                        <Label styleClass="usuarios-panel-title" text="Panel de Usuarios" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnAgregarUsuario" onAction="#irRegistro" styleClass="usuarios-btn-agregar" text="Agregar Usuarios" />
+                    </children>
+                </HBox>
+
+                <TableView fx:id="tablaUsuarios" prefHeight="800.0" prefWidth="950.0" styleClass="usuarios-table" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="idColumn" prefWidth="68.0" text="ID" />
                         <TableColumn fx:id="nombreColumn" prefWidth="158.0" text="NOMBRE" />
@@ -29,6 +38,57 @@
                         <TableColumn fx:id="accionColumn" prefWidth="199.0" text="ACCION" />
                     </columns>
                 </TableView>
-            </children></AnchorPane>
-   </center>
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </VBox>
+    </center>
+
+    <right>
+        <VBox prefHeight="900.0" prefWidth="380.0" spacing="20.0" styleClass="usuarios-right-pane" BorderPane.alignment="CENTER">
+            <children>
+                <Label styleClass="usuarios-perfil-title" text="Perfil Usuario" />
+
+                <VBox prefHeight="217.0" prefWidth="338.0" spacing="15.0" styleClass="usuarios-perfil-card">
+                    <children>
+                        <Label styleClass="usuarios-perfil-title" text="Información del Usuario" />
+                        <VBox spacing="10.0">
+                            <children>
+                                <HBox prefWidth="296.0" spacing="10.0">
+                                    <children>
+                                        <Label styleClass="usuarios-perfil-info-label" text="ID:" />
+                                        <Label fx:id="labelId" styleClass="usuarios-perfil-info-value" text="(id)" />
+                                    </children>
+                                </HBox>
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <Label styleClass="usuarios-perfil-info-label" text="Nombre:" />
+                                        <Label fx:id="labelNombreCompleto" styleClass="usuarios-perfil-info-value" text="(nombre completo)" />
+                                    </children>
+                                </HBox>
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <Label styleClass="usuarios-perfil-info-label" text="Email:" />
+                                        <Label fx:id="labelEmail" styleClass="usuarios-perfil-info-value" text="email" />
+                                    </children>
+                                </HBox>
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <Label styleClass="usuarios-perfil-info-label" text="Rol:" />
+                                        <Label fx:id="labelRol" styleClass="usuarios-perfil-info-value" text="(rol nombre)" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS" />
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </VBox>
+    </right>
 </BorderPane>

@@ -5,75 +5,74 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="700.0" stylesheets="@estilos/login-register.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.RegisterController">
-   <VBox alignment="CENTER" prefHeight="500.0" prefWidth="300.0" spacing="20" styleClass="left-panel">
-      <padding>
-         <Insets bottom="40.0" left="30.0" right="30.0" top="40.0" />
-      </padding>
+<StackPane stylesheets="@estilos/login-register.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.RegisterController">
 
-      <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@images/siaj-logo.png" />
-         </image>
-      </ImageView>
+   <HBox prefHeight="650.0" prefWidth="700.0">
 
-      <Label alignment="CENTER" styleClass="title-label" text="SIAJ INVENTARIOS" wrapText="true" />
+      <VBox alignment="CENTER" prefHeight="500.0" prefWidth="300.0" spacing="20" styleClass="left-panel">
+         <padding>
+            <Insets bottom="40.0" left="30.0" right="30.0" top="40.0" />
+         </padding>
 
-      <VBox alignment="CENTER" spacing="15">
-         <Label alignment="CENTER" styleClass="info-text" text="¿Tienes una cuenta?" wrapText="true" />
-         <Button mnemonicParsing="false" onAction="#irALogin" prefHeight="35.0" prefWidth="150.0" styleClass="secondary-button" text="Iniciar Sesión">
-         </Button>
-      </VBox>
-   </VBox>
-   <VBox alignment="CENTER" prefHeight="500.0" prefWidth="400.0" spacing="25" styleClass="right-panel">
-      <padding>
-         <Insets bottom="50.0" left="40.0" right="40.0" top="50.0" />
-      </padding>
+         <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@images/siaj-logo.png" />
+            </image>
+         </ImageView>
 
-      <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@images/siaj-logo.png" />
-         </image>
-      </ImageView>
+         <Label alignment="CENTER" styleClass="title-label" text="SIAJ INVENTARIOS" wrapText="true" />
 
-      <Label styleClass="form-title" text="Registrarse">
-
-      </Label>
-
-      <VBox maxWidth="320.0" spacing="20">
-
-         <VBox spacing="8">
-            <Label styleClass="field-label" text="Nombre" />
-            <TextField fx:id="nombre" promptText="Ingresa tu nombre" styleClass="text-field">
-
-            </TextField>
+         <VBox alignment="CENTER" spacing="15">
+            <Label alignment="CENTER" styleClass="info-text" text="¿Tienes una cuenta?" wrapText="true" />
+            <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#irALogin" prefHeight="35.0" prefWidth="150.0" styleClass="secondary-button" text="Iniciar Sesión" />
          </VBox>
-         <VBox layoutX="10.0" layoutY="10.0" spacing="8">
-            <children>
+      </VBox>
+
+      <VBox alignment="CENTER" prefHeight="500.0" prefWidth="400.0" spacing="25" styleClass="right-panel">
+         <padding>
+            <Insets bottom="50.0" left="40.0" right="40.0" top="50.0" />
+         </padding>
+
+         <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@images/siaj-logo.png" />
+            </image>
+         </ImageView>
+
+         <Label styleClass="form-title" text="Registro Usuario" />
+
+         <VBox maxWidth="320.0" spacing="20">
+
+            <VBox spacing="8">
+               <Label styleClass="field-label" text="Nombre" />
+               <TextField fx:id="nombre" promptText="Ingresa tu nombre" styleClass="text-field" />
+            </VBox>
+
+            <VBox spacing="8">
                <Label styleClass="field-label" text="Apellido" />
                <TextField fx:id="apellido" promptText="Ingresa tu apellido" styleClass="text-field" />
-            </children>
-         </VBox>
-         <VBox layoutX="10.0" layoutY="10.0" spacing="8">
-            <children>
+            </VBox>
+
+            <VBox spacing="8">
                <Label styleClass="field-label" text="Correo Electrónico" />
                <TextField fx:id="email" promptText="Ingresa tu email" styleClass="text-field" />
-            </children>
-         </VBox>
-         <VBox layoutX="10.0" layoutY="101.0" spacing="8">
-            <children>
+            </VBox>
+
+            <VBox spacing="8">
                <Label styleClass="field-label" text="Contraseña" />
                <PasswordField fx:id="password" promptText="Ingresa tu contraseña" styleClass="password-field" />
-            </children>
+            </VBox>
+
+            <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#registrarse" prefHeight="45.0" styleClass="primary-button" text="Registrar">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
          </VBox>
-   
-         <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#registrarse" prefHeight="45.0" styleClass="primary-button" text="Registrarse">
-            <VBox.margin>
-               <Insets top="10.0" />
-            </VBox.margin>
-         </Button>
       </VBox>
+   </HBox>
 
-   </VBox>
-
-</HBox>
+   <AnchorPane pickOnBounds="false">
+      <Button fx:id="btnVolver" layoutX="10" layoutY="10" onAction="#volverAtras" prefHeight="50.0" prefWidth="100.0" styleClass="primary-button" text="Volver"/>
+   </AnchorPane>
+</StackPane>

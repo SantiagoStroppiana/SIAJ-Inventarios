@@ -2,6 +2,7 @@ package org.example.desktop.controller;
 
 import com.google.gson.Gson;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -9,13 +10,16 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
+import org.example.desktop.dto.UsuarioDTO;
 import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Usuario;
 import org.example.desktop.util.StageManager;
+import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
 
 import java.net.URI;
@@ -35,9 +39,36 @@ public class RegisterController {
     private TextField email;
     @FXML
     private TextField password;
+    @FXML
+    private Label lblCuenta;
+    @FXML
+    private Button btnLogin;
+    @FXML
+    private Button btnVolver;
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
+
+    @FXML
+    public void initialize() {
+
+        UsuarioDTO usuarioDTO = UserSession.getUsuarioActual();
+        if(usuarioDTO != null && usuarioDTO.getNombreRol().equals("Administrador")) {
+            btnLogin.setVisible(false);
+            btnLogin.setManaged(false);
+//            lblCuenta.setVisible(false);
+//            lblCuenta.setManaged(false);
+        }else{
+            btnLogin.setVisible(false);
+            btnLogin.setManaged(true);
+        }
+
+    }
+
+    @FXML
+    public void volverAtras(ActionEvent event) {
+        StageManager.loadScene("/org/example/desktop/usuarios-view.fxml", 1600, 900);
+    }
 
     @FXML
     public void registrarse(javafx.event.ActionEvent actionEvent) {
@@ -46,6 +77,8 @@ public class RegisterController {
             notificar("Error", "Por favor, complete todos los campos", false);
             return;
         }
+
+
 
         new Thread(() -> {
 
@@ -75,7 +108,14 @@ public class RegisterController {
                             if (resultado.isExito()) {
                                 notificar("Registro exitoso", resultado.getMensaje(), true);
                                 limpiarCampos();
-                                irALogin(actionEvent);
+                                UsuarioDTO usuarioDTO = UserSession.getUsuarioActual();
+
+                                if (usuarioDTO != null) {
+                                    StageManager.loadScene("/org/example/desktop/usuarios-view.fxml", 1600, 900);
+                                }else{
+                                    irALogin(actionEvent);
+                                }
+
                             } else {
                                 notificar("Error al registrarse", resultado.getMensaje(), false);
                             }

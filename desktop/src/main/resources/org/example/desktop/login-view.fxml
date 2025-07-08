@@ -61,7 +61,7 @@
             </VBox>
 
             <HBox alignment="CENTER_RIGHT">
-                <Label styleClass="link-text" text="¿Olvidaste tu contraseña?" underline="true"/>
+                <Button styleClass="link-text" text="¿Olvidaste tu contraseña?" underline="true" onAction="#olvidePassword"/>
             </HBox>
 
             <Button mnemonicParsing="false" onAction="#iniciarSesion" prefHeight="45.0" maxWidth="Infinity"

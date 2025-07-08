@@ -1,0 +1,166 @@
+/* ===== POPUP DE PERFIL DE USUARIO ===== */
+
+.user-popup-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.7);
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.user-popup-container {
+    -fx-background-color: #2a2a2a;
+    -fx-background-radius: 15px;
+    -fx-padding: 25px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 15, 0, 0, 5);
+    -fx-border-color: rgba(76, 175, 80, 0.3);
+    -fx-border-width: 2px;
+    -fx-border-radius: 15px;
+}
+
+.user-popup-header {
+    -fx-padding: 0 0 10 0;
+}
+
+.user-btn-close {
+    -fx-background-color: transparent;
+    -fx-text-fill: #cccccc;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 50%;
+    -fx-min-width: 35px;
+    -fx-min-height: 35px;
+}
+
+.user-btn-close:hover {
+    -fx-background-color: rgba(244, 67, 54, 0.2);
+    -fx-text-fill: #f44336;
+    -fx-effect: dropshadow(gaussian, rgba(244, 67, 54, 0.4), 5, 0, 0, 2);
+}
+
+.user-btn-close:pressed {
+    -fx-background-color: rgba(244, 67, 54, 0.4);
+    -fx-text-fill: #ffffff;
+}
+
+.user-popup-title {
+    -fx-text-fill: #4caf50;
+    -fx-font-weight: bold;
+    -fx-font-size: 22px;
+    -fx-effect: dropshadow(gaussian, rgba(76, 175, 80, 0.5), 3, 0, 0, 1);
+}
+
+.user-perfil-avatar {
+    -fx-background-color: #4caf50;
+    -fx-background-radius: 50px;
+    -fx-effect: dropshadow(gaussian, rgba(76, 175, 80, 0.5), 8, 0, 0, 3);
+    -fx-border-color: rgba(76, 175, 80, 0.4);
+    -fx-border-width: 3px;
+    -fx-border-radius: 50px;
+}
+
+.user-data-container {
+    -fx-background-color: #1a1a1a;
+    -fx-background-radius: 10px;
+    -fx-padding: 20px;
+    -fx-border-color: rgba(76, 175, 80, 0.2);
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
+}
+
+.user-field-container {
+    -fx-padding: 8px 0;
+}
+
+.user-field-label {
+    -fx-text-fill: #cccccc;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-opacity: 0.8;
+}
+
+.user-field-value {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.1), 1, 0, 0, 1);
+}
+
+.user-field-rol {
+    -fx-text-fill: #ffb74d;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(255, 183, 77, 0.3), 2, 0, 0, 1);
+}
+
+.user-field-email {
+    -fx-text-fill: #64b5f6;
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-effect: dropshadow(gaussian, rgba(100, 181, 246, 0.3), 2, 0, 0, 1);
+}
+
+.user-btn-cambiar-password {
+    -fx-background-color: linear-gradient(to bottom, #4caf50, #388e3c);
+    -fx-text-fill: white;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 12px 25px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(76, 175, 80, 0.4), 5, 0, 0, 2);
+    -fx-min-width: 180px;
+}
+
+.user-btn-cambiar-password:hover {
+    -fx-background-color: linear-gradient(to bottom, #5cbf60, #42a047);
+    -fx-effect: dropshadow(gaussian, rgba(76, 175, 80, 0.6), 8, 0, 0, 3);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.user-btn-cambiar-password:pressed {
+    -fx-background-color: linear-gradient(to bottom, #388e3c, #2e7d32);
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.3), 3, 0, 0, 1);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* ===== ANIMACIONES Y EFECTOS ===== */
+
+.user-popup-container:hover {
+    -fx-effect: dropshadow(gaussian, rgba(76, 175, 80, 0.3), 20, 0, 0, 5);
+}
+
+.user-field-container:hover .user-field-value {
+    -fx-text-fill: #4caf50;
+}
+
+.user-field-container:hover .user-field-rol {
+    -fx-text-fill: #ffc107;
+}
+
+.user-field-container:hover .user-field-email {
+    -fx-text-fill: #2196f3;
+}
+
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
+@media (max-width: 500px) {
+    .user-popup-container {
+        -fx-padding: 20px;
+    }
+
+    .user-popup-title {
+        -fx-font-size: 18px;
+    }
+
+    .user-field-value, .user-field-rol, .user-field-email {
+        -fx-font-size: 14px;
+    }
+
+    .user-btn-cambiar-password {
+        -fx-font-size: 12px;
+        -fx-padding: 10px 20px;
+    }
+}

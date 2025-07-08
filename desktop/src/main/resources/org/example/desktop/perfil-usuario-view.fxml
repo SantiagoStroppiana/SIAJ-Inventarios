@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="660.0" prefWidth="466.0" spacing="20.0" styleClass="user-popup-container" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.PefilUserController">
+
+    <stylesheets>
+        <URL value="@estilos/profile-users.css" />
+    </stylesheets>
+
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+
+    <!-- Header del perfil -->
+    <VBox alignment="CENTER" spacing="10.0">
+        <ImageView fx:id="imgPerfil" fitHeight="100.0" fitWidth="100.0" preserveRatio="true" styleClass="user-perfil-avatar">
+            <image>
+                <Image url="@images/usuario.png" />
+            </image>
+        </ImageView>
+
+        <Label styleClass="user-popup-title" text="Perfil de Usuario" />
+    </VBox>
+
+    <!-- Datos del usuario -->
+    <VBox maxWidth="350.0" spacing="15.0" styleClass="user-data-container">
+
+        <VBox spacing="5.0" styleClass="user-field-container">
+            <Label styleClass="user-field-label" text="Nombre:" />
+            <Label fx:id="lblNombre" styleClass="user-field-value" text="(nombre)" />
+        </VBox>
+
+        <VBox spacing="5.0" styleClass="user-field-container">
+            <Label styleClass="user-field-label" text="Apellido:" />
+            <Label fx:id="lblApellido" styleClass="user-field-value" text="(apellido)" />
+        </VBox>
+
+        <VBox spacing="5.0" styleClass="user-field-container">
+            <Label styleClass="user-field-label" text="Rol:" />
+            <Label fx:id="lblRol" styleClass="user-field-rol" text="(rol)" />
+        </VBox>
+
+        <VBox spacing="5.0" styleClass="user-field-container">
+            <Label styleClass="user-field-label" text="Email:" />
+            <Label fx:id="lblEmail" styleClass="user-field-email" text="(email)" />
+        </VBox>
+
+    </VBox>
+
+    <!-- Botón -->
+    <HBox alignment="CENTER" spacing="20.0">
+        <Button fx:id="btnCambiarPassword" onAction="#cambiarPassword" styleClass="user-btn-cambiar-password" text="Cambiar Contraseña" />
+    </HBox>
+
+    <!-- Espaciador -->
+    <Region VBox.vgrow="ALWAYS" />
+
+</VBox>
