@@ -300,7 +300,7 @@ public class ProductoController implements Initializable {
             controller.setProducto(producto);
             controller.cargarProducto();
 
-            Stage stage = new Stage(); // Esto NO usa StageManager
+            Stage stage = new Stage();
             stage.setScene(new Scene(root, 800, 550));
             stage.setTitle("Detalle de Producto");
             stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés

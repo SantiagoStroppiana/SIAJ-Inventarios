@@ -2,7 +2,7 @@ package siaj.inventarios.rutas;
 
 import io.javalin.Javalin;
 import siaj.inventarios.controller.UsuarioController;
-import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.dto.*;
 import siaj.inventarios.model.Usuario;
 
 import java.util.List;
@@ -26,21 +26,36 @@ public class RutasUsuario {
         });
 
         app.post("/api/login", ctx -> {
-           Usuario usuario = ctx.bodyAsClass(Usuario.class);
-           MensajesResultados respuesta = usuarioController.login(usuario.getEmail(), usuario.getPassword());
-           ctx.json(respuesta);
+            Usuario usuario = ctx.bodyAsClass(Usuario.class);
+            LoginResponseDTO respuesta = usuarioController.login(usuario.getEmail(), usuario.getPassword());
+            ctx.json(respuesta);
         });
 
         app.put("/api/actualizarRol", ctx -> {
-            Usuario usuario = ctx.bodyAsClass(Usuario.class);
-            MensajesResultados respuesta = usuarioController.actualizarRol(usuario.getId());
+            UsuarioRolDTO usuarioRolDTO = ctx.bodyAsClass(UsuarioRolDTO.class);
+
+            int id = usuarioRolDTO.getId();
+            String nuevoRol = usuarioRolDTO.getNuevoRol();
+
+            MensajesResultados respuesta = usuarioController.actualizarRol(id, nuevoRol);
             ctx.json(respuesta);
         });
 
         app.get("/api/usuarios", ctx -> {
-            List<Usuario> mostrar = usuarioController.listarUsuarios();
+            List<UsuarioDTO> mostrar = usuarioController.listarUsuariosDTO();
             ctx.json(mostrar);
         });
+
+        app.put("/api/cambiarPassword", ctx -> {
+            UsuarioPasswordDTO usuarioPasswordDTO = ctx.bodyAsClass(UsuarioPasswordDTO.class);
+            ctx.json(usuarioController.cambiarPassWord(usuarioPasswordDTO));
+        });
+
+        app.put("/api/olvidePassword", ctx -> {
+            UsuarioForgetPasswordDTO usuarioForgetPasswordDTO = ctx.bodyAsClass(UsuarioForgetPasswordDTO.class);
+            ctx.json(usuarioController.olvidePassword(usuarioForgetPasswordDTO));
+        });
+
 
     }
 }

@@ -2,6 +2,8 @@ package siaj.inventarios.dao;
 
 import org.hibernate.Session;
 
+import org.mindrot.jbcrypt.BCrypt;
+import siaj.inventarios.dto.UsuarioPasswordDTO;
 import siaj.inventarios.model.Rol;
 import siaj.inventarios.model.Usuario;
 import siaj.inventarios.util.HibernateUtil;
@@ -33,7 +35,7 @@ public class UsuarioDAOImpl implements UsuarioDAO{
     }
 
     @Override
-    public void actualizarRolAdmin(int idUsuario) {
+    public void actualizarRol(int idUsuario, String nuevoRol) {
 
         Session session = HibernateUtil.getSession();
 
@@ -41,13 +43,19 @@ public class UsuarioDAOImpl implements UsuarioDAO{
             session.beginTransaction();
 
             Usuario usuario = session.get(Usuario.class, idUsuario);
-            if(usuario == null){
+            if (usuario == null) {
                 throw new RuntimeException("Usuario no encontrado");
             }
 
-            Rol rolAdmin = new Rol();
-            rolAdmin.setId(1);
-            usuario.setRolId(rolAdmin);
+            Rol rol = (Rol) session.createQuery("FROM Rol WHERE nombre = :nombreRol")
+                    .setParameter("nombreRol", nuevoRol)
+                    .uniqueResult();
+
+            if (rol == null) {
+                throw new RuntimeException("Rol no encontrado: " + nuevoRol);
+            }
+
+            usuario.setRolId(rol);
 
             session.merge(usuario);
             session.getTransaction().commit();
@@ -98,5 +106,71 @@ public class UsuarioDAOImpl implements UsuarioDAO{
         }
         return usuario;
     }
+
+    @Override
+    public void cambiarPassword(int idUsuario, String oldPassword, String newPassword) {
+
+        Session session = HibernateUtil.getSession();
+
+        try {
+            session.beginTransaction();
+
+            Usuario usuario = session.get(Usuario.class, idUsuario);
+            if (usuario == null) {
+                throw new RuntimeException("Usuario no encontrado");
+            }
+
+            if (!BCrypt.checkpw(oldPassword, usuario.getPassword())) {
+                throw new RuntimeException("La contraseña actual no es correcta");
+            }
+
+            String hashedNueva = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+            usuario.setPassword(hashedNueva);
+
+            session.merge(usuario);
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RuntimeException("Error al cambiar contraseña: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void olvidePassword(String email, String newPassword, String repetirPassword) {
+
+        Session session = HibernateUtil.getSession();
+
+        try {
+            session.beginTransaction();
+
+            Usuario usuario = session.createQuery("FROM Usuario WHERE email = :email", Usuario.class)
+                    .setParameter("email", email)
+                    .uniqueResult();
+
+            if (usuario == null) {
+                throw new RuntimeException("Usuario no encontrado");
+            }
+
+            if (!newPassword.equals(repetirPassword)) {
+                throw new RuntimeException("Las contraseñas no coinciden");
+            }
+
+            String hashedNueva = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+            usuario.setPassword(hashedNueva);
+
+            session.merge(usuario);
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RuntimeException("Error al cambiar contraseña: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+
 
 }

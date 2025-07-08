@@ -1,16 +1,17 @@
 package org.example.desktop.controller;
 
 import com.google.gson.Gson;
-import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
-import org.example.desktop.model.MensajesResultados;
-import org.example.desktop.model.Usuario;
+import org.example.desktop.dto.UsuarioDTO;
+import org.example.desktop.model.LoginResponse;
 import org.example.desktop.util.StageManager;
+import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
 
 import java.net.URI;
@@ -25,26 +26,29 @@ public class LoginController {
     @FXML
     private TextField password;
 
-
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
 
     @FXML
+    public void olvidePassword(ActionEvent event) {
+        StageManager.loadScene("/org/example/desktop/cambiar-password-view.fxml", 700, 500);
+    }
+
+    @FXML
     public void iniciarSesion(javafx.event.ActionEvent actionEvent) {
 
-        if(email.getText().isEmpty() || password.getText().isEmpty()){
+        if (email.getText().isEmpty() || password.getText().isEmpty()) {
             notificar("Error", "Por favor, complete todos los campos", false);
             return;
         }
 
-        Usuario usuario = new Usuario();
-        usuario.setEmail(email.getText());
-        usuario.setPassword(password.getText());
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setEmail(email.getText());
+        usuarioDTO.setPassword(password.getText());
 
         new Thread(() -> {
             try {
-                String json = gson.toJson(usuario);
-
+                String json = gson.toJson(usuarioDTO);
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(VariablesEntorno.getServerURL() + "/api/login"))
                         .header("Content-Type", "application/json")
@@ -56,17 +60,21 @@ public class LoginController {
 
                 Platform.runLater(() -> {
                     try {
-                        if(responseBody.trim().startsWith("{")){
-                            MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
-                            if (resultado.isExito()) {
-                                notificar("Iniciar sesión exitoso", resultado.getMensaje(), true);
+                        if (responseBody.trim().startsWith("{")) {
+                            LoginResponse resultado = gson.fromJson(responseBody, LoginResponse.class);
 
-//                                StageManager.loadScene("/org/example/desktop/productos-view.fxml", 1200, 800);
+                            if (resultado.isSuccess()) {
+                                UsuarioDTO usuarioLogueado = resultado.getUsuario();
+                                UserSession.iniciarSesion(usuarioLogueado);
+
+                                System.out.println("JSON de respuesta LOGIN: " + responseBody);
+
+                                notificar("Iniciar sesión exitoso", resultado.getMessage(), true);
                                 StageManager.loadScene("/org/example/desktop/menu-view.fxml", 1600, 900);
-
                             } else {
-                                notificar("Incorrecto", resultado.getMensaje(), false);
+                                notificar("Incorrecto", resultado.getMessage(), false);
                             }
+
                         } else {
                             notificar("Error", responseBody, false);
                         }
@@ -75,6 +83,7 @@ public class LoginController {
                         notificar("Error", "Error al procesar la respuesta: " + e.getMessage(), false);
                     }
                 });
+
             } catch (Exception e) {
                 e.printStackTrace();
                 final String errorMsg = e.getMessage();
@@ -85,29 +94,27 @@ public class LoginController {
         }).start();
     }
 
-    private void notificar(String titulo, String mensaje, boolean exito){
+    private void notificar(String titulo, String mensaje, boolean exito) {
         Platform.runLater(() -> {
             Notifications notificacion = Notifications.create()
                     .title(titulo)
                     .text(mensaje)
                     .position(Pos.TOP_CENTER)
                     .hideAfter(Duration.seconds(4));
-            if(exito){
+            if (exito) {
                 notificacion.showInformation();
-            }else {
+            } else {
                 notificacion.showError();
             }
         });
     }
 
-
     public void irARegistro(javafx.event.ActionEvent actionEvent) {
-        try{
+        try {
             StageManager.loadScene("/org/example/desktop/register-view.fxml", 700, 650);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             notificar("Error", "No se pudo cargar la pantalla de registro: " + e.getMessage(), false);
         }
     }
-
 }

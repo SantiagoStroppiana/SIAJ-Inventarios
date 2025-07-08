@@ -78,7 +78,6 @@
                 </Label>
                 <TextField fx:id="txtEmail" layoutX="20.0" layoutY="310.0" prefHeight="39.0" prefWidth="359.0" promptText="Ingrese el email" />
 
-                <!-- Campo 5: Estado -->
                 <Label layoutX="20.0" layoutY="360.0" styleClass="field-label" text="Estado">
                     <font>
                         <Font name="System Bold" size="12.0" />

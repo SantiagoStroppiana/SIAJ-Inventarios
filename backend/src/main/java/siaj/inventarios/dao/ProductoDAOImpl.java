@@ -113,7 +113,7 @@ public class ProductoDAOImpl implements ProductoDAO {
         }finally {
             session.close();
         }
-//        return re;
+
     }
 
     @Override
