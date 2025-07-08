@@ -35,6 +35,16 @@ public class ProductoDAOImpl implements ProductoDAO {
     }
 
     @Override
+    public Producto obtenerPorId(int id) {
+        Session session = HibernateUtil.getSession();
+        try {
+            return session.get(Producto.class, id);
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
     public MensajesResultados crearProducto (Producto producto){
 
         Session session = HibernateUtil.getSession();
