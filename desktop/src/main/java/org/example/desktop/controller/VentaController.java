@@ -3,9 +3,12 @@ package org.example.desktop.controller;
 import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,6 +16,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.DTO.ProductoVentaDTO;
@@ -21,6 +26,7 @@ import org.example.desktop.util.VariablesEntorno;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
@@ -55,6 +61,9 @@ public class VentaController implements Initializable {
     private ComboBox<MedioPago> comboMedioPago;  // 👈 NO ComboBox<String>
 
     private final Map<Integer, HBox> productosEnCarrito = new HashMap<>();
+
+    @FXML
+    private Button btnHistorialVentas;
 
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
@@ -148,7 +157,7 @@ public class VentaController implements Initializable {
             } catch (NumberFormatException ex) {
                 cantidad = 1;
             }
-            agregarAlCarrito(producto, cantidad);
+            agregarAlCarrito(producto,cantidad);
         });
 
         card.getChildren().addAll(nombre, categoria, precio, stock, cantidadField, agregarBtn);
@@ -166,6 +175,12 @@ public class VentaController implements Initializable {
     }
 
     private void agregarAlCarrito(Producto producto, int cantidadInicial) {
+
+        if (producto.getStock() <= 0) {
+            notificar("Falta de stock", "No hay stock del producto " + producto.getNombre(), false);
+        } else {
+
+
         // Si ya existe en el carrito, sumar la cantidad
         if (productosEnCarrito.containsKey(producto.getId())) {
             HBox itemExistente = productosEnCarrito.get(producto.getId());
@@ -173,7 +188,11 @@ public class VentaController implements Initializable {
 
             try {
                 int cantidadActual = Integer.parseInt(cantidadField.getText());
-                cantidadField.setText(String.valueOf(cantidadActual + cantidadInicial));
+                if (cantidadActual+cantidadInicial>producto.getStock()) {
+                    notificar("Falta de stock", "No alcanza el stock del producto " + producto.getNombre()+"\nhay "+producto.getStock()+ " unidades", false);
+                } else {
+                    cantidadField.setText(String.valueOf(cantidadActual + cantidadInicial));
+                }
             } catch (NumberFormatException ignored) {
                 cantidadField.setText(String.valueOf(cantidadInicial));
             }
@@ -194,7 +213,7 @@ public class VentaController implements Initializable {
         nombre.getStyleClass().add("pv-cart-item-name");
 
         TextField cantidadField = new TextField(String.valueOf(cantidadInicial));
-        cantidadField.setPrefWidth(50);
+        cantidadField.setPrefWidth(70);
         cantidadField.setAlignment(Pos.CENTER);
 
         Label precioUnitario = new Label("$" + producto.getPrecio());
@@ -206,26 +225,58 @@ public class VentaController implements Initializable {
         subtotalLabel.getStyleClass().add("pv-cart-item-price");
         subtotalLabel.setStyle("-fx-text-fill: #ffffff");
 
-        Button eliminarBtn = new Button("✖");
-        eliminarBtn.setOnAction(e -> {
-            cartContent.getChildren().remove(item);
-            productosEnCarrito.remove(producto.getId());
-            actualizarTotales();
-        });
+        Button eliminarBtn = crearBotonEliminar(item, producto);
 
-        cantidadField.textProperty().addListener((obs, oldVal, newVal) -> {
+            cantidadField.textProperty().addListener((obs, oldVal, newVal) -> {
             actualizarSubtotal(item, producto.getPrecio().doubleValue());
             actualizarTotales();
         });
 
         item.getChildren().addAll(nombre, cantidadField, precioUnitario, subtotalLabel, eliminarBtn);
         cartContent.getChildren().add(item);
-       // long productoId = producto.getId();
+        // long productoId = producto.getId();
         productosEnCarrito.put(producto.getId(), item);  // Guardar referencia
 
         actualizarSubtotal(item, producto.getPrecio().doubleValue());
         actualizarTotales();
     }
+    }
+    private Button crearBotonEliminar(Node item, Producto producto) {
+        Button eliminarBtn = new Button("X");
+        eliminarBtn.setOnAction(e -> {
+            cartContent.getChildren().remove(item);
+            productosEnCarrito.remove(producto.getId());
+            actualizarTotales();
+        });
+
+        eliminarBtn.setPrefWidth(50);
+        eliminarBtn.setMinWidth(50);
+        eliminarBtn.setStyle(
+                "-fx-background-color: #ff4d4d;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 20;" +
+                        "-fx-cursor: hand;"
+        );
+
+        eliminarBtn.setOnMouseEntered(e -> eliminarBtn.setStyle(
+                "-fx-background-color: #cc0000;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 20;" +
+                        "-fx-cursor: hand;"
+        ));
+
+        eliminarBtn.setOnMouseExited(e -> eliminarBtn.setStyle(
+                "-fx-background-color: #ff4d4d;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 20;" +
+                        "-fx-cursor: hand;"
+        ));
+        return eliminarBtn;
+    }
+
 
 
     private void actualizarSubtotal(HBox item, double precioUnitario) {
@@ -291,34 +342,7 @@ public class VentaController implements Initializable {
     }
 
 
-    @FXML
-    public void mostrarVentas() {
-        try{
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/ventas"))
-                    .GET()
-                    .build();
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            String responseBody = response.body();
-
-            Venta[] ventas = gson.fromJson(responseBody, Venta[].class);
-
-//            tablaUsuarios.getItems().clear();
-            //          tablaUsuarios.getItems().addAll(usuarios);
-
-            for (Venta v : ventas){
-                System.out.println(v);
-            }
-
-            System.out.println("Respuesta del backend:");
-            System.out.println(responseBody);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
-        }
-    }
     private List<Producto> listaProductos = new ArrayList<>();
 
     public void procesarVenta() {
@@ -451,6 +475,7 @@ public class VentaController implements Initializable {
             e.printStackTrace();
             notificar("Error", "No se pudo procesar la venta: " + e.getMessage(), false);
         }
+        mostrarProductos();
     }
 
     private void cargarMediosDePago() {
@@ -492,14 +517,44 @@ public class VentaController implements Initializable {
         }
     }
 
+    @FXML
+    public void verVentas() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/historial-ventas.fxml"));
 
+        Parent root = fxmlLoader.load();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root, 1600, 900)); // Dimensiones adaptadas para la vista de historial
+        stage.setTitle("Historial de Ventas");
+        stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior
+        stage.setResizable(true); // Permite redimensionar para mejor experiencia
+        stage.setMinWidth(1200); // Ancho mínimo para que se vea bien
+        stage.setMinHeight(700);  // Alto mínimo para que se vea bien
+
+        // Opcional: Centrar la ventana en pantalla
+        stage.centerOnScreen();
+
+        // Opcional: Si querés hacer algo cuando se cierre la ventana
+        // stage.setOnCloseRequest(event -> {
+        //     // Código para ejecutar al cerrar
+        //     System.out.println("Cerrando historial de ventas");
+        // });
+
+        stage.showAndWait();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        mostrarVentas();
         mostrarProductos();
         cargarMediosDePago();
         btnProcesarVenta.setOnAction(onclick -> {procesarVenta();});
         btnLimpiarCarrito.setOnAction(onclick -> {limpiarCarrito();});
+        btnHistorialVentas.setOnAction(onclick -> {
+            try {
+                verVentas();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

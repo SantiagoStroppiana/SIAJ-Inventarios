@@ -47,8 +47,8 @@ public class VentaDAOImpl implements VentaDAO{
                     venta.getTotal(),
                     venta.getEstado().toString(),
                     venta.getFechaPago().toString(),
-                    venta.getUsuario().getNombre(),     // o getUsername(), según tu modelo
-                    venta.getMedioPago().getTipo()    // según cómo se llame el campo
+                    venta.getUsuario(),     // o getUsername(), según tu modelo
+                    venta.getMedioPago()    // según cómo se llame el campo
             );
 
         } catch (Exception e) {

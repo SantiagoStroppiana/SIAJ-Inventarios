@@ -1,6 +1,8 @@
 package siaj.inventarios.dto;
 
 
+import siaj.inventarios.model.MedioPago;
+import siaj.inventarios.model.Usuario;
 import siaj.inventarios.model.Venta;
 
 import java.math.BigDecimal;
@@ -12,8 +14,8 @@ public class VentaDTO {
         private BigDecimal total;
         private String estado;
         private String fechaPago;
-        private String usuarioNombre;
-        private String medioPagoNombre;
+        private Usuario usuario;
+        private MedioPago medioPago;
 
     public int getId() {
         return id;
@@ -47,29 +49,38 @@ public class VentaDTO {
         this.fechaPago = fechaPago;
     }
 
-    public String getUsuarioNombre() {
-        return usuarioNombre;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setUsuarioNombre(String usuarioNombre) {
-        this.usuarioNombre = usuarioNombre;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-    public String getMedioPagoNombre() {
-        return medioPagoNombre;
+    public MedioPago getMedioPago() {
+        return medioPago;
     }
 
-    public void setMedioPagoNombre(String medioPagoNombre) {
-        this.medioPagoNombre = medioPagoNombre;
+    public void setMedioPago(MedioPago medioPago) {
+        this.medioPago = medioPago;
     }
 
-    public VentaDTO(int id, BigDecimal total, String estado, String fechaPago, String usuarioNombre, String medioPagoNombre) {
+/*public VentaDTO(int id, BigDecimal total, String estado, String fechaPago, String usuarioNombre, String medioPagoNombre) {
         this.id = id;
         this.total = total;
         this.estado = estado;
         this.fechaPago = fechaPago;
         this.usuarioNombre = usuarioNombre;
         this.medioPagoNombre = medioPagoNombre;
+    }*/
+
+    public VentaDTO(int id, BigDecimal total, String estado, String fechaPago, Usuario usuario, MedioPago medioPago) {
+        this.id = id;
+        this.total = total;
+        this.estado = estado;
+        this.fechaPago = fechaPago;
+        this.usuario = usuario;
+        this.medioPago = medioPago;
     }
 
     public VentaDTO() {

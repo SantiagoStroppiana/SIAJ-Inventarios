@@ -29,8 +29,8 @@ public class VentaServiceImpl implements VentaService{
             dto.setTotal(v.getTotal());
             dto.setEstado(v.getEstado().name());
             dto.setFechaPago(v.getFechaPago().toString());
-            dto.setUsuarioNombre(v.getUsuario().getNombre());
-            dto.setMedioPagoNombre(v.getMedioPago().getTipo());
+            dto.setUsuario(v.getUsuario());
+            dto.setMedioPago(v.getMedioPago());
             return dto;
         }).collect(Collectors.toList()).reversed();
     }

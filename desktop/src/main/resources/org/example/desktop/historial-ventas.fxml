@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.HistorialVentasController">
+    <children>
+        <!-- Título principal -->
+        <Label layoutX="14.0" layoutY="20.0" styleClass="form-title" text="HISTORIAL DE VENTAS">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
+
+        <!-- Barra de búsqueda -->
+        <HBox layoutX="14.0" layoutY="60.0" prefWidth="1570.0" spacing="15.0">
+            <children>
+                <TextField fx:id="txtBuscarVenta" prefHeight="38.0" prefWidth="600.0" promptText="Buscar por ID, vendedor, estado..." />
+
+                <!-- Filtros -->
+                <ComboBox fx:id="filtroEstado" prefHeight="38.0" prefWidth="150.0" promptText="Estado" styleClass="combo-field" />
+
+                <ComboBox fx:id="filtroMedioPago" prefHeight="38.0" prefWidth="150.0" promptText="Medio de Pago" styleClass="combo-field" />
+
+                <DatePicker fx:id="fechaDesde" prefHeight="38.0" prefWidth="150.0" promptText="Fecha desde" />
+                <DatePicker fx:id="fechaHasta" prefHeight="38.0" prefWidth="150.0" promptText="Fecha hasta" />
+
+                <Button fx:id="btnFiltrar" onAction="#onFiltrar" prefHeight="38.0" prefWidth="100.0" styleClass="button-primary" text="Filtrar" />
+                <Button fx:id="btnLimpiar" onAction="#onLimpiar" prefHeight="38.0" prefWidth="100.0" styleClass="button-secondary" text="Limpiar" />
+            </children>
+        </HBox>
+
+        <!-- Tabla de ventas -->
+        <TableView fx:id="tablaVentas" layoutX="14.0" layoutY="120.0" prefHeight="650.0" prefWidth="1570.0">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="80.0" text="ID" minWidth="60.0" maxWidth="100.0" />
+                <TableColumn fx:id="totalColumn" prefWidth="150.0" text="TOTAL" minWidth="120.0" />
+                <TableColumn fx:id="vendedorColumn" prefWidth="250.0" text="VENDEDOR" minWidth="200.0" />
+                <TableColumn fx:id="estadoColumn" prefWidth="140.0" text="ESTADO" minWidth="120.0" />
+                <TableColumn fx:id="medioPagoColumn" prefWidth="180.0" text="MEDIO DE PAGO" minWidth="150.0" />
+                <TableColumn fx:id="fechaColumn" prefWidth="200.0" text="FECHA Y HORA" minWidth="180.0" />
+                <TableColumn fx:id="observacionesColumn" prefWidth="200.0" text="OBSERVACIONES" minWidth="150.0" />
+            </columns>
+        </TableView>
+
+        <!-- Botones de acción -->
+        <HBox layoutX="14.0" layoutY="790.0" prefWidth="1570.0" spacing="15.0">
+            <children>
+                <Button fx:id="btnVerDetalles" onAction="#onVerDetalles" prefHeight="46.0" prefWidth="165.0" styleClass="button-primary" text="Ver Detalles" />
+                <Button fx:id="btnCambiarEstado" onAction="#onCambiarEstado" prefHeight="46.0" prefWidth="165.0" styleClass="button-modify" text="Cambiar Estado" />
+                <Button fx:id="btnGenerarPDF" onAction="#onGenerarPDF" prefHeight="46.0" prefWidth="165.0" styleClass="button-secondary" text="Generar PDF" />
+                <Button fx:id="btnExportar" onAction="#onExportar" prefHeight="46.0" prefWidth="165.0" styleClass="button-categoria" text="Exportar Excel" />
+
+                <!-- Separador visual -->
+                <Region prefWidth="50.0" />
+
+                <!-- Estadísticas rápidas -->
+                <VBox spacing="5.0">
+                    <children>
+                        <Label fx:id="lblTotalVentas" styleClass="field-label" text="Total Ventas: 0">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblVentasCompletadas" styleClass="field-label" text="Completadas: 0">
+                            <font>
+                                <Font name="System Bold" size="10.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+
+                <VBox spacing="5.0">
+                    <children>
+                        <Label fx:id="lblVentasPendientes" styleClass="field-label" text="Pendientes: 0">
+                            <font>
+                                <Font name="System Bold" size="10.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblVentasCanceladas" styleClass="field-label" text="Canceladas: 0">
+                            <font>
+                                <Font name="System Bold" size="10.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+
+                <VBox spacing="5.0">
+                    <children>
+                        <Label fx:id="lblMontoTotal" styleClass="field-label" text="Monto Total: $0.00">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblPromedioVenta" styleClass="field-label" text="Promedio: $0.00">
+                            <font>
+                                <Font name="System Bold" size="10.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+
+        <!-- Botón de volver -->
+        <Button fx:id="btnVolver" onAction="#onVolver" layoutX="1450.0" layoutY="20.0" prefHeight="38.0" prefWidth="120.0" styleClass="button-danger" text="← Volver" />
+    </children>
+
+    <stylesheets>
+        <URL value="@estilos/estilos-globales.css" />
+        <URL value="@estilos/tabla.css" />
+    </stylesheets>
+</AnchorPane>
