@@ -116,8 +116,24 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
-    public MensajesResultados olvidePassword(UsuarioForgetPasswordDTO UsuarioForgetPasswordDTO){
-        return new MensajesResultados(true, "El usuario ya existe");
+    public MensajesResultados olvidePassword(UsuarioForgetPasswordDTO usuarioForgetPasswordDTO){
+
+        if (usuarioForgetPasswordDTO.getNewPassword() == null || usuarioForgetPasswordDTO.getNewPassword().isBlank() ||
+                usuarioForgetPasswordDTO.getConfirmPassword() == null || usuarioForgetPasswordDTO.getConfirmPassword().isBlank()) {
+            return new MensajesResultados(false, "Los campos no pueden estar vacíos");
+        }
+
+        if (usuarioForgetPasswordDTO.getNewPassword().length() < 6 || usuarioForgetPasswordDTO.getConfirmPassword().length() < 6) {
+            return new MensajesResultados(false, "La contraseña debe tener al menos 6 caracteres");
+        }
+
+        try{
+            usuarioDAO.olvidePassword(usuarioForgetPasswordDTO.getEmail(), usuarioForgetPasswordDTO.getNewPassword(), usuarioForgetPasswordDTO.getConfirmPassword());
+            return new MensajesResultados(true, "Password actualizada correctamente");
+        }catch (Exception e){
+            return new MensajesResultados(false, e.getMessage());
+        }
+
     }
 
 }

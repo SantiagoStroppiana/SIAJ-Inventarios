@@ -30,7 +30,7 @@ public class UsuarioController {
     }
 
     public List<UsuarioDTO> listarUsuariosDTO() {
-    List<Usuario> usuarios = usuarioService.listarUsuarios(); // o como lo estés obteniendo
+    List<Usuario> usuarios = usuarioService.listarUsuarios();
 
     return usuarios.stream()
             .map(usuario -> new UsuarioDTO(
@@ -44,5 +44,5 @@ public class UsuarioController {
 }
 
     public MensajesResultados cambiarPassWord(UsuarioPasswordDTO usuarioPasswordDTO) { return usuarioService.cambiarPassword(usuarioPasswordDTO); }
-    public MensajesResultados olvidePassword(UsuarioForgetPasswordDTO UsuarioForgetPasswordDTO) { return usuarioService.olvidePassword(UsuarioForgetPasswordDTO); }
+    public MensajesResultados olvidePassword(UsuarioForgetPasswordDTO usuarioForgetPasswordDTO) { return usuarioService.olvidePassword(usuarioForgetPasswordDTO); }
 }

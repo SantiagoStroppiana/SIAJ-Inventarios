@@ -139,36 +139,38 @@ public class UsuarioDAOImpl implements UsuarioDAO{
     }
 
     @Override
-    public  void olvidePassword(String email, String newPassword, String repetirPassword){
+    public void olvidePassword(String email, String newPassword, String repetirPassword) {
 
-//        Session session = HibernateUtil.getSession();
-//
-//        try {
-//            session.beginTransaction();
-//
-//            Usuario usuario = session.get(Usuario.class, idUsuario);
-//            if (usuario == null) {
-//                throw new RuntimeException("Usuario no encontrado");
-//            }
-//
-//            if (!BCrypt.checkpw(oldPassword, usuario.getPassword())) {
-//                throw new RuntimeException("La contraseña actual no es correcta");
-//            }
-//
-//            String hashedNueva = BCrypt.hashpw(newPassword, BCrypt.gensalt());
-//            usuario.setPassword(hashedNueva);
-//
-//            session.merge(usuario);
-//            session.getTransaction().commit();
-//
-//        } catch (Exception e) {
-//            session.getTransaction().rollback();
-//            throw new RuntimeException("Error al cambiar contraseña: " + e.getMessage());
-//        } finally {
-//            session.close();
-//        }
+        Session session = HibernateUtil.getSession();
 
+        try {
+            session.beginTransaction();
 
+            Usuario usuario = session.createQuery("FROM Usuario WHERE email = :email", Usuario.class)
+                    .setParameter("email", email)
+                    .uniqueResult();
+
+            if (usuario == null) {
+                throw new RuntimeException("Usuario no encontrado");
+            }
+
+            if (!newPassword.equals(repetirPassword)) {
+                throw new RuntimeException("Las contraseñas no coinciden");
+            }
+
+            String hashedNueva = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+            usuario.setPassword(hashedNueva);
+
+            session.merge(usuario);
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RuntimeException("Error al cambiar contraseña: " + e.getMessage());
+        } finally {
+            session.close();
+        }
     }
+
 
 }

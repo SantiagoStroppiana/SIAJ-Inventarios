@@ -5,9 +5,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
@@ -28,82 +26,29 @@ public class PasswordController {
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
 
-    @FXML private VBox emailBox;
-    @FXML private VBox oldPasswordBox;
-    @FXML private VBox newPasswordBox;
-    @FXML private VBox repetirPasswordBox;
+    @FXML private VBox olvideBox;
+    @FXML private VBox cambiarBox;
 
-    @FXML private Label labelOldPassword;
-    @FXML private Label labelNewPassword;
-    @FXML private Label labelRepetirPassword;
-
-    @FXML private TextField oldPassword;
-    @FXML private TextField newPassword;
-    @FXML private TextField repetirPassword;
     @FXML private TextField email;
+    @FXML private PasswordField nuevaPassword;
+    @FXML private PasswordField confirmarPassword;
+
+    @FXML private PasswordField oldPassword;
+    @FXML private PasswordField newPassword;
 
     @FXML private Button btnCambiarPassword;
     @FXML private Button btnOlvidePassword;
 
     @FXML
     public void initialize() {
-        UsuarioDTO usuario = UserSession.getUsuarioActual();
+        boolean logueado = UserSession.getUsuarioActual() != null;
 
-        if (usuario != null) {
-            emailBox.setVisible(false); emailBox.setManaged(false);
-            repetirPasswordBox.setVisible(false); repetirPasswordBox.setManaged(false);
-            btnOlvidePassword.setVisible(false); btnOlvidePassword.setManaged(false);
-        } else {
-            btnCambiarPassword.setVisible(false); btnCambiarPassword.setManaged(false);
-            oldPasswordBox.setVisible(false); oldPasswordBox.setManaged(false);
+        olvideBox.setVisible(!logueado);
+        olvideBox.setManaged(!logueado);
 
-            labelNewPassword.setText("Nueva Contraseña");
-            newPassword.setPromptText("Ingresar nueva contraseña");
-
-            labelRepetirPassword.setText("Repetir Contraseña");
-            repetirPassword.setPromptText("Repetir nueva contraseña");
-        }
+        cambiarBox.setVisible(logueado);
+        cambiarBox.setManaged(logueado);
     }
-
-    @FXML public void olvidePassword(ActionEvent event) {
-
-        String email = this.email.getText();
-        String newPas = oldPassword.getText();
-        String repetirPas = repetirPassword.getText();
-
-        if (newPas.isEmpty() || repetirPas.isEmpty() && newPas.length() < 6 || repetirPas.length() < 6) {
-            notificar("Campos vacíos", "Debes completar ambos campos de contraseña.", false);
-            return;
-        }
-
-        try {
-            UsuarioForgetPasswordDTO usuarioForgetPasswordDTO = new UsuarioForgetPasswordDTO();
-            usuarioForgetPasswordDTO.setEmail(email);
-            usuarioForgetPasswordDTO.setNewPassword(newPas);
-            usuarioForgetPasswordDTO.setConfirmPassword(repetirPas);
-
-            String json = gson.toJson(usuarioForgetPasswordDTO);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/olvidePassword"))
-                    .header("Content-Type", "application/json")
-                    .PUT(HttpRequest.BodyPublishers.ofString(json))
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-
-            if (response.statusCode() == 200) {
-                notificar("Éxito", "Contraseña cambiada con éxito", true);
-            } else {
-                notificar("Error", "No se pudo cambiar la contraseña", false);
-            }
-        }catch (Exception e) {
-            notificar("Error", "No se pudo actualizar la contraseña", false);
-        }
-
-    }
-
 
     @FXML
     public void cambiarPassword(ActionEvent event) {
@@ -113,18 +58,18 @@ public class PasswordController {
             String oldPass = oldPassword.getText();
             String newPass = newPassword.getText();
 
-            if (oldPass.isEmpty() || newPass.isEmpty()) {
+            if (oldPass.isBlank() || newPass.isBlank()) {
                 notificar("Campos vacíos", "Debes completar ambos campos de contraseña.", false);
                 return;
             }
 
             try {
-                UsuarioPasswordDTO usuarioPasswordDTO = new UsuarioPasswordDTO();
-                usuarioPasswordDTO.setId(usuario.getId());
-                usuarioPasswordDTO.setOldPassword(oldPass);
-                usuarioPasswordDTO.setNewPassword(newPass);
+                UsuarioPasswordDTO dto = new UsuarioPasswordDTO();
+                dto.setId(usuario.getId());
+                dto.setOldPassword(oldPass);
+                dto.setNewPassword(newPass);
 
-                String json = gson.toJson(usuarioPasswordDTO);
+                String json = gson.toJson(dto);
 
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(VariablesEntorno.getServerURL() + "/api/cambiarPassword"))
@@ -135,27 +80,67 @@ public class PasswordController {
                 HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (response.statusCode() == 200) {
-                    notificar("Éxito", "Contraseña cambiada con éxito", true);
+                    notificar("Éxito", "Contraseña cambiada con éxito.", true);
                 } else {
-                    notificar("Error", "No se pudo cambiar la contraseña", false);
+                    notificar("Error", "No se pudo cambiar la contraseña.", false);
                 }
 
             } catch (Exception e) {
-                notificar("Error", "No se pudo cambiar la contraseña", false);
+                notificar("Error", "Hubo un problema con la solicitud.", false);
             }
         }
     }
 
+    @FXML
+    public void olvidePassword(ActionEvent event) {
+        String correo = email.getText();
+        String nueva = nuevaPassword.getText();
+        String repetir = confirmarPassword.getText();
+
+        if (correo.isBlank() || nueva.isBlank() || repetir.isBlank()) {
+            notificar("Campos vacíos", "Debes completar todos los campos.", false);
+            return;
+        }
+
+        if (!nueva.equals(repetir)) {
+            notificar("Error", "Las contraseñas no coinciden.", false);
+            return;
+        }
+
+        try {
+            UsuarioForgetPasswordDTO dto = new UsuarioForgetPasswordDTO();
+            dto.setEmail(correo);
+            dto.setNewPassword(nueva);
+            dto.setConfirmPassword(repetir);
+
+            String json = gson.toJson(dto);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/olvidePassword"))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                notificar("Éxito", "Contraseña actualizada correctamente.", true);
+            } else {
+                notificar("Error", "No se pudo actualizar la contraseña.", false);
+            }
+
+        } catch (Exception e) {
+            notificar("Error", "Hubo un problema con la solicitud.", false);
+        }
+    }
 
     @FXML
     public void volver(ActionEvent event) {
-
         if (UserSession.getUsuarioActual() != null) {
-            StageManager.loadScene("/org/example/desktop/menu-view.fxml" , 1600, 900);
-        }else{
+            StageManager.loadScene("/org/example/desktop/menu-view.fxml", 1600, 900);
+        } else {
             StageManager.loadScene("/org/example/desktop/login-view.fxml", 700, 500);
         }
-
     }
 
     private void notificar(String titulo, String mensaje, boolean exito) {
@@ -172,5 +157,4 @@ public class PasswordController {
             }
         });
     }
-
 }
