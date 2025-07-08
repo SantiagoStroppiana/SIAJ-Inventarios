@@ -28,4 +28,8 @@ public class ProductoController {
         return productoService.modificarProducto(producto);
     }
 
+    public List<Producto> filtrarProveedor (int id) {
+        return productoService.filtrarProveedor(id);
+    }
+
 }

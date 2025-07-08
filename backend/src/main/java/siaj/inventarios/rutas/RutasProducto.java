@@ -37,6 +37,15 @@ public class RutasProducto {
             MensajesResultados respuesta = productoController.modificarProducto(producto);
             ctx.json(respuesta);
         });
+
+
+        app.get("/api/productos/proveedor/{id}", ctx -> {
+            int proveedorId = Integer.parseInt(ctx.pathParam("id"));
+            List<Producto> productos = productoController.filtrarProveedor(proveedorId);
+            ctx.json(productos);
+        });
+
+
     }
 
 
