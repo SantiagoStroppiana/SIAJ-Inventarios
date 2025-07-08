@@ -46,6 +46,7 @@ public class ProductoController implements Initializable {
     @FXML private TableColumn<Producto, String> nombreColumn;
     @FXML private TableColumn<Producto, Integer> stockColumn;
     @FXML private TableColumn<Producto, BigDecimal> precioColumn;
+    @FXML private TableColumn<Producto, BigDecimal> precioCostoColumn;
     @FXML private TableColumn<Producto, String> estadoColumn;
     @FXML private TableColumn<Producto, String> proveedorColumn;
     @FXML private Button agregar;
@@ -205,6 +206,7 @@ public class ProductoController implements Initializable {
         nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
         precioColumn.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        precioCostoColumn.setCellValueFactory(new PropertyValueFactory<>("precioCosto"));
         estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
         proveedorColumn.setCellValueFactory(cellData -> {
             Producto producto = cellData.getValue();
@@ -262,14 +264,13 @@ public class ProductoController implements Initializable {
     @FXML private TextField txtNombre;
     @FXML private TextField txtStock;
     @FXML private TextField txtPrecio;
+    @FXML private TextField txtPrecioCosto;
  //   @FXML private SplitMenuButton menuProveedor;
 
 
     public void actualizarProductos() {
         mostrarProductos(); // refrescar la tabla
     }
-
-
 
 
     private Stage stage;
@@ -363,6 +364,7 @@ public class ProductoController implements Initializable {
             String nombre = txtNombre.getText().trim();
             String stockStr = txtStock.getText().trim();
             String precioStr = txtPrecio.getText().trim();
+            String precioCostoStr = txtPrecioCosto.getText().trim();
 
 
             if (sku.isEmpty() || nombre.isEmpty() ||  stockStr.isEmpty() || precioStr.isEmpty()) {
@@ -384,6 +386,7 @@ public class ProductoController implements Initializable {
             }
 
             BigDecimal precio;
+            BigDecimal precioCosto;
             try {
                 double precioDouble = Double.parseDouble(precioStr);
                 if (precioDouble < 0) {
@@ -404,11 +407,16 @@ public class ProductoController implements Initializable {
                 notificar("Error", "Debe seleccionar un estado.", false);
                 return;
             }
+
+            double precioDoubleCosto = Double.parseDouble(precioCostoStr);
+            precioCosto = BigDecimal.valueOf(precioDoubleCosto);
+
             Producto producto = new Producto();
             producto.setSku(sku);
             producto.setNombre(nombre);
             producto.setStock(stock);
             producto.setPrecio(precio);
+            producto.setPrecioCosto(precioCosto);
             producto.setActivo(estadoSeleccionado);
             producto.setProveedorid(proveedorSeleccionado);
             producto.setImg("");

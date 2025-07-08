@@ -2,7 +2,7 @@ package siaj.inventarios.dto;
 
 
 import siaj.inventarios.model.MedioPago;
-import siaj.inventarios.model.Usuario;
+
 import siaj.inventarios.model.Venta;
 
 import java.math.BigDecimal;
@@ -14,7 +14,7 @@ public class VentaDTO {
         private BigDecimal total;
         private String estado;
         private String fechaPago;
-        private Usuario usuario;
+        private UsuarioDTO usuarioDTO;
         private MedioPago medioPago;
 
     public int getId() {
@@ -49,12 +49,12 @@ public class VentaDTO {
         this.fechaPago = fechaPago;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public UsuarioDTO getUsuarioDTO() {
+        return usuarioDTO;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setUsuarioDTO(UsuarioDTO usuarioDTO) {
+        this.usuarioDTO = usuarioDTO;
     }
 
     public MedioPago getMedioPago() {
@@ -74,12 +74,12 @@ public class VentaDTO {
         this.medioPagoNombre = medioPagoNombre;
     }*/
 
-    public VentaDTO(int id, BigDecimal total, String estado, String fechaPago, Usuario usuario, MedioPago medioPago) {
+    public VentaDTO(int id, BigDecimal total, String estado, String fechaPago, UsuarioDTO usuarioDTO, MedioPago medioPago) {
         this.id = id;
         this.total = total;
         this.estado = estado;
         this.fechaPago = fechaPago;
-        this.usuario = usuario;
+        this.usuarioDTO = usuarioDTO;
         this.medioPago = medioPago;
     }
 

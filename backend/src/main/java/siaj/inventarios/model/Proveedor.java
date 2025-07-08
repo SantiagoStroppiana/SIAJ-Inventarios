@@ -22,20 +22,21 @@ public class Proveedor {
     private String telefono;
     @Column(name = "direccion", nullable = false, length = 50)
     private String direccion;
+    @Column(name = "cuit", nullable = false, length = 50)
+    private String cuit;
     @Column(name = "activo", nullable = false)
     private boolean activo;
     @Column(name = "fecha_alta", nullable = false)
     private Date fecha_alta;
 
-
-
     public Proveedor() {}
 
-    public Proveedor(String razonSocial, String email, String telefono, String direccion, boolean activo, Date fecha_alta) {
+    public Proveedor(String razonSocial, String email, String telefono, String direccion, String cuit,boolean activo, Date fecha_alta) {
         this.razonSocial = razonSocial;
         this.email = email;
         this.telefono = telefono;
         this.direccion = direccion;
+        this.cuit = cuit;
         this.activo = activo;
     }
     public int getId() { return id; }
@@ -66,6 +67,12 @@ public class Proveedor {
 
     public void setFecha_alta(Date fecha_alta) {this.fecha_alta = fecha_alta; }
 
+    public String getCuit() {
+        return cuit;
+    }
 
+    public void setCuit(String cuit) {
+        this.cuit = cuit;
+    }
 }
 

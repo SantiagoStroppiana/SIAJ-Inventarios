@@ -18,8 +18,6 @@ public class ProductoController {
     public List<Producto> mostrarProductos () {return productoService.listarProductos();}
 
 
-    //sku, nombre, categoria, stock, activo, precio y proveedor VALIDACIONES?
-
     public MensajesResultados crearProducto (Producto producto) {
 
         return productoService.crearProducto(producto);

@@ -17,13 +17,13 @@
         <AnchorPane prefHeight="800.0" prefWidth="380.0" styleClass="form-container" BorderPane.alignment="CENTER">
             <children>
                 <!-- Título del formulario -->
-                <Label layoutX="14.0" layoutY="69.0" styleClass="form-title" text="DATOS DEL PRODUCTO">
+                <Label layoutX="14.0" layoutY="45.0" styleClass="form-title" text="DATOS DEL PRODUCTO">
                     <font>
                         <Font name="System Bold" size="16.0" />
                     </font>
                 </Label>
 
-                <VBox layoutX="14.0" layoutY="120.0" prefWidth="350.0" spacing="15.0">
+                <VBox layoutX="8.0" layoutY="79.0" prefWidth="350.0" spacing="15.0">
                     <children>
                         <VBox spacing="5.0">
                             <children>
@@ -66,6 +66,16 @@
                                     </font>
                                 </Label>
                                 <TextField fx:id="txtPrecio" prefHeight="38.0" prefWidth="309.0" promptText="Precio" />
+                        <VBox prefWidth="306.0" spacing="5.0">
+                           <children>
+                              <Label prefHeight="15.0" prefWidth="94.0" styleClass="field-label" text="Precio Costo">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtPrecioCosto" prefHeight="38.0" prefWidth="309.0" promptText="Precio Costo" />
+                           </children>
+                        </VBox>
                             </children>
                         </VBox>
 
@@ -125,7 +135,7 @@
                     </children>
                 </VBox>
 
-                <VBox layoutX="8.0" layoutY="668.0" prefWidth="350.0" spacing="10.0">
+                <VBox layoutX="5.0" layoutY="704.0" prefWidth="350.0" spacing="10.0">
                     <children>
                         <HBox spacing="15.0">
                             <children>
@@ -159,11 +169,12 @@
                 <TableView fx:id="tablaProductos" layoutX="10.0" layoutY="66.0" prefHeight="798.0" prefWidth="990.0">
                     <columns>
                         <TableColumn fx:id="skuColumn" prefWidth="150.0" text="SKU" />
-                        <TableColumn fx:id="nombreColumn" prefWidth="320.0" text="PRODUCTO" />
-                        <TableColumn fx:id="stockColumn" prefWidth="100.0" text="STOCK" />
+                        <TableColumn fx:id="nombreColumn" prefWidth="226.0" text="PRODUCTO" />
+                        <TableColumn fx:id="stockColumn" prefWidth="71.0" text="STOCK" />
                         <TableColumn fx:id="precioColumn" prefWidth="120.0" text="PRECIO" />
-                        <TableColumn fx:id="estadoColumn" prefWidth="100.0" text="ESTADO" />
-                        <TableColumn fx:id="proveedorColumn" prefWidth="210.0" text="PROVEEDORES" />
+                        <TableColumn fx:id="precioCostoColumn" prefWidth="136.0" text="PRECIO COSTO" />
+                        <TableColumn fx:id="estadoColumn" prefWidth="103.0" text="ESTADO" />
+                        <TableColumn fx:id="proveedorColumn" prefWidth="178.0" text="PROVEEDORES" />
                     </columns>
                 </TableView>
             </children>

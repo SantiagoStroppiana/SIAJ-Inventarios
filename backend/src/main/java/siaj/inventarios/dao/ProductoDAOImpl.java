@@ -55,19 +55,15 @@ public class ProductoDAOImpl implements ProductoDAO {
             session.persist(producto);
             session.getTransaction().commit();
             return new MensajesResultados(true, "Producto registrado con exito");
-//            re= "Producto registtrado con exito";
 
         }catch (Exception e) {
 
             session.getTransaction().rollback();
             return new MensajesResultados(false, "Error al crear producto: " + e.getMessage());
-//            re="Error al crear producto: " + e.getMessage();
 
-//            throw new RuntimeException("Erorr al crear producto" + e.getMessage());
         }finally {
             session.close();
         }
-//        return re;
     }
 
 
@@ -111,15 +107,12 @@ public class ProductoDAOImpl implements ProductoDAO {
             session.merge(producto);
             session.getTransaction().commit();
             return new MensajesResultados(true, "Producto Modificado con exito");
-//            re= "Producto editado con exito";
 
         }catch (Exception e) {
 
             session.getTransaction().rollback();
             return new MensajesResultados(false, "Error al modificar producto: " + e.getMessage());
-//            re="Error al editar producto: " + e.getMessage();
 
-//            throw new RuntimeException("Erorr al editar producto" + e.getMessage());
         }finally {
             session.close();
         }

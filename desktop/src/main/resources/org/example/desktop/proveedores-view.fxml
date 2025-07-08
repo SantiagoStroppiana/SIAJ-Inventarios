@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import java.net.URL?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.ProveedorController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.ProveedorController">
 
     <left>
         <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
@@ -27,9 +21,10 @@
                     <columns>
                         <TableColumn fx:id="razonSocialColumn" prefWidth="220.0" text="RAZÓN SOCIAL" />
                         <TableColumn fx:id="telefonoColumn" prefWidth="120.0" text="TELÉFONO" />
-                        <TableColumn fx:id="direccionColumn" prefWidth="280.0" text="DIRECCIÓN" />
-                        <TableColumn fx:id="activoColumn" prefWidth="100.0" text="ACTIVO" />
-                        <TableColumn fx:id="emailColumn" prefWidth="160.0" text="EMAIL" />
+                        <TableColumn fx:id="direccionColumn" prefWidth="210.0" text="DIRECCIÓN" />
+                        <TableColumn fx:id="cuitColumn" prefWidth="119.0" text="CUIT" />
+                        <TableColumn fx:id="activoColumn" prefWidth="64.0" text="ACTIVO" />
+                        <TableColumn fx:id="emailColumn" prefWidth="143.0" text="EMAIL" />
                     </columns>
                 </TableView>
             </children>
@@ -91,12 +86,18 @@
                         </FXCollections>
                     </items>
                 </ComboBox>
+            <Label layoutX="20.0" layoutY="437.0" styleClass="field-label" text="CUIT">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtCUIT" layoutX="20.0" layoutY="457.0" prefHeight="39.0" prefWidth="360.0" promptText="Ingrese CUIT" />
 
                 <!-- Botones con orden correcto -->
-                <Button fx:id="agregar" layoutX="45.0" layoutY="450.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-primary" text="AGREGAR" />
-                <Button fx:id="actualizar" layoutX="45.0" layoutY="510.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-secondary" text="ACTUALIZAR" />
-                <Button fx:id="ver" layoutX="45.0" layoutY="570.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-modify" text="MODIFICAR" />
-                <Button fx:id="desactivar" layoutX="45.0" layoutY="630.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-danger" text="DESACTIVAR" />
+                <Button fx:id="agregar" layoutX="45.0" layoutY="518.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-primary" text="AGREGAR" />
+                <Button fx:id="actualizar" layoutX="45.0" layoutY="578.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-secondary" text="ACTUALIZAR" />
+                <Button fx:id="ver" layoutX="45.0" layoutY="638.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-modify" text="MODIFICAR" />
+                <Button fx:id="desactivar" layoutX="45.0" layoutY="698.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-danger" text="DESACTIVAR" />
             </children>
         </AnchorPane>
     </center>

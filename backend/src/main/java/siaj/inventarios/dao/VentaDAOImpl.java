@@ -2,6 +2,7 @@ package siaj.inventarios.dao;
 
 import org.hibernate.Session;
 import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.dto.UsuarioDTO;
 import siaj.inventarios.dto.VentaDTO;
 import siaj.inventarios.model.Usuario;
 import siaj.inventarios.model.Venta;
@@ -33,22 +34,22 @@ public class VentaDAOImpl implements VentaDAO{
     }
 
     @Override
-    public VentaDTO agregarVenta(Venta venta) {
+    public VentaDTO agregarVenta(Venta v) {
         Session session = HibernateUtil.getSession();
 
         try {
             session.beginTransaction();
-            session.persist(venta);
+            session.persist(v);
             session.getTransaction().commit();
+            UsuarioDTO usuarioDTO = new UsuarioDTO(v.getUsuario().getId());
 
-            // Ahora que la venta tiene ID, construimos el DTO
             return new VentaDTO(
-                    venta.getId(),                      // ID generado por Hibernate
-                    venta.getTotal(),
-                    venta.getEstado().toString(),
-                    venta.getFechaPago().toString(),
-                    venta.getUsuario(),     // o getUsername(), según tu modelo
-                    venta.getMedioPago()    // según cómo se llame el campo
+                    v.getId(),
+                    v.getTotal(),
+                    v.getEstado().toString(),
+                    v.getFechaPago().toString(),
+                    usuarioDTO,
+                    v.getMedioPago()
             );
 
         } catch (Exception e) {

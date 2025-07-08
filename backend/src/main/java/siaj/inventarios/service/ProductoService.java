@@ -11,7 +11,7 @@ public interface ProductoService {
 
     MensajesResultados crearProducto(Producto producto);
 
-    MensajesResultados validaciones (String sku, String nombre, int stock, double precio,/* String categoria,*/ boolean estado, Integer proveedorId);
+    MensajesResultados validaciones (String sku, String nombre, int stock, double precio,double precioCosto,/* String categoria,*/ boolean estado, Integer proveedorId);
 
     MensajesResultados modificarProducto(Producto producto);
 

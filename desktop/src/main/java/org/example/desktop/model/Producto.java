@@ -11,6 +11,7 @@ public class Producto {
     private int id;
     private String nombre;
     private BigDecimal precio;
+    private BigDecimal precioCosto;
     private String sku;
     private boolean activo;
     private String img;
@@ -20,10 +21,11 @@ public class Producto {
     private Proveedor  proveedor_id;
 
 
-    public Producto(int id, String nombre, BigDecimal precio, String sku, boolean activo, String img, long fecha_alta, int stock, int stock_minimo,Proveedor proveedor_id) {
+    public Producto(int id, String nombre, BigDecimal precio, BigDecimal precioCosto,String sku, boolean activo, String img, long fecha_alta, int stock, int stock_minimo,Proveedor proveedor_id) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
+        this.precioCosto = precioCosto;
         this.sku = sku;
         this.activo = activo;
         this.img = img;
@@ -128,5 +130,11 @@ public class Producto {
         return isActivo();
     }
 
+    public BigDecimal getPrecioCosto() {
+        return precioCosto;
+    }
 
+    public void setPrecioCosto(BigDecimal precioCosto) {
+        this.precioCosto = precioCosto;
+    }
 }

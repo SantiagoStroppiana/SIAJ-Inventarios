@@ -2,8 +2,6 @@ package siaj.inventarios.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -19,6 +17,8 @@ public class Producto {
     private String nombre;
     @Column(name = "precio", nullable=false, precision = 10, scale = 2)
     private BigDecimal precio;
+    @Column(name = "precio_costo", nullable=false, precision = 10, scale = 2)
+    private BigDecimal precioCosto;
     @Column(name = "sku", nullable=false, length=100, unique = true)
     private String sku;
     @Column(name = "activo", nullable=false)
@@ -31,16 +31,16 @@ public class Producto {
     private int stock;
     @Column(name = "stock_minimo", nullable=false)
     private int stock_minimo;
-
     @JsonProperty("proveedor_id")
     @ManyToOne
     @JoinColumn(name = "proveedores_id", nullable=false)
     private Proveedor proveedorid;
 
-    public Producto(int id, String nombre, BigDecimal precio, String sku, boolean activo, String img, Date fecha_alta, int stock, int stock_minimo,Proveedor proveedorid) {
+    public Producto(int id, String nombre, BigDecimal precio, BigDecimal precioCosto,String sku, boolean activo, String img, Date fecha_alta, int stock, int stock_minimo,Proveedor proveedorid) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
+        this.precioCosto = precioCosto;
         this.sku = sku;
         this.activo = activo;
         this.img = img;
@@ -77,7 +77,12 @@ public class Producto {
     public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
-
+    public BigDecimal getPrecioCosto() {
+        return precioCosto;
+    }
+    public void setPrecioCosto(BigDecimal precioCosto) {
+        this.precioCosto = precioCosto;
+    }
     public String getSku() {
         return sku;
     }
