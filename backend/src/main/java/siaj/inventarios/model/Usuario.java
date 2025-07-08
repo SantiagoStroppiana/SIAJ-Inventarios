@@ -83,4 +83,7 @@ public class Usuario {
         this.rolId = rolId;
     }
 
+    public String getNombreRol() {
+        return getRolId().getNombre();
+    }
 }

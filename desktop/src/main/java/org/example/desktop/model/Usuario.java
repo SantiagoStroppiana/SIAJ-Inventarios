@@ -1,5 +1,7 @@
 package org.example.desktop.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Usuario {
 
     private int id;
@@ -7,51 +9,50 @@ public class Usuario {
     private String apellido;
     private String email;
     private String password;
-    private Rol rolId;
+    @SerializedName("rol")
+    private Rol rol;
 
     public Usuario() {}
 
-    public Usuario(int id, String nombre, String apellido, String email, String password, Rol rolId) {
+    public Usuario(int id, String nombre, String apellido, String email, String password, Rol rol) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
         this.password = password;
-        this.rolId = rolId;
+        this.rol = rol;
     }
-    public int getId() {return id;}
-    public void setId(int id) {this.id = id;}
-    public String getNombre() {
-        return nombre;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    public String getApellido() {
-        return apellido;
-    }
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    public Rol getRolId() {
-        return rolId;
-    }
-    public void setRolId(Rol rolId) {
-        this.rolId = rolId;
-    }
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+
+    public String getApellido() { return apellido; }
+    public void setApellido(String apellido) { this.apellido = apellido; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+    public Rol getRol() { return rol; }
+    public void setRol(Rol rol) { this.rol = rol; }
+
     public String getNombreRol() {
-        return rolId != null ? rolId.getNombre() : "Sin Rol";
+        return rol != null ? rol.getNombre() : "Sin rol";
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", email='" + email + '\'' +
+                ", rol=" + (rol != null ? rol.getNombre() : "null") +
+                '}';
     }
 }

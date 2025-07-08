@@ -1,6 +1,6 @@
 package siaj.inventarios.controller;
 
-import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.dto.*;
 import siaj.inventarios.model.Usuario;
 import siaj.inventarios.service.UsuarioService;
 import java.util.List;
@@ -20,11 +20,29 @@ public class UsuarioController {
         return usuarioService.registrarUsuario(usuario);
     }
 
-    public MensajesResultados login(String email, String password) {
+    public LoginResponseDTO login(String email, String password) {
         return usuarioService.login(email, password);
     }
 
-    public MensajesResultados actualizarRol(int idUsuario) { return usuarioService.actualizarRolAdmin(idUsuario); }
+    public MensajesResultados actualizarRol(int idUsuario, String nuevoRol) {
 
-    public List<Usuario> listarUsuarios (){ return usuarioService.listarUsuarios(); }
+        return usuarioService.actualizarRol(idUsuario, nuevoRol);
+    }
+
+    public List<UsuarioDTO> listarUsuariosDTO() {
+    List<Usuario> usuarios = usuarioService.listarUsuarios();
+
+    return usuarios.stream()
+            .map(usuario -> new UsuarioDTO(
+                    usuario.getId(),
+                    usuario.getNombre(),
+                    usuario.getApellido(),
+                    usuario.getEmail(),
+                    (usuario.getRolId() != null) ? usuario.getRolId().getNombre() : "Sin rol"
+            ))
+            .toList();
+}
+
+    public MensajesResultados cambiarPassWord(UsuarioPasswordDTO usuarioPasswordDTO) { return usuarioService.cambiarPassword(usuarioPasswordDTO); }
+    public MensajesResultados olvidePassword(UsuarioForgetPasswordDTO usuarioForgetPasswordDTO) { return usuarioService.olvidePassword(usuarioForgetPasswordDTO); }
 }

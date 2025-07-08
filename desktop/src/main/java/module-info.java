@@ -11,8 +11,11 @@ module org.example.desktop {
     requires com.google.gson;
     requires java.dotenv;
     requires java.logging;
+    requires com.github.librepdf.openpdf;
 
-    opens org.example.desktop.controller  to javafx.fxml;
+    opens org.example.desktop.controller to javafx.fxml;
     opens org.example.desktop.model to com.google.gson, javafx.base;
+    opens org.example.desktop.dto to com.google.gson, javafx.fxml, javafx.base;
+
     exports org.example.desktop;
 }

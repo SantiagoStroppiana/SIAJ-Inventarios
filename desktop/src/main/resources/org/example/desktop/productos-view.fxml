@@ -32,7 +32,7 @@
                                         <Font name="System Bold" size="12.0" />
                                     </font>
                                 </Label>
-                                <TextField fx:id="txtSku" prefHeight="38.0" prefWidth="330.0" promptText="SKU" />
+                                <TextField fx:id="txtSku" prefHeight="23.0" prefWidth="282.0" promptText="SKU" />
                             </children>
                         </VBox>
 
@@ -154,9 +154,9 @@
     <right>
         <AnchorPane prefHeight="900.0" prefWidth="1020.0" BorderPane.alignment="CENTER">
             <children>
-                <TextField fx:id="txtBuscarProducto" layoutX="10.0" layoutY="14.0" prefHeight="38.0" prefWidth="980.0" promptText="Buscar Producto..." />
+                <TextField fx:id="txtBuscarProducto" layoutX="14.0" layoutY="14.0" prefHeight="39.0" prefWidth="349.0" promptText="Buscar Producto..." />
 
-                <TableView fx:id="tablaProductos" layoutX="10.0" layoutY="66.0" prefHeight="720.0" prefWidth="1000.0">
+                <TableView fx:id="tablaProductos" layoutX="10.0" layoutY="66.0" prefHeight="798.0" prefWidth="990.0">
                     <columns>
                         <TableColumn fx:id="skuColumn" prefWidth="150.0" text="SKU" />
                         <TableColumn fx:id="nombreColumn" prefWidth="320.0" text="PRODUCTO" />
