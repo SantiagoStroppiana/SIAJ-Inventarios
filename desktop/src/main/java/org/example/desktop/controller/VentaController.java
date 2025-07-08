@@ -7,6 +7,9 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -16,6 +19,8 @@ import org.example.desktop.DTO.ProductoVentaDTO;
 import org.example.desktop.model.*;
 import org.example.desktop.util.VariablesEntorno;
 
+import java.awt.*;
+import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
@@ -23,9 +28,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.List;
 
 import javafx.scene.text.Font;
 import javafx.collections.ObservableList;
+import org.example.desktop.util.VentaPDFGenerator;
 
 public class VentaController implements Initializable {
 
@@ -394,6 +401,48 @@ public class VentaController implements Initializable {
                     httpClient.send(detalleRequest, HttpResponse.BodyHandlers.ofString());
                 }
             }
+
+
+            // Paso 3: Generar PDF y abrirlo automáticamente
+
+            // Construir lista de detalles para el PDF
+            List<DetalleVenta> detalles = new ArrayList<>();
+            for (Node node : cartContent.getChildren()) {
+                if (node instanceof HBox item) {
+                    Label nombreLabel = (Label) item.getChildren().get(0);
+                    TextField cantidadField = (TextField) item.getChildren().get(1);
+                    Label precioLabel = (Label) item.getChildren().get(2);
+
+                    String nombre = nombreLabel.getText();
+                    int cantidad = Integer.parseInt(cantidadField.getText());
+                    double precioUnitario = Double.parseDouble(precioLabel.getText().replace("$", "").trim());
+
+                    Producto producto = buscarProductoPorNombre(nombre);
+                    if (producto == null) continue;
+
+                    detalles.add(new DetalleVenta(ventaCreada, cantidad, precioUnitario, producto));
+                }
+            }
+
+            // Crear carpeta Facturas en Documentos si no existe
+            String rutaDocumentos = System.getProperty("user.home") + File.separator + "Documents";
+            File carpetaFacturas = new File(rutaDocumentos + File.separator + "Facturas");
+            if (!carpetaFacturas.exists()) {
+                carpetaFacturas.mkdirs();
+            }
+
+            // Generar ruta del archivo PDF
+            String archivoSalida = carpetaFacturas.getAbsolutePath() + File.separator + "venta_" + ventaCreada.getId() + ".pdf";
+
+            // Generar PDF
+            ventaCreada.setMedioPago(seleccionado);
+            VentaPDFGenerator generador = new VentaPDFGenerator();
+            generador.generarPDF(ventaCreada, detalles, archivoSalida);
+
+            // Abrir el PDF automáticamente con el visor predeterminado del sistema
+            Desktop.getDesktop().open(new File(archivoSalida));
+
+
 
             notificar("Venta Procesada", "La venta fue registrada exitosamente.", true);
             limpiarCarrito();
