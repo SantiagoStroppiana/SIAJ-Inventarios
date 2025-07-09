@@ -87,5 +87,15 @@ public class ProveedorDAOImpl implements ProveedorDAO{
         return proveedor;
     }
 
+    @Override
+    public Proveedor buscarPorId(int id) {
+        Session session = HibernateUtil.getSession();
+        try {
+            return session.get(Proveedor.class, id);
+        } finally {
+            session.close();
+        }
+    }
+
 
 }

@@ -2,6 +2,7 @@ package siaj.inventarios.rutas;
 import io.javalin.Javalin;
 import siaj.inventarios.controller.OrdenCompraController;
 import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.dto.OrdenCompraDTO;
 import siaj.inventarios.model.OrdenCompra;
 
 import java.util.List;
@@ -21,9 +22,15 @@ public class RutasOrdenCompra {
             ctx.json(mostrar);
         });
 
-        app.post("/api/crearOrdenCompra", ctx -> {
+        /*app.post("/api/crearOrdenCompra", ctx -> {
             OrdenCompra ordenCompra = ctx.bodyAsClass(OrdenCompra.class);
             OrdenCompra respuesta = ordenCompraController.agregarOrdenCompra(ordenCompra);
+            ctx.json(respuesta);
+        });*/
+
+        app.post("/api/crearOrdenCompra", ctx -> {
+            OrdenCompraDTO ordenCompraDTO = ctx.bodyAsClass(OrdenCompraDTO.class);
+            OrdenCompraDTO respuesta = ordenCompraController.agregarOrdenCompra(ordenCompraDTO);
             ctx.json(respuesta);
         });
 

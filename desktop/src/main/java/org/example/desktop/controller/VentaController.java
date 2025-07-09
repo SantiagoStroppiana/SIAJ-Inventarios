@@ -20,7 +20,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
-import org.example.desktop.DTO.ProductoVentaDTO;
+import org.example.desktop.dto.ProductoVentaDTO;
 import org.example.desktop.dto.UsuarioDTO;
 import org.example.desktop.model.*;
 import org.example.desktop.util.UserSession;

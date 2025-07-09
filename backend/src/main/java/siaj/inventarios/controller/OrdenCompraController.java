@@ -1,5 +1,6 @@
 package siaj.inventarios.controller;
 
+import siaj.inventarios.dto.OrdenCompraDTO;
 import siaj.inventarios.model.OrdenCompra;
 import siaj.inventarios.service.OrdenCompraService;
 
@@ -16,7 +17,7 @@ public class OrdenCompraController {
         return ordenCompraService.obtenerTodasLasOrdenCompras();
     }
 
-    public OrdenCompra agregarOrdenCompra(OrdenCompra ordenCompra) {
-        return ordenCompraService.agregarOrdenCompra(ordenCompra);
+    public OrdenCompraDTO agregarOrdenCompra(OrdenCompraDTO ordenCompraDTO) {
+        return ordenCompraService.agregarOrdenCompraDesdeDTO(ordenCompraDTO);
     }
 }

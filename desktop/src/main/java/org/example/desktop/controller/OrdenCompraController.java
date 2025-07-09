@@ -8,6 +8,7 @@ import javafx.scene.layout.*;
 import javafx.geometry.Insets;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
+import org.example.desktop.dto.OrdenCompraDTO;
 import org.example.desktop.model.*;
 import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
@@ -20,6 +21,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import javafx.fxml.FXML;
@@ -460,19 +462,27 @@ public class OrdenCompraController {
         medioPagoDummy.setTipo("TEMPORAL"); // Tipo cualquiera
         double total = Double.parseDouble(totalLabel.getText().replace(",", "."));
 
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String fechaFormateada = LocalDateTime.now().format(formatter);
+
+
         if (medioPagoDummy == null) {
             notificar("Error", "Seleccione un medio de pago.", false);
             return;
         }
 
 // Crear objeto OrdenCompra (adaptalo si usás DTO)
-        /*OrdenCompra ordenCompra = new OrdenCompra(
-                OrdenCompra.EstadoOrden.pendiente,  // o el enum correspondiente
-                proveedor,
+        OrdenCompraDTO ordenCompraDTO = new OrdenCompraDTO(
+                proveedor.getId(),
+                medioPagoDummy.getId(),
                 new BigDecimal(total),
-                medioPagoDummy,
-                LocalDateTime.now()
-        );*/
+                fechaFormateada,
+                OrdenCompra.EstadoOrden.pendiente.toString()  // o el enum correspondiente
+        );
+
+
+        /*
         String fechaPagoStr = LocalDateTime.now().toString(); // por ejemplo: "2025-07-09T23:15:30"
 
         Map<String, Object> ordenMap = new HashMap<>();
@@ -487,6 +497,13 @@ public class OrdenCompraController {
         String ordenJson = gson.toJson(ordenMap);
 
 // Enviar al backend
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crearOrdenCompra"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(ordenJson))
+                .build();*/
+        String ordenJson = gson.toJson(ordenCompraDTO);
+
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crearOrdenCompra"))
                 .header("Content-Type", "application/json")
