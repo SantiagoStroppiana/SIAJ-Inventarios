@@ -31,7 +31,7 @@ public class OrdenCompraServiceImpl implements OrdenCompraService{
 
         orden.setEstado(OrdenCompra.EstadoOrden.valueOf(dto.getEstado()));
         orden.setTotal(dto.getTotal());
-        orden.setFechaPago(dto.getFechaPago());
+        orden.setFechaPago(LocalDateTime.parse(dto.getFechaPago()));
 
         // Acá se hacen las búsquedas
         Proveedor proveedor = proveedorService.buscarPorId(dto.getProveedorId());
@@ -47,9 +47,19 @@ public class OrdenCompraServiceImpl implements OrdenCompraService{
                 proveedor.getId(),
                 medioPago.getId(),
                 creada.getTotal(),
-                creada.getFechaPago(),
+                creada.getFechaPago().toString(),
                 creada.getEstado().toString()
         );
+    }
+
+
+    @Override
+    public OrdenCompra buscarPorId(int id) {
+        OrdenCompra ordenCompra = ordenCompraDAO.buscarPorId(id);
+        if (ordenCompra == null) {
+            throw new RuntimeException("Orden de pago no encontrada con ID: " + id);
+        }
+        return ordenCompra;
     }
 
 }

@@ -9,4 +9,5 @@ import java.util.List;
 public interface OrdenCompraDAO {
     List<OrdenCompra> obtenerTodasLasOrdenCompras();
     OrdenCompra agregarOrdenCompra(OrdenCompra ordenCompra);
+    OrdenCompra buscarPorId(int id);
 }

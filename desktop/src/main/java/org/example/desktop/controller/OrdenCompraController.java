@@ -3,11 +3,13 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
+import org.example.desktop.dto.DetalleOrdenCompraDTO;
 import org.example.desktop.dto.OrdenCompraDTO;
 import org.example.desktop.model.*;
 import org.example.desktop.util.UserSession;
@@ -160,6 +162,7 @@ public class OrdenCompraController {
             mostrarAlerta("Error", "No se pudieron cargar los proveedores");
         }
     }
+    private List<Producto> productos = new ArrayList<>();
 
     private void cargarProductosPorProveedor(Proveedor proveedor) {
         // Limpiar productos anteriores
@@ -180,8 +183,7 @@ public class OrdenCompraController {
             // Parseo la respuesta
             String responseBody = response.body();
             Producto[] productosArray = gson.fromJson(responseBody, Producto[].class);
-            List<Producto> productos = Arrays.asList(productosArray);
-
+            productos = Arrays.asList(productosArray);
             System.out.println("Productos del proveedor " + proveedor.getRazonSocial() + ":");
             for (Producto p : productos) {
                 System.out.println("- " + p.getNombre() + " - $" + p.getPrecio());
@@ -280,20 +282,30 @@ public class OrdenCompraController {
 
         Optional<String> resultado = dialog.showAndWait();
         if (resultado.isPresent()) {
+            System.out.println("🔍 Usuario ingresó cantidad: " + resultado.get());
             try {
                 int cantidad = Integer.parseInt(resultado.get());
+                System.out.println("🔍 Cantidad parseada: " + cantidad);
+                System.out.println("🔍 Stock disponible: " + producto.getStock());
                 if (cantidad > 0 && cantidad <= producto.getStock()) {
+                    System.out.println("🔍 Llamando agregarItemAOrden...");
                     agregarItemAOrden(producto, cantidad);
                 } else {
+                    System.out.println("❌ Cantidad inválida o excede stock");
                     mostrarAlerta("Error", "Cantidad inválida o excede el stock disponible");
                 }
             } catch (NumberFormatException e) {
+                System.out.println("❌ Error al parsear cantidad: " + e.getMessage());
                 mostrarAlerta("Error", "Por favor ingrese un número válido");
             }
+        } else {
+            System.out.println("🔍 Usuario canceló el dialog");
         }
     }
 
     private void agregarItemAOrden(Producto producto, int cantidad) {
+        System.out.println("🔍 agregarItemAOrden llamado - Producto: " + producto.getNombre() + ", Cantidad: " + cantidad);
+        System.out.println("🔍 itemsOrden size ANTES: " + itemsOrden.size());
         // Verificar si el producto ya está en la orden
         ItemOrden itemExistente = null;
         for (ItemOrden item : itemsOrden) {
@@ -304,32 +316,41 @@ public class OrdenCompraController {
         }
 
         if (itemExistente != null) {
+            System.out.println("🔍 Producto ya existe en orden, actualizando cantidad...");
             // Actualizar cantidad
             itemExistente.setCantidad(itemExistente.getCantidad() + cantidad);
+            System.out.println("🔍 Nueva cantidad: " + itemExistente.getCantidad());
         } else {
+            System.out.println("🔍 Creando nuevo item en orden...");
             // Crear nuevo item
             ItemOrden nuevoItem = new ItemOrden(producto, cantidad);
             itemsOrden.add(nuevoItem);
+            System.out.println("🔍 Item agregado a itemsOrden");
         }
-
+        System.out.println("🔍 itemsOrden size DESPUÉS: " + itemsOrden.size());
+        System.out.println("🔍 Llamando actualizarVistaOrden...");
         actualizarVistaOrden();
     }
 
     private void actualizarVistaOrden() {
+        System.out.println("🔍 actualizarVistaOrden llamado - itemsOrden size: " + itemsOrden.size());
         // Limpiar contenido anterior
         orderContent.getChildren().clear();
 
         if (itemsOrden.isEmpty()) {
+            System.out.println("🔍 itemsOrden está vacío, mostrando estado vacío");
             // Mostrar estado vacío
             emptyOrderState.setVisible(true);
             emptyOrderState.setManaged(true);
         } else {
+            System.out.println("🔍 itemsOrden tiene " + itemsOrden.size() + " items, creando tarjetas...");
             // Ocultar estado vacío
             emptyOrderState.setVisible(false);
             emptyOrderState.setManaged(false);
 
             // Crear tarjetas de items
             for (ItemOrden item : itemsOrden) {
+                System.out.println("🔍 Creando tarjeta para: " + item.getProducto().getNombre());
                 HBox tarjetaItem = crearTarjetaItem(item);
                 orderContent.getChildren().add(tarjetaItem);
             }
@@ -341,6 +362,7 @@ public class OrdenCompraController {
 
         // Habilitar/deshabilitar botón generar orden
         btnGenerateOrder.setDisable(itemsOrden.isEmpty());
+        System.out.println("🔍 Botón generar orden habilitado: " + !btnGenerateOrder.isDisabled());
     }
 
     private HBox crearTarjetaItem(ItemOrden item) {
@@ -429,6 +451,16 @@ public class OrdenCompraController {
     }
 
     private void generarOrden() throws IOException, InterruptedException {
+        System.out.println("🔍 generarOrden llamado - itemsOrden size: " + itemsOrden.size());
+
+        // Imprimir todos los items
+        for (int i = 0; i < itemsOrden.size(); i++) {
+            ItemOrden item = itemsOrden.get(i);
+            System.out.println("🔍 Item " + i + ": " + item.getProducto().getNombre() +
+                    " - Cantidad: " + item.getCantidad() +
+                    " - Precio: $" + item.getProducto().getPrecio());
+        }
+
         if (supplierComboBox.getValue() == null) {
             mostrarAlerta("Error", "Debe seleccionar un proveedor");
             return;
@@ -444,64 +476,30 @@ public class OrdenCompraController {
             return;
         }
 
-        // Aquí harías tu petición HTTP para generar la orden
-        // OrdenCompra orden = new OrdenCompra(
-        //     supplierComboBox.getValue(),
-        //     orderDatePicker.getValue(),
-        //     itemsOrden,
-        //     notesTextArea.getText()
-        // );
-        // backendService.crearOrdenCompra(orden);
-        // Paso 1: Crear venta
-        // Obtener datos necesarios
+        // Paso 1: Crear orden de compra
         Proveedor proveedor = supplierComboBox.getValue();
         LocalDate fecha = orderDatePicker.getValue();
-        //MedioPago medioPago = comboMedioPago.getSelectionModel().getSelectedItem(); // Asegurate de tenerlo declarado
         MedioPago medioPagoDummy = new MedioPago();
-        medioPagoDummy.setId(1); // ID temporal
-        medioPagoDummy.setTipo("TEMPORAL"); // Tipo cualquiera
+        medioPagoDummy.setId(1);
+        medioPagoDummy.setTipo("TEMPORAL");
         double total = Double.parseDouble(totalLabel.getText().replace(",", "."));
-
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         String fechaFormateada = LocalDateTime.now().format(formatter);
-
 
         if (medioPagoDummy == null) {
             notificar("Error", "Seleccione un medio de pago.", false);
             return;
         }
 
-// Crear objeto OrdenCompra (adaptalo si usás DTO)
         OrdenCompraDTO ordenCompraDTO = new OrdenCompraDTO(
                 proveedor.getId(),
                 medioPagoDummy.getId(),
                 new BigDecimal(total),
                 fechaFormateada,
-                OrdenCompra.EstadoOrden.pendiente.toString()  // o el enum correspondiente
+                OrdenCompra.EstadoOrden.pendiente.toString()
         );
 
-
-        /*
-        String fechaPagoStr = LocalDateTime.now().toString(); // por ejemplo: "2025-07-09T23:15:30"
-
-        Map<String, Object> ordenMap = new HashMap<>();
-        ordenMap.put("estado", "pendiente");
-        ordenMap.put("proveedor", proveedor.getId());
-        ordenMap.put("total", total);
-        ordenMap.put("medioPago", medioPagoDummy.getId());
-        ordenMap.put("fechaPago", fechaPagoStr); // ← string plano
-
-
-// Serializar a JSON
-        String ordenJson = gson.toJson(ordenMap);
-
-// Enviar al backend
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crearOrdenCompra"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(ordenJson))
-                .build();*/
         String ordenJson = gson.toJson(ordenCompraDTO);
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -512,25 +510,83 @@ public class OrdenCompraController {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200 || response.statusCode() == 201) {
-            mostrarAlerta("Éxito", "Orden de compra generada correctamente.");
-            limpiarOrden();
-        } else {
+        if (response.statusCode() != 200 && response.statusCode() != 201) {
             System.err.println("Error al crear orden: " + response.body());
             notificar("Error", "No se pudo crear la orden de compra.", false);
+            return;
         }
 
+        System.out.println("AAAAA\n" + response.body() + "\n\n\n");
+        OrdenCompraDTO ordenCompraCreadaDTO = gson.fromJson(response.body(), OrdenCompraDTO.class);
 
+        // Paso 2: Crear los detalles de la orden
+        boolean todosDetallesCreados = true;
 
+        for (ItemOrden item : itemsOrden) {
+            int cantidad = item.getCantidad();
+            double precioUnitario = item.getProducto().getPrecio().doubleValue();
+            Producto producto = item.getProducto();
 
+            DetalleOrdenCompraDTO detalle = new DetalleOrdenCompraDTO();
+            detalle.setOrdenCompraId(ordenCompraCreadaDTO.getId());
+            detalle.setProductoId(producto.getId());
+            detalle.setCantidad(cantidad);
+            detalle.setPrecioUnitario(precioUnitario);
 
+            String json = gson.toJson(detalle);
+            System.out.println("JSON detalle: " + json);
 
+            HttpRequest request2 = HttpRequest.newBuilder()
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crear-detalle-orden"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
 
-        // TODO: FALTARIA CREAR LOS DETALLES OC
+            HttpResponse<String> response2 = httpClient.send(request2, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Respuesta detalle: " + response2.body());
 
-        mostrarAlerta("Éxito", "Orden de compra generada correctamente");
-        limpiarOrden();
+            if (response2.statusCode() == 200 || response2.statusCode() == 201) {
+                System.out.println("Detalle creado exitosamente para producto: " + producto.getNombre());
+            } else {
+                System.err.println("Error al crear detalle para producto " + producto.getNombre() + ": " + response2.body());
+                notificar("Error", "No se pudo crear el detalle para " + producto.getNombre(), false);
+                todosDetallesCreados = false;
+            }
+        }
+
+        // Paso 3: Mostrar mensaje de éxito y limpiar SOLO si todo salió bien
+        if (todosDetallesCreados) {
+            mostrarAlerta("Éxito", "Orden de compra y todos los detalles creados correctamente.");
+            limpiarOrden(); // ← AHORA sí, al final
+        } else {
+            mostrarAlerta("Advertencia", "La orden se creó pero hubo problemas con algunos detalles.");
+        }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+    private Producto buscarProductoEnLista(String nombre) {
+        for (Producto producto : productos) {
+            if (producto.getNombre().equalsIgnoreCase(nombre)) {
+                return producto;
+            }
+        }
+        return null;
+    }
+
+
+
+
+
     private void notificar(String titulo, String mensaje, boolean exito){
         Platform.runLater(() -> {
             Notifications notificacion = Notifications.create()

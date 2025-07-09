@@ -20,6 +20,7 @@ public class BackendServer {
         configurarDetallesVentas(app);
         configurarMedioPagos(app);
         configurarOrdenCompra(app);
+        configurarDetalleOrdenCompra(app);
 
 
     }
@@ -80,6 +81,13 @@ public class BackendServer {
         OrdenCompraService ordenCompraService = new OrdenCompraServiceImpl(ordenCompraDAO);
         OrdenCompraController ordenCompraController = new OrdenCompraController(ordenCompraService);
         new RutasOrdenCompra(ordenCompraController).rutaOrdenCompra(app);
+    }
+
+    public static void configurarDetalleOrdenCompra(Javalin app) {
+        DetalleOrdenCompraDAO detalleOrdenCompraDAO = new DetalleOrdenCompraDAOImpl();
+        DetalleOrdenCompraService detalleOrdenCompraService = new DetalleOrdenCompraServiceImpl(detalleOrdenCompraDAO);
+        DetalleOrdenCompraController detalleOrdenCompraController = new DetalleOrdenCompraController(detalleOrdenCompraService);
+        new RutasDetalleOrdenCompra(detalleOrdenCompraController).rutaDetalleOrdenCompra(app);
     }
 
 }

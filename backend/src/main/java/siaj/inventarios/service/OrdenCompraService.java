@@ -8,4 +8,5 @@ import java.util.List;
 public interface OrdenCompraService {
     List<OrdenCompra> obtenerTodasLasOrdenCompras();
     OrdenCompraDTO agregarOrdenCompraDesdeDTO(OrdenCompraDTO ordenCompraDTO);
+    OrdenCompra buscarPorId(int id);
 }

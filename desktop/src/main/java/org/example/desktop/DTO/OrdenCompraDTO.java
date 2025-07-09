@@ -74,4 +74,16 @@ public class OrdenCompraDTO {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    @Override
+    public String toString() {
+        return "OrdenCompraDTO{" +
+                "id=" + id +
+                ", proveedorId=" + proveedorId +
+                ", medioPagoId=" + medioPagoId +
+                ", total=" + total +
+                ", fechaPago='" + fechaPago + '\'' +
+                ", estado='" + estado + '\'' +
+                '}';
+    }
 }

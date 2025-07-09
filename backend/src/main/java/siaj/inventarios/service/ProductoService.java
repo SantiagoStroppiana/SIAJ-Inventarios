@@ -18,4 +18,6 @@ public interface ProductoService {
     List<Producto> filtrarProveedor(int id);
 
     List<Producto> filtrarCategoria(int idCategoria);
+
+    Producto buscarPorId(int id);
 }

@@ -2,6 +2,7 @@ package siaj.inventarios.service;
 
 import siaj.inventarios.dao.ProductoDAO;
 import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.model.OrdenCompra;
 import siaj.inventarios.model.Producto;
 
 import java.math.BigDecimal;
@@ -67,6 +68,15 @@ public class ProductoServiceImpl implements ProductoService {
 
             return mr;
         }
+    }
+
+    @Override
+    public Producto buscarPorId(int id) {
+        Producto producto = productoDAO.buscarPorId(id);
+        if (producto == null) {
+            throw new RuntimeException("Producto no encontrado con ID: " + id);
+        }
+        return producto;
     }
 
     public MensajesResultados validaciones(String sku, String nombre, int stock, double precio, double precioCosto, /* String categoria,*/ boolean estado, Integer proveedorId) {

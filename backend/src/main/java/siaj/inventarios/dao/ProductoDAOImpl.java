@@ -34,15 +34,7 @@ public class ProductoDAOImpl implements ProductoDAO {
         return productos;
     }
 
-    @Override
-    public Producto obtenerPorId(int id) {
-        Session session = HibernateUtil.getSession();
-        try {
-            return session.get(Producto.class, id);
-        } finally {
-            session.close();
-        }
-    }
+
 
     @Override
     public MensajesResultados crearProducto (Producto producto){
@@ -162,6 +154,16 @@ public class ProductoDAOImpl implements ProductoDAO {
         }
 
         return productos;
+    }
+
+    @Override
+    public Producto buscarPorId(int id) {
+        Session session = HibernateUtil.getSession();
+        try {
+            return session.get(Producto.class, id);
+        } finally {
+            session.close();
+        }
     }
 
 }
