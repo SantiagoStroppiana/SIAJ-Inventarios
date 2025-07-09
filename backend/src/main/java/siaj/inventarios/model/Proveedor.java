@@ -43,6 +43,10 @@ public class Proveedor {
 
     public void setId(int id) { this.id = id; }
 
+    public Proveedor(int id) {
+        this.id = id;
+    }
+
     public String getRazonSocial() { return razonSocial; }
 
     public void setRazonSocial(String razonSocial) {this.razonSocial = razonSocial; }

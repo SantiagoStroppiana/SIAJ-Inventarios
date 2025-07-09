@@ -37,6 +37,7 @@ public class HibernateUtil {
             configuration.addAnnotatedClass(siaj.inventarios.model.Venta.class);
             configuration.addAnnotatedClass(siaj.inventarios.model.MedioPago.class);
             configuration.addAnnotatedClass(siaj.inventarios.model.DetalleVenta.class);
+            configuration.addAnnotatedClass(siaj.inventarios.model.OrdenCompra.class);
 
 
 

@@ -1,21 +1,27 @@
 package org.example.desktop.controller;
 import com.google.gson.Gson;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
-import org.example.desktop.model.Producto;
-import org.example.desktop.model.Proveedor;
+import javafx.util.Duration;
+import org.controlsfx.control.Notifications;
+import org.example.desktop.model.*;
+import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -24,7 +30,6 @@ import javafx.util.StringConverter;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -98,7 +103,15 @@ public class OrdenCompraController {
 
         // Configurar botones
         btnClearOrder.setOnAction(e -> limpiarOrden());
-        btnGenerateOrder.setOnAction(e -> generarOrden());
+        btnGenerateOrder.setOnAction(e -> {
+            try {
+                generarOrden();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         btnRefreshCatalog.setOnAction(e -> actualizarCatalogo());
     }
 
@@ -413,7 +426,7 @@ public class OrdenCompraController {
         actualizarVistaOrden();
     }
 
-    private void generarOrden() {
+    private void generarOrden() throws IOException, InterruptedException {
         if (supplierComboBox.getValue() == null) {
             mostrarAlerta("Error", "Debe seleccionar un proveedor");
             return;
@@ -437,9 +450,84 @@ public class OrdenCompraController {
         //     notesTextArea.getText()
         // );
         // backendService.crearOrdenCompra(orden);
+        // Paso 1: Crear venta
+        // Obtener datos necesarios
+        Proveedor proveedor = supplierComboBox.getValue();
+        LocalDate fecha = orderDatePicker.getValue();
+        //MedioPago medioPago = comboMedioPago.getSelectionModel().getSelectedItem(); // Asegurate de tenerlo declarado
+        MedioPago medioPagoDummy = new MedioPago();
+        medioPagoDummy.setId(1); // ID temporal
+        medioPagoDummy.setTipo("TEMPORAL"); // Tipo cualquiera
+        double total = Double.parseDouble(totalLabel.getText().replace(",", "."));
+
+        if (medioPagoDummy == null) {
+            notificar("Error", "Seleccione un medio de pago.", false);
+            return;
+        }
+
+// Crear objeto OrdenCompra (adaptalo si usás DTO)
+        /*OrdenCompra ordenCompra = new OrdenCompra(
+                OrdenCompra.EstadoOrden.pendiente,  // o el enum correspondiente
+                proveedor,
+                new BigDecimal(total),
+                medioPagoDummy,
+                LocalDateTime.now()
+        );*/
+        String fechaPagoStr = LocalDateTime.now().toString(); // por ejemplo: "2025-07-09T23:15:30"
+
+        Map<String, Object> ordenMap = new HashMap<>();
+        ordenMap.put("estado", "pendiente");
+        ordenMap.put("proveedor", proveedor.getId());
+        ordenMap.put("total", total);
+        ordenMap.put("medioPago", medioPagoDummy.getId());
+        ordenMap.put("fechaPago", fechaPagoStr); // ← string plano
+
+
+// Serializar a JSON
+        String ordenJson = gson.toJson(ordenMap);
+
+// Enviar al backend
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crearOrdenCompra"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(ordenJson))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200 || response.statusCode() == 201) {
+            mostrarAlerta("Éxito", "Orden de compra generada correctamente.");
+            limpiarOrden();
+        } else {
+            System.err.println("Error al crear orden: " + response.body());
+            notificar("Error", "No se pudo crear la orden de compra.", false);
+        }
+
+
+
+
+
+
+
+        // TODO: FALTARIA CREAR LOS DETALLES OC
 
         mostrarAlerta("Éxito", "Orden de compra generada correctamente");
         limpiarOrden();
+    }
+    private void notificar(String titulo, String mensaje, boolean exito){
+        Platform.runLater(() -> {
+            Notifications notificacion = Notifications.create()
+                    .title(titulo)
+                    .text(mensaje)
+                    .position(Pos.TOP_CENTER)
+                    .hideAfter(Duration.seconds(4));
+
+            if (exito) {
+                notificacion.showInformation();
+            } else {
+                notificacion.showError();
+            }
+        });
     }
 
     private void actualizarCatalogo() {
@@ -472,4 +560,5 @@ public class OrdenCompraController {
         public void setCantidad(int cantidad) { this.cantidad = cantidad; }
         public double getTotal() { return producto.getPrecio().doubleValue() * cantidad; }
     }
+
 }

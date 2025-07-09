@@ -103,4 +103,8 @@ public class Proveedor {
     public void setCuit(String cuit) {
         this.cuit = cuit;
     }
+
+    public Proveedor(int id) {
+        this.id = id;
+    }
 }

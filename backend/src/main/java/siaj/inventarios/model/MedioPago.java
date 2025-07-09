@@ -10,6 +10,10 @@ public class MedioPago {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    public MedioPago(int id) {
+        this.id = id;
+    }
+
     @Column(nullable = false, unique = true)
     private String tipo;
 
