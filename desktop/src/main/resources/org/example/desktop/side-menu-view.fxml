@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="600.0" prefWidth="210.0" spacing="10" styleClass="side-menu" stylesheets="@estilos/estilos-globales.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.SideMenuController" >
+<VBox prefHeight="600.0" prefWidth="210.0" spacing="10" styleClass="side-menu" stylesheets="@estilos/side-menu.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.SideMenuController">
 
     <padding>
         <Insets bottom="15" left="15" right="15" top="15" />
     </padding>
 
-    <Text fill="#38b536" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="heading-2" text="SIAJ INVENTARIOS" />
+    <Text styleClass="heading-2" text="SIAJ INVENTARIOS" />
 
     <ImageView fx:id="userIcon" fitHeight="50" fitWidth="50">
         <image>
@@ -23,80 +22,70 @@
 
     <Separator />
 
-    <Button fx:id="dashboardBtn" maxWidth="Infinity" text="Menú Principal" onAction="#irMenuPrincipal">
-        <styleClass>
-            <String fx:value="button-primary" />
-            <String fx:value="button" />
-        </styleClass>
-        <font>
-            <Font name="System Bold" size="12.0" />
-        </font>
+    <Button fx:id="dashboardBtn" maxWidth="Infinity" onAction="#irMenuPrincipal" styleClass="button" text="Menú Principal">
+        <graphic>
+            <ImageView fitHeight="20" fitWidth="20">
+                <Image url="@images/ion--home.png" />
+            </ImageView>
+        </graphic>
     </Button>
 
-    <Button fx:id="productsBtn" maxWidth="Infinity" text="Productos" onAction="#irProductos">
-        <styleClass>
-            <String fx:value="button-primary" />
-            <String fx:value="button" />
-        </styleClass>
-        <font>
-            <Font name="System Bold" size="12.0" />
-        </font>
+    <Button fx:id="productsBtn" maxWidth="Infinity" onAction="#irProductos" styleClass="button" text="Productos">
+        <graphic>
+            <ImageView fitHeight="20" fitWidth="20">
+                <Image url="@images/mage--package-box-fill.png" />
+            </ImageView>
+        </graphic>
     </Button>
 
-    <Button fx:id="ordersBtn" maxWidth="Infinity" text="Proveedores" onAction="#irProveedores">
-        <styleClass>
-            <String fx:value="button-primary" />
-            <String fx:value="button" />
-        </styleClass>
-        <font>
-            <Font name="System Bold" size="12.0" />
-        </font>
+    <Button fx:id="ordersBtn" maxWidth="Infinity" onAction="#irProveedores" styleClass="button" text="Proveedores">
+        <graphic>
+            <ImageView fitHeight="20" fitWidth="20">
+                <Image url="@images/weui--contacts-filled.png" />
+            </ImageView>
+        </graphic>
     </Button>
 
-    <Button fx:id="reportsBtn" maxWidth="Infinity" text="Reportes/Graficos" onAction="#irReportes">
-        <styleClass>
-            <String fx:value="button-primary" />
-            <String fx:value="button" />
-        </styleClass>
-        <font>
-            <Font name="System Bold" size="12.0" />
-        </font>
+    <Button fx:id="reportsBtn" maxWidth="Infinity" onAction="#irReportes" styleClass="button" text="Reportes/Graficos">
+        <graphic>
+            <ImageView fitHeight="20" fitWidth="20">
+                <Image url="@images/icomoon-free--stats-bars.png" />
+            </ImageView>
+        </graphic>
     </Button>
 
-    <Button fx:id="btnVentas" maxWidth="Infinity" text="Punto de VENTA" onAction="#irPuntoVenta">
-        <styleClass>
-            <String fx:value="button-primary" />
-            <String fx:value="button" />
-        </styleClass>
-        <font>
-            <Font name="System Bold" size="12.0" />
-        </font>
-    </Button>
-    <Button fx:id="btnOrdenCompra" maxWidth="Infinity" text="Orden COMPRA" onAction="#irOrdenCompra">
-        <styleClass>
-            <String fx:value="button-primary" />
-            <String fx:value="button" />
-        </styleClass>
-        <font>
-            <Font name="System Bold" size="12.0" />
-        </font>
-    </Button>
-    <Button fx:id="btnUsuarios" layoutX="25.0" layoutY="307.0" maxWidth="Infinity" text="Usuarios" onAction="#irUsuarios">
-        <styleClass>
-            <String fx:value="button-primary" />
-            <String fx:value="button" />
-        </styleClass>
-        <font>
-            <Font name="System Bold" size="12.0" />
-        </font>
+    <Button fx:id="btnVentas" maxWidth="Infinity" onAction="#irPuntoVenta" styleClass="button" text="Punto de VENTA">
+        <graphic>
+            <ImageView fitHeight="20" fitWidth="20">
+                <Image url="@images/majesticons--shopping-cart.png" />
+            </ImageView>
+        </graphic>
     </Button>
 
-    <Region prefHeight="185.0" prefWidth="180.0" VBox.vgrow="ALWAYS" />
+    <Button fx:id="btnOrdenCompra" maxWidth="Infinity" onAction="#irOrdenCompra" styleClass="button" text="Orden COMPRA">
+        <graphic>
+            <ImageView fitHeight="20" fitWidth="20">
+                <Image url="@images/mdi--text-box-edit.png" />
+            </ImageView>
+        </graphic>
+    </Button>
 
-    <Button fx:id="logoutBtn" maxWidth="Infinity" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Cerrar Sesión" onAction="#logout">
-        <font>
-            <Font name="System Bold" size="12.0" />
-        </font>
+    <Button fx:id="btnUsuarios" maxWidth="Infinity" onAction="#irUsuarios" styleClass="button" text="Usuarios">
+        <graphic>
+            <ImageView fitHeight="20" fitWidth="20">
+                <Image url="@images/weui--contacts-filled.png" />
+            </ImageView>
+        </graphic>
+    </Button>
+
+    <Region prefHeight="120.0" VBox.vgrow="ALWAYS" />
+
+    <Button fx:id="logoutBtn" maxWidth="Infinity" onAction="#logout" styleClass="logout-button" text="Cerrar Sesión">
+        <graphic>
+            <ImageView fitHeight="20" fitWidth="20">
+                <Image url="@images/usuario.png" />
+            </ImageView>
+        </graphic>
     </Button>
 
 </VBox>

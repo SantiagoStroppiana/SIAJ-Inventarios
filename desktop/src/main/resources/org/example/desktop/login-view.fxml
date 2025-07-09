@@ -1,71 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.geometry.Insets?>
+
 <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="500.0" prefWidth="700.0" stylesheets="@estilos/login-register.css"
       xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.desktop.controller.LoginController" >
+      fx:controller="org.example.desktop.controller.LoginController"
+      styleClass="login-register-container">
 
-    <VBox alignment="CENTER" prefHeight="500.0" prefWidth="300.0" styleClass="left-panel" spacing="20">
+    <VBox alignment="CENTER" prefHeight="500.0" prefWidth="300.0"
+          styleClass="login-register-left-panel" spacing="20">
         <padding>
             <Insets bottom="40.0" left="30.0" right="30.0" top="40.0"/>
         </padding>
 
-        <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@images/siaj-logo.png"/>
-            </image>
-        </ImageView>
+        <VBox alignment="CENTER" spacing="15" styleClass="login-register-logo-container">
+            <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true"
+                       styleClass="login-register-logo-image">
+                <image>
+                    <Image url="@images/siaj-logo.png"/>
+                </image>
+            </ImageView>
 
-        <Label alignment="CENTER" styleClass="title-label" text="SIAJ INVENTARIOS" wrapText="true"/>
+            <Label alignment="CENTER" styleClass="login-register-brand-title"
+                   text="SIAJ INVENTARIOS" wrapText="true"/>
+            <Label alignment="CENTER" styleClass="login-register-brand-subtitle"
+                   text="Sistema de gestión inteligente" wrapText="true"/>
+        </VBox>
 
-        <VBox alignment="CENTER" spacing="15">
-            <Label alignment="CENTER" styleClass="info-text" text="¿No tienes una cuenta?" wrapText="true"/>
-            <Button mnemonicParsing="false" onAction="#irARegistro" prefHeight="35.0" prefWidth="150.0"
-                    styleClass="secondary-button" text="Registrarse">
-            </Button>
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <VBox alignment="CENTER" spacing="15" styleClass="login-register-register-section">
+            <Label alignment="CENTER" styleClass="login-register-register-text"
+                   text="¿No tienes una cuenta?" wrapText="true"/>
+            <Button mnemonicParsing="false" onAction="#irARegistro" prefHeight="45.0" prefWidth="180.0"
+                    styleClass="login-register-register-button" text="Registrarse"/>
         </VBox>
     </VBox>
 
-    <VBox alignment="CENTER" prefHeight="500.0" prefWidth="400.0" styleClass="right-panel" spacing="25">
+    <VBox alignment="CENTER" prefHeight="500.0" prefWidth="400.0"
+          styleClass="login-register-right-panel" spacing="25">
         <padding>
             <Insets bottom="50.0" left="40.0" right="40.0" top="50.0"/>
         </padding>
 
-        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@images/siaj-logo.png"/>
-            </image>
-        </ImageView>
+        <VBox alignment="CENTER" spacing="15" styleClass="login-register-form-header">
+            <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true"
+                       styleClass="login-register-form-logo">
+                <image>
+                    <Image url="@images/siaj-logo.png"/>
+                </image>
+            </ImageView>
 
-        <Label styleClass="form-title" text="Iniciar Sesión">
+            <Label styleClass="login-register-form-title" text="Iniciar Sesión"/>
+            <Label styleClass="login-register-form-subtitle" text="Accede a tu cuenta"/>
+        </VBox>
 
-        </Label>
-
-        <VBox spacing="20" maxWidth="320.0">
-
-            <VBox spacing="8">
-                <Label styleClass="field-label" text="Correo Electrónico"/>
-                <TextField fx:id="email" promptText="Ingresa tu email" styleClass="text-field">
-
-                </TextField>
+        <VBox spacing="20" maxWidth="320.0" styleClass="login-register-form-container">
+            <VBox spacing="8" styleClass="login-register-field-group">
+                <Label styleClass="login-register-field-label" text="Correo Electrónico"/>
+                <TextField fx:id="email" promptText="Ingresa tu email"
+                           styleClass="login-register-input-field"/>
             </VBox>
 
-            <VBox spacing="8">
-                <Label styleClass="field-label" text="Contraseña"/>
-                <PasswordField fx:id="password" promptText="Ingresa tu contraseña" styleClass="password-field">
-                </PasswordField>
+            <VBox spacing="8" styleClass="login-register-field-group">
+                <Label styleClass="login-register-field-label" text="Contraseña"/>
+                <PasswordField fx:id="password" promptText="Ingresa tu contraseña"
+                               styleClass="login-register-input-field"/>
             </VBox>
 
-            <HBox alignment="CENTER_RIGHT">
-                <Button styleClass="link-text" text="¿Olvidaste tu contraseña?" underline="true" onAction="#olvidePassword"/>
+            <HBox alignment="CENTER_RIGHT" styleClass="login-register-forgot-password-container">
+                <Button styleClass="login-register-forgot-password-link"
+                        text="¿Olvidaste tu contraseña?" onAction="#olvidePassword"/>
             </HBox>
 
             <Button mnemonicParsing="false" onAction="#iniciarSesion" prefHeight="45.0" maxWidth="Infinity"
-                    styleClass="primary-button" text="Iniciar Sesión">
+                    styleClass="login-register-primary-button" text="Iniciar Sesión">
                 <VBox.margin>
                     <Insets top="10.0"/>
                 </VBox.margin>
@@ -73,6 +86,5 @@
         </VBox>
 
         <Region VBox.vgrow="ALWAYS"/>
-
     </VBox>
 </HBox>

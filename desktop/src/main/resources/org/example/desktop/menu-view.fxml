@@ -5,114 +5,139 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="main-container" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.MenuController">
+<BorderPane prefHeight="900.0" prefWidth="1600.0" styleClass="menuprincipal-container"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.desktop.controller.MenuController">
 
     <left>
         <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
     </left>
 
     <stylesheets>
-        <URL value="@estilos/estilos-globales.css" />
         <URL value="@estilos/menu-principal.css" />
     </stylesheets>
-   <right>
-      <AnchorPane prefHeight="900.0" prefWidth="1400.0" styleClass="content-pane" stylesheets="@estilos/menu-principal.css" BorderPane.alignment="CENTER">
-         <children>
-             <HBox alignment="CENTER_LEFT" layoutX="81.0" layoutY="85.0" spacing="15">
-               <Button mnemonicParsing="false" text="Button" onAction="#irPerfilUsuario"/>
-                 <ImageView fitHeight="65.0" fitWidth="87.0" layoutX="81.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@images/ion--home.png" />
-                 </ImageView>
-                 <VBox>
-                     <Label fx:id="labelBienvenida" styleClass="welcome-title" text="Bienvenido, (user)" />
-                     <Label styleClass="welcome-subtitle" text="Seleccione modulo" />
-                 </VBox>
-             </HBox>
 
-             <Button fx:id="bntPuntoVenta" layoutX="158.0" layoutY="203.0" mnemonicParsing="false" onAction="#irPuntoDeVenta" prefHeight="200.0" prefWidth="200.0" styleClass="menu-button, punto-venta">
-                 <graphic>
-                     <VBox alignment="CENTER" spacing="10">
-                         <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                             <Image url="@images/majesticons--shopping-cart.png" />
-                         </ImageView>
-                         <Label styleClass="button-text" text="Punto de Venta" textFill="WHITE" />
-                     </VBox>
-                 </graphic>
-             </Button>
-             <Button fx:id="btnInventario" layoutX="372.0" layoutY="203.0" mnemonicParsing="false" onAction="#irPuntoDeVenta" prefHeight="200.0" prefWidth="200.0" styleClass="menu-button, inventario">
-                 <graphic>
-                     <VBox alignment="CENTER" spacing="10">
-                         <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                             <Image url="@images/mage--package-box-fill.png" />
-                         </ImageView>
-                         <Label styleClass="button-text" text="Inventario/Productos" textFill="WHITE" />
-                     </VBox>
-                 </graphic>
-             </Button>
-             <Button fx:id="btnProveedores" layoutX="587.0" layoutY="203.0" mnemonicParsing="false" onAction="#irProveedores" prefHeight="200.0" prefWidth="200.0" styleClass="menu-button, proveedores">
-                 <graphic>
-                     <VBox alignment="CENTER" spacing="10">
-                         <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                             <Image url="@images/weui--contacts-filled.png" />
-                         </ImageView>
-                         <Label styleClass="button-text" text="Proveedores" textFill="WHITE" />
-                     </VBox>
-                 </graphic>
-             </Button>
-             <Button fx:id="btnGraficos" layoutX="801.0" layoutY="203.0" mnemonicParsing="false" onAction="#irInventario" prefHeight="200.0" prefWidth="200.0" styleClass="menu-button, productos">
-                 <graphic>
-                     <VBox alignment="CENTER" spacing="10">
-                         <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                             <Image url="@images/icomoon-free--stats-bars.png" />
-                         </ImageView>
-                         <Label styleClass="button-text" text="Gráfico de Inventario" textFill="WHITE" />
-                     </VBox>
-                 </graphic>
-             </Button>
-            <Button fx:id="btnGraficos1" layoutX="1015.0" layoutY="203.0" mnemonicParsing="false" onAction="#irReportes" prefHeight="200.0" prefWidth="200.0" styleClass="menu-button, productos">
-               <graphic>
-                  <VBox alignment="CENTER" spacing="10">
-                     <children>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/icomoon-free--stats-bars.png" />
-                           </image>
+    <right>
+        <AnchorPane prefHeight="900.0" prefWidth="1400.0" styleClass="content-pane" BorderPane.alignment="CENTER">
+            <children>
+
+                <HBox layoutX="20" layoutY="20" prefWidth="1360" alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 0 100 0 100;">
+                    <HBox fx:id="welcomeBox" alignment="CENTER_LEFT" spacing="10">
+                        <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@images/ion--home.png" />
                         </ImageView>
-                        <Label styleClass="button-text" text="Backups" textFill="WHITE" />
-                     </children>
-                  </VBox>
-               </graphic>
-            </Button>
+                        <VBox>
+                            <Label fx:id="labelBienvenida" styleClass="menuprincipal-welcome-title" text="Bienvenido, Pepe Perez" />
+                            <Label styleClass="menuprincipal-welcome-subtitle" text="(Administrador) - Seleccione módulo" />
+                        </VBox>
+                    </HBox>
+
+                    <Pane HBox.hgrow="ALWAYS" />
+
+                    <Button fx:id="btnPerfilUsuario" styleClass="menuprincipal-perfil-button" onAction="#irPerfilUsuario">
+                        <graphic>
+                            <ImageView fitHeight="35" fitWidth="35" pickOnBounds="true" preserveRatio="true">
+                                <Image url="@images/usuario.png" />
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
 
 
-             <VBox layoutX="71.0" layoutY="450.0" prefHeight="244.0" prefWidth="600.0" styleClass="info-section">
-                 <Label styleClass="section-header" text="Información General" />
-                 <VBox spacing="15" styleClass="info-content">
-                     <HBox alignment="CENTER_LEFT" spacing="15" styleClass="info-item">
-                         <Label styleClass="info-icon, income-icon" text="💰" />
-                         <VBox spacing="2">
-                             <Label styleClass="info-label" text="Ingresos hoy" />
-                             <Label styleClass="info-value" text="(ingresos fecha)" />
-                         </VBox>
-                     </HBox>
-                     <HBox alignment="CENTER_LEFT" spacing="15" styleClass="info-item">
-                         <Label styleClass="info-icon, sales-icon" text="💰" />
-                         <VBox spacing="2">
-                             <Label styleClass="info-label" text="Ventas hoy (fecha)" />
-                             <Label styleClass="info-value" text="(numero de ventas)" />
-                         </VBox>
-                     </HBox>
-                 </VBox>
-             </VBox>
+                <Button fx:id="bntPuntoVenta" layoutX="158.0" layoutY="203.0" mnemonicParsing="false"
+                        onAction="#irPuntoDeVenta" prefHeight="200.0" prefWidth="200.0"
+                        styleClass="menuprincipal-button, punto-venta">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="10">
+                            <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                <Image url="@images/majesticons--shopping-cart.png" />
+                            </ImageView>
+                            <Label styleClass="button-text" text="Punto de Venta" textFill="WHITE" />
+                        </VBox>
+                    </graphic>
+                </Button>
 
-             <VBox layoutX="700.0" layoutY="450.0" prefHeight="147.0" prefWidth="600.0" styleClass="info-section">
+                <Button fx:id="btnInventario" layoutX="372.0" layoutY="203.0" mnemonicParsing="false"
+                        onAction="#irPuntoDeVenta" prefHeight="200.0" prefWidth="200.0"
+                        styleClass="menuprincipal-button, inventario">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="10">
+                            <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                <Image url="@images/mage--package-box-fill.png" />
+                            </ImageView>
+                            <Label styleClass="button-text" text="Inventario/Productos" textFill="WHITE" />
+                        </VBox>
+                    </graphic>
+                </Button>
 
-                 <Label styleClass="section-header" text="Últimos movimientos" />
-                 <VBox spacing="10" styleClass="info-content">
-                     <Label styleClass="empty-message" text="No hay movimientos recientes" />
-                 </VBox>
-             </VBox>
-         </children>
-      </AnchorPane>
-   </right>
+                <Button fx:id="btnProveedores" layoutX="587.0" layoutY="203.0" mnemonicParsing="false"
+                        onAction="#irProveedores" prefHeight="200.0" prefWidth="200.0"
+                        styleClass="menuprincipal-button, proveedores">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="10">
+                            <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                <Image url="@images/weui--contacts-filled.png" />
+                            </ImageView>
+                            <Label styleClass="button-text" text="Proveedores" textFill="WHITE" />
+                        </VBox>
+                    </graphic>
+                </Button>
+
+                <Button fx:id="btnGraficos" layoutX="801.0" layoutY="203.0" mnemonicParsing="false"
+                        onAction="#irInventario" prefHeight="200.0" prefWidth="200.0"
+                        styleClass="menuprincipal-button, productos">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="10">
+                            <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                <Image url="@images/icomoon-free--stats-bars.png" />
+                            </ImageView>
+                            <Label styleClass="button-text" text="Gráfico de Inventario" textFill="WHITE" />
+                        </VBox>
+                    </graphic>
+                </Button>
+
+                <Button fx:id="btnGraficos1" layoutX="1015.0" layoutY="203.0" mnemonicParsing="false"
+                        onAction="#irReportes" prefHeight="200.0" prefWidth="200.0"
+                        styleClass="menuprincipal-button, productos">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="10">
+                            <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                <Image url="@images/icomoon-free--stats-bars.png" />
+                            </ImageView>
+                            <Label styleClass="button-text" text="Backups" textFill="WHITE" />
+                        </VBox>
+                    </graphic>
+                </Button>
+
+                <VBox layoutX="71.0" layoutY="450.0" prefHeight="244.0" prefWidth="600.0" styleClass="menuprincipal-info-section">
+                    <Label styleClass="menuprincipal-section-header" text="Información General" />
+                    <VBox spacing="15" styleClass="menuprincipal-info-content">
+                        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="menuprincipal-info-item">
+                            <Label styleClass="menuprincipal-info-icon, income-icon" text="💰" />
+                            <VBox spacing="2">
+                                <Label styleClass="menuprincipal-info-label" text="Ingresos hoy" />
+                                <Label styleClass="menuprincipal-info-value" text="(ingresos fecha)" />
+                            </VBox>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="menuprincipal-info-item">
+                            <Label styleClass="menuprincipal-info-icon, sales-icon" text="💰" />
+                            <VBox spacing="2">
+                                <Label styleClass="menuprincipal-info-label" text="Ventas hoy (fecha)" />
+                                <Label styleClass="menuprincipal-info-value" text="(numero de ventas)" />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <VBox layoutX="700.0" layoutY="450.0" prefHeight="147.0" prefWidth="600.0" styleClass="menuprincipal-info-section">
+                    <Label styleClass="menuprincipal-section-header" text="Últimos movimientos" />
+                    <VBox spacing="10" styleClass="menuprincipal-info-content">
+                        <Label styleClass="menuprincipal-empty-message" text="No hay movimientos recientes" />
+                    </VBox>
+                </VBox>
+
+            </children>
+        </AnchorPane>
+    </right>
 </BorderPane>
