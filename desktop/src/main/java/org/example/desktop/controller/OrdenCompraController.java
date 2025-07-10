@@ -2,11 +2,16 @@ package org.example.desktop.controller;
 import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.DetalleOrdenCompraDTO;
@@ -23,6 +28,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -111,7 +117,13 @@ public class OrdenCompraController {
                 throw new RuntimeException(ex);
             }
         });
-        btnRefreshCatalog.setOnAction(e -> actualizarCatalogo());
+        btnRefreshCatalog.setOnAction(e -> {
+            try {
+                actualizarCatalogo();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 
     private void cargarProveedores() {
@@ -461,19 +473,24 @@ public class OrdenCompraController {
         medioPagoDummy.setTipo("TEMPORAL");
         double total = Double.parseDouble(totalLabel.getText().replace(",", "."));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        String fechaFormateada = LocalDateTime.now().format(formatter);
+        /*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String fechaFormateada = LocalDateTime.now().format(formatter);*/
 
         if (medioPagoDummy == null) {
             notificar("Error", "Seleccione un medio de pago.", false);
             return;
         }
+        long fechaTimestamp = LocalDateTime.now()
+                .atZone(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
 
         OrdenCompraDTO ordenCompraDTO = new OrdenCompraDTO(
                 proveedor.getId(),
                 medioPagoDummy.getId(),
                 new BigDecimal(total),
-                fechaFormateada,
+                fechaTimestamp,
+                //fechaFormateada,
                 OrdenCompra.EstadoOrden.pendiente.toString()
         );
 
@@ -565,11 +582,36 @@ public class OrdenCompraController {
         });
     }
 
-    private void actualizarCatalogo() {
-        Proveedor proveedorSeleccionado = supplierComboBox.getValue();
+    private void actualizarCatalogo() throws IOException {
+        /*Proveedor proveedorSeleccionado = supplierComboBox.getValue();
         if (proveedorSeleccionado != null) {
             cargarProductosPorProveedor(proveedorSeleccionado);
-        }
+        }*/
+
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/ingreso-orden-view.fxml"));
+
+        Parent root = fxmlLoader.load();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root, 1600, 900)); // Dimensiones adaptadas para la vista de historial
+        stage.setTitle("Historial de Ventas");
+        stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior
+        stage.setResizable(true); // Permite redimensionar para mejor experiencia
+        stage.setMinWidth(1200); // Ancho mínimo para que se vea bien
+        stage.setMinHeight(700);  // Alto mínimo para que se vea bien
+
+        // Opcional: Centrar la ventana en pantalla
+        stage.centerOnScreen();
+
+        // Opcional: Si querés hacer algo cuando se cierre la ventana
+        // stage.setOnCloseRequest(event -> {
+        //     // Código para ejecutar al cerrar
+        //     System.out.println("Cerrando historial de ventas");
+        // });
+
+        stage.showAndWait();
+
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {

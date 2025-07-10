@@ -8,11 +8,11 @@ public class OrdenCompraDTO {
     public int proveedorId;
     public int medioPagoId;
     public BigDecimal total;
-    public String fechaPago;
+    public long fechaPago;
     public String estado;
 
 
-    public OrdenCompraDTO(int proveedorId, int medioPagoId, BigDecimal total, String fechaPago, String estado) {
+    public OrdenCompraDTO(int proveedorId, int medioPagoId, BigDecimal total, long fechaPago, String estado) {
         this.proveedorId = proveedorId;
         this.medioPagoId = medioPagoId;
         this.total = total;
@@ -20,7 +20,7 @@ public class OrdenCompraDTO {
         this.estado = estado;
     }
 
-    public OrdenCompraDTO(int id, int proveedorId, int medioPagoId, BigDecimal total, String fechaPago, String estado) {
+    public OrdenCompraDTO(int id, int proveedorId, int medioPagoId, BigDecimal total, long fechaPago, String estado) {
         this.id = id;
         this.proveedorId = proveedorId;
         this.medioPagoId = medioPagoId;
@@ -64,11 +64,11 @@ public class OrdenCompraDTO {
         this.total = total;
     }
 
-    public String getFechaPago() {
+    public long getFechaPago() {
         return fechaPago;
     }
 
-    public void setFechaPago(String fechaPago) {
+    public void setFechaPago(long fechaPago) {
         this.fechaPago = fechaPago;
     }
 

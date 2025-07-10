@@ -13,7 +13,7 @@ public class OrdenCompraController {
     public OrdenCompraController(OrdenCompraService ordenCompraService){
         this.ordenCompraService = ordenCompraService;
     }
-    public List<OrdenCompra> listarOrdenCompra() {
+    public List<OrdenCompraDTO> listarOrdenCompra() {
         return ordenCompraService.obtenerTodasLasOrdenCompras();
     }
 

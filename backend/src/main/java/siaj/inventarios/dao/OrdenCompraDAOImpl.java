@@ -1,32 +1,44 @@
 package siaj.inventarios.dao;
 
 import org.hibernate.Session;
+import siaj.inventarios.dto.OrdenCompraDTO;
 import siaj.inventarios.model.OrdenCompra;
-import siaj.inventarios.model.Proveedor;
 import siaj.inventarios.util.HibernateUtil;
 
+import java.time.ZoneId;
 import java.util.List;
 
 public class OrdenCompraDAOImpl implements OrdenCompraDAO {
     @Override
-    public List<OrdenCompra> obtenerTodasLasOrdenCompras() {
-        List<OrdenCompra> ordenCompras;
+    public List<OrdenCompraDTO> obtenerTodasLasOrdenCompras() {
+        List<OrdenCompraDTO> ordenCompraDTOs;
 
         try (Session session = HibernateUtil.getSession()) {
             session.beginTransaction();
 
-            ordenCompras = session.createQuery("FROM OrdenCompra o", OrdenCompra.class).getResultList();
+            List<OrdenCompra> ordenCompras = session.createQuery("FROM OrdenCompra o", OrdenCompra.class).getResultList();
+
+            ordenCompraDTOs = ordenCompras.stream()
+                    .map(orden -> new OrdenCompraDTO(
+                            orden.getId(),
+                            orden.getProveedor().getId(),
+                            orden.getMedioPago().getId(),
+                            orden.getTotal(),
+                            orden.getFechaPago().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),
+                            orden.getEstado().toString()
+                    ))
+                    .toList();
 
             session.getTransaction().commit();
         } catch (Exception e) {
-            System.err.println("Error al listar Venta: " + e.getMessage());
+            System.err.println("Error al listar OrdenCompra: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Error al listar las ordenes de compras", e);
         }
 
-        return ordenCompras;
-
+        return ordenCompraDTOs;
     }
+
 
     @Override
     public OrdenCompra agregarOrdenCompra(OrdenCompra ordenCompra) {
