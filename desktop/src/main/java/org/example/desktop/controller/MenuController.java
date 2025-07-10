@@ -60,6 +60,6 @@ public class MenuController {
 
     @FXML
     public void irReportes() {
-        StageManager.loadScene("/org/example/desktop/reportes-view.fxml" , 1600, 900);
+        StageManager.loadScene("/org/example/desktop/graficos-ventas-view.fxml" , 1600, 900);
     }
 }
