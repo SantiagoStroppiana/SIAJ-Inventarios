@@ -1,24 +1,29 @@
 package siaj.inventarios.rutas;
+
 import io.javalin.Javalin;
+import siaj.inventarios.controller.EntradaController;
 import siaj.inventarios.controller.OrdenCompraController;
-import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.dto.OrdenCompraDTO;
+import siaj.inventarios.model.Entrada;
 import siaj.inventarios.model.OrdenCompra;
 
 import java.util.List;
 
-public class RutasOrdenCompra {
-    private OrdenCompraController ordenCompraController;
+public class RutasEntrada {
 
-    public RutasOrdenCompra(OrdenCompraController ordenCompraController) {
-        this.ordenCompraController = ordenCompraController;
+
+
+    private EntradaController entradaController;
+
+    public RutasEntrada(EntradaController entradaController) {
+        this.entradaController = entradaController;
     }
-    public RutasOrdenCompra() {}
+    public RutasEntrada() {}
 
-    public void rutaOrdenCompra(Javalin app) {
+    public void rutaEntradas(Javalin app) {
 
-        app.get("/api/OrdenCompras", ctx -> {
-            List<OrdenCompraDTO> mostrar = ordenCompraController.listarOrdenCompra();
+        app.get("/api/entradas", ctx -> {
+            List<Entrada> mostrar = entradaController.listarEntradas();
             ctx.json(mostrar);
         });
 
@@ -28,9 +33,9 @@ public class RutasOrdenCompra {
             ctx.json(respuesta);
         });*/
 
-        app.post("/api/crearOrdenCompra", ctx -> {
-            OrdenCompraDTO ordenCompraDTO = ctx.bodyAsClass(OrdenCompraDTO.class);
-            OrdenCompraDTO respuesta = ordenCompraController.agregarOrdenCompra(ordenCompraDTO);
+        app.post("/api/crear-entrada", ctx -> {
+            Entrada entrada = ctx.bodyAsClass(Entrada.class);
+            Entrada respuesta = entradaController.agregarEntrada(entrada);
             ctx.json(respuesta);
         });
 
@@ -40,4 +45,9 @@ public class RutasOrdenCompra {
             ctx.json(respuesta);
         });*/
     }
+
+
+
+
+
 }
