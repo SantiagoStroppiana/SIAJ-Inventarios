@@ -1,0 +1,142 @@
+/* FORMULARIO GENERAL */
+.main-background { /* Nueva clase para el BorderPane principal */
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);
+    -fx-background-radius: 0; /* Aseguramos que no haya radio en las esquinas */
+}
+
+/* El AnchorPane que contiene el formulario ahora no tiene background propio */
+.center-form-pane {
+    -fx-padding: 15; /* Reducido para compactar más */
+}
+
+/* TÍTULOS Y ETIQUETAS */
+.crud-title {
+    -fx-font-size: 20px; /* Un poco más pequeño */
+    -fx-font-weight: bold;
+    -fx-text-fill: #38bdf8;
+    -fx-effect: dropshadow(gaussian, rgba(56, 189, 248, 0.3), 10, 0, 0, 2);
+}
+
+.crud-label {
+    -fx-font-size: 13px; /* Un poco más pequeño */
+    -fx-font-weight: bold;
+    -fx-text-fill: #cbd5e1;
+}
+
+/* TEXTFIELDS */
+.crud-text-field,
+TextField {
+    -fx-background-color: rgba(30, 41, 59, 0.9);
+    -fx-border-color: #334155;
+    -fx-border-width: 1; /* Más fino */
+    -fx-border-radius: 8; /* Menos redondeado */
+    -fx-background-radius: 8;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #64748b;
+    -fx-padding: 8 12 8 12; /* Más compacto */
+    -fx-font-size: 13px; /* Más pequeño */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);
+}
+
+.crud-text-field:focused,
+TextField:focused {
+    -fx-border-color: #22c55e;
+    -fx-effect: dropshadow(gaussian, rgba(34, 197, 94, 0.3), 6, 0, 0, 2);
+}
+
+/* COMBOBOX */
+.crud-combo,
+ComboBox {
+    -fx-background-color: rgba(30, 41, 59, 0.9);
+    -fx-border-color: #334155;
+    -fx-border-width: 1; /* Más fino */
+    -fx-border-radius: 8; /* Menos redondeado */
+    -fx-background-radius: 8;
+    -fx-padding: 6; /* Más compacto */
+    -fx-font-size: 13px; /* Más pequeño */
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #94a3b8;
+}
+
+.crud-combo:focused,
+ComboBox:focused {
+    -fx-border-color: #22c55e;
+    -fx-effect: dropshadow(gaussian, rgba(34, 197, 94, 0.3), 6, 0, 0, 2);
+}
+
+/* BOTONES */
+.crud-button-primary,
+.crud-button-modify,
+.crud-button-secondary,
+.crud-button-danger,
+.crud-button-categoria {
+    -fx-background-radius: 8; /* Menos redondeado */
+    -fx-pref-height: 35; /* Ajustado para compactar */
+    -fx-font-size: 13px; /* Más pequeño */
+}
+
+.crud-button-primary {
+    -fx-background-color: #22c55e;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.crud-button-primary:hover {
+    -fx-background-color: #16a34a;
+}
+
+.crud-button-modify {
+    -fx-background-color: #0ea5e9;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.crud-button-modify:hover {
+    -fx-background-color: #0284c7;
+}
+
+.crud-button-secondary {
+    -fx-background-color: #facc15;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.crud-button-secondary:hover {
+    -fx-background-color: #eab308;
+}
+
+.crud-button-danger {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.crud-button-danger:hover {
+    -fx-background-color: #dc2626;
+}
+
+.crud-button-categoria {
+    -fx-background-color: #a855f7;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.crud-button-categoria:hover {
+    -fx-background-color: #9333ea;
+}
+
+/* TABLA */
+.tabla {
+    -fx-background-color: transparent;
+    -fx-control-inner-background: #1e293b;
+    -fx-text-fill: white;
+    -fx-table-cell-border-color: transparent;
+    -fx-border-color: #22c55e;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}

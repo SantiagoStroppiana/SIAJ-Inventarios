@@ -39,7 +39,7 @@
 .login-register-brand-title {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
-    -fx-text-fill: #10b981;
+    -fx-text-fill: #1bb910;
     -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.3), 10, 0, 0, 2);
     -fx-wrap-text: true;
     -fx-text-alignment: center;
@@ -67,11 +67,11 @@
 
 .login-register-register-button {
     -fx-background-color: transparent;
-    -fx-border-color: #10b981;
+    -fx-border-color: #21b910;
     -fx-border-width: 2;
     -fx-border-radius: 12;
     -fx-background-radius: 12;
-    -fx-text-fill: #10b981;
+    -fx-text-fill: #27b910;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
@@ -119,8 +119,8 @@
 .login-register-form-title {
     -fx-font-size: 32px;
     -fx-font-weight: bold;
-    -fx-text-fill: #10b981;
-    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.2), 8, 0, 0, 1);
+    -fx-text-fill: #27b910;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 24, 0.2), 8, 0, 0, 1);
     -fx-text-alignment: center;
 }
 
@@ -161,7 +161,7 @@
 }
 
 .login-register-input-field:focused {
-    -fx-border-color: #10b981;
+    -fx-border-color: #10b91e;
     -fx-background-color: rgba(30, 41, 59, 0.9);
     -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.3), 10, 0, 0, 0);
 }
