@@ -24,42 +24,34 @@ public class DetalleOrdenCompraServiceImpl implements  DetalleOrdenCompraService
     public DetalleOrdenCompraServiceImpl() {}
 
     public DetalleOrdenCompraServiceImpl(CategoriaDAO categoriaDAO) {}
-    /*@Override
-    public DetalleOrdenCompraDTO registrarDetalle(DetalleOrdenCompra detalle) {
-    return detalleOrdenCompraDAO.agregarDetalle(detalle);
-    }*/
 
 
     @Override
     public MensajesResultados registrarDetalle(DetalleOrdenCompraDTO detalleOrdenCompraDTO) {
         Session session = HibernateUtil.getSession();
         try {
+
             session.beginTransaction();
 
+            if (detalleOrdenCompraDTO.getCantidad() <= 0){
+                return new MensajesResultados(false, "La cantidad debe ser mayor que 0");
+            }
+
             OrdenCompra ordenCompra = session.get(OrdenCompra.class, detalleOrdenCompraDTO.getOrdenCompraId());
+
+
             Producto producto = session.get(Producto.class, detalleOrdenCompraDTO.getProductoId());
 
             if (ordenCompra == null || producto == null) {
-                throw new RuntimeException("Orden de compra o producto no encontrado");
+               return new MensajesResultados(false, "No se puede registrar la orden de compra");
             }
 
-            // Asignar instancias persistidas
             DetalleOrdenCompra detalleOrdenCompra = new DetalleOrdenCompra();
             detalleOrdenCompra.setOrdenCompra(ordenCompra);
             detalleOrdenCompra.setProducto(producto);
             detalleOrdenCompra.setCantidad(detalleOrdenCompraDTO.getCantidad());
             detalleOrdenCompra.setPrecioUnitario(BigDecimal.valueOf(detalleOrdenCompraDTO.getPrecioUnitario()));
 
-            // Descontar stock
-            /*
-            int stockNuevo = producto.getStock() - detalleVenta.getCantidad();
-            if (stockNuevo < 0) {
-                throw new RuntimeException("Stock insuficiente");
-            }
-            producto.setStock(stockNuevo);
-            session.merge(producto);*/
-
-            // Guardar el detalle
             session.persist(detalleOrdenCompra);
 
             session.getTransaction().commit();
@@ -67,7 +59,7 @@ public class DetalleOrdenCompraServiceImpl implements  DetalleOrdenCompraService
 
         } catch (Exception e) {
             session.getTransaction().rollback();
-            throw new RuntimeException("Error en guardar detalles de orden de compra: " + e.getMessage());
+            return new MensajesResultados(false, e.getMessage());
         } finally {
             session.close();
         }

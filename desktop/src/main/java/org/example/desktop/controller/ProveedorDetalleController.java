@@ -36,6 +36,7 @@ public class ProveedorDetalleController {
     @FXML private TextField txtDireccion;
     @FXML private TextField txtTelefono;
     @FXML private TextField txtEmail;
+    @FXML private TextField txtCUIT;
     @FXML private Button modificar;
     @FXML private Button guardar;
     @FXML private SplitMenuButton menuEstado;
@@ -44,9 +45,6 @@ public class ProveedorDetalleController {
     private final Gson gson = new Gson();
     private Boolean estadoSeleccionado = null;
 
-
-
-
     public void cargarProveedor() {
 
 
@@ -54,6 +52,7 @@ public class ProveedorDetalleController {
         txtDireccion.setText(proveedor.getDireccion());
         txtTelefono.setText(proveedor.getTelefono());
         txtEmail.setText(proveedor.getEmail());
+        txtCUIT.setText(proveedor.getCuit());
         menuEstado.setText(proveedor.getEstado() ? "Activo" : "Inactivo");
 
 
@@ -77,6 +76,11 @@ public class ProveedorDetalleController {
         txtEmail.setDisable(true);
         txtEmail.setMouseTransparent(true);
         txtEmail.setFocusTraversable(false);
+
+        txtCUIT.setEditable(false);
+        txtCUIT.setDisable(true);
+        txtCUIT.setMouseTransparent(true);
+        txtCUIT.setFocusTraversable(false);
 
         // SplitMenuButton
         menuEstado.setDisable(true);
@@ -120,6 +124,11 @@ public class ProveedorDetalleController {
             txtEmail.setMouseTransparent(false);
             txtEmail.setFocusTraversable(true);
 
+            txtCUIT.setEditable(true);
+            txtCUIT.setDisable(false);
+            txtCUIT.setMouseTransparent(false);
+            txtCUIT.setFocusTraversable(true);
+
 // SplitMenuButton
             menuEstado.setDisable(false);
             menuEstado.setMouseTransparent(false);
@@ -150,6 +159,11 @@ public class ProveedorDetalleController {
         txtEmail.setMouseTransparent(true);
         txtEmail.setFocusTraversable(false);
 
+        txtCUIT.setEditable(false);
+        txtCUIT.setDisable(true);
+        txtCUIT.setMouseTransparent(true);
+        txtCUIT.setFocusTraversable(false);
+
 // SplitMenuButton
         menuEstado.setDisable(true);
         menuEstado.setMouseTransparent(true);
@@ -166,9 +180,10 @@ public class ProveedorDetalleController {
             String direccion = txtDireccion.getText().trim();
             String telefono = txtTelefono.getText().trim();
             String email = txtEmail.getText().trim();
+            String cuit = txtCUIT.getText().trim();
 
 
-            if (razonSocial.isEmpty() || direccion.isEmpty() ||  telefono.isEmpty() || email.isEmpty()) {
+            if (razonSocial.isEmpty() || direccion.isEmpty() ||  telefono.isEmpty() || email.isEmpty() || cuit.isEmpty()) {
                 notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
                 return;
             }
@@ -180,9 +195,9 @@ public class ProveedorDetalleController {
             proveedor2.setDireccion(direccion);
             proveedor2.setTelefono(telefono);
             proveedor2.setEmail(email);
+            proveedor2.setCuit(cuit);
 
             proveedor2.setActivo(menuEstado.getText().equals("Activo") ? true : false);
-
 
             String json = gson.toJson(proveedor2);
 

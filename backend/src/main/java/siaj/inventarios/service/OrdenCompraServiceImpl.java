@@ -28,7 +28,6 @@ public class OrdenCompraServiceImpl implements OrdenCompraService{
 
     public OrdenCompraDTO agregarOrdenCompraDesdeDTO(OrdenCompraDTO dto) {
         OrdenCompra orden = new OrdenCompra();
-
         orden.setEstado(OrdenCompra.EstadoOrden.valueOf(dto.getEstado()));
         orden.setTotal(dto.getTotal());
         orden.setFechaPago(LocalDateTime.parse(dto.getFechaPago()));
