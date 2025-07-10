@@ -1,0 +1,70 @@
+.side-menu {
+    -fx-background-color: #0b1120; /* más oscuro que el fondo general (#0f172a) */
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+    -fx-spacing: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 20, 0, 2, 0);
+}
+
+.side-menu .heading-2 {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff; /* texto blanco puro */
+    -fx-text-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(52, 211, 153, 0.4), 5, 0, 0, 1); /* leve glow menta */
+    -fx-padding: 0 0 10 0;
+}
+
+
+
+.side-menu .button {
+    -fx-background-color: #22c55e;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 3, 0, 0, 2);
+    -fx-alignment: CENTER_LEFT; /* alineación del texto e ícono */
+    -fx-content-display: LEFT;  /* icono a la izquierda */
+    -fx-graphic-text-gap: 10px; /* espacio entre icono y texto */
+    -fx-padding: 0 0 0 15px;    /* padding izquierdo */
+}
+
+
+.side-menu .button:hover {
+    -fx-background-color: #16a34a;
+}
+
+.side-menu .button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.side-menu .button:focused {
+    -fx-background-color: #15803d;
+}
+
+.side-menu .button.inactive {
+    -fx-opacity: 0.5;
+    -fx-background-color: #334155;
+    -fx-text-fill: #94a3b8;
+}
+
+.side-menu .logout-button {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.side-menu .logout-button:hover {
+    -fx-background-color: #c0392b;
+}
+
+.side-menu .logout-button:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}

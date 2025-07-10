@@ -42,6 +42,7 @@ public class ProveedorController implements Initializable {
     @FXML private TableColumn<Proveedor, Integer> telefonoColumn;
     @FXML private TableColumn<Proveedor, String> direccionColumn;
     @FXML private TableColumn<Proveedor, Boolean> activoColumn;
+    @FXML private TableColumn<Proveedor, String> cuitColumn;
     @FXML private TableColumn<Proveedor, Date> fecha_altaColumn;
     @FXML private TableColumn<Proveedor, String> emailColumn;
 
@@ -94,6 +95,7 @@ public class ProveedorController implements Initializable {
         razonSocialColumn.setCellValueFactory(new PropertyValueFactory<>("razonSocial"));
         telefonoColumn.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         direccionColumn.setCellValueFactory(new PropertyValueFactory<>("direccion"));
+        cuitColumn.setCellValueFactory(new PropertyValueFactory<>("cuit"));
         activoColumn.setCellValueFactory(new PropertyValueFactory<>("activo"));
         //fecha_altaColumn.setCellValueFactory(new PropertyValueFactory<>("fecha_alta"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -143,6 +145,7 @@ public class ProveedorController implements Initializable {
     @FXML private TextField txtRazonSocial;
     @FXML private TextField txtTelefono;
     @FXML private TextField txtDireccion;
+    @FXML private TextField txtCUIT;
     @FXML private TextField txtActivo;
     @FXML private TextField txtFecha_Alta;
     @FXML private TextField txtId;
@@ -212,6 +215,7 @@ public class ProveedorController implements Initializable {
             String telefono = txtTelefono.getText().trim();
             String email = txtEmail.getText().trim();
             String direccion = txtDireccion.getText().trim();
+            String cuit = txtCUIT.getText().trim();
             boolean activo = true;
             //String fecha_alta = txtFecha_Alta.getText().trim();
 
@@ -257,6 +261,7 @@ public class ProveedorController implements Initializable {
 
             proveedor.setDireccion(direccion);
 
+            proveedor.setCuit(cuit);
             proveedor.setActivo(true);
 
             proveedor.setEmail(email);

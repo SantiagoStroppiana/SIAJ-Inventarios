@@ -20,8 +20,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
-import org.example.desktop.DTO.ProductoVentaDTO;
+import org.example.desktop.dto.ProductoVentaDTO;
+import org.example.desktop.dto.UsuarioDTO;
 import org.example.desktop.model.*;
+import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
 
 import java.awt.*;
@@ -363,22 +365,24 @@ public class VentaController implements Initializable {
 
                 System.out.println("ID: " + id + " | Tipo: " + tipo);
                 // Usá estos datos en tu lógica, por ejemplo para enviarlos al backend
+
             } else {
                 notificar("Error", "Seleccione un medio de pago.", false);
             }
 
+            UsuarioDTO usuarioDTO = UserSession.getUsuarioActual();
+            Usuario usuario = new Usuario();
+            usuario.setId(usuarioDTO.getId());
 
             String ventaJson = gson.toJson(new Venta(
                     total,
                     Venta.EstadoVenta.pendiente,
                     LocalDateTime.now().toString(),
-                    new Usuario(1,"","","","",new Rol()),       // ID hardcodeado, después lo podés hacer dinámico
-                    seleccionado//new MedioPago(2,"")      // También configurable
-
-
-
-
+                    usuario,
+                    seleccionado
             ));
+
+            System.out.println(ventaJson);
 
             HttpRequest crearVentaRequest = HttpRequest.newBuilder()
                     .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crearVenta"))
@@ -394,7 +398,7 @@ public class VentaController implements Initializable {
             }
 
             Venta ventaCreada = gson.fromJson(ventaResponse.body(), Venta.class);
-
+            System.out.println("VENTAA CREADA CARAACK:" + ventaCreada);
             // Paso 2: Enviar los detalles
             for (Node node : cartContent.getChildren()) {
                 if (node instanceof HBox item) {
@@ -416,6 +420,8 @@ public class VentaController implements Initializable {
                             producto
                     ));
 
+
+
                     HttpRequest detalleRequest = HttpRequest.newBuilder()
                             .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crear-detalle-venta"))
                             .header("Content-Type", "application/json")
@@ -423,6 +429,7 @@ public class VentaController implements Initializable {
                             .build();
 
                     httpClient.send(detalleRequest, HttpResponse.BodyHandlers.ofString());
+
                 }
             }
 

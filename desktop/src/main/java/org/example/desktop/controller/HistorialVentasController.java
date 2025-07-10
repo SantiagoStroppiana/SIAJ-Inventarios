@@ -127,7 +127,7 @@ public class HistorialVentasController implements Initializable {
 
         // Columna de vendedor - obtener nombre del usuario
         vendedorColumn.setCellValueFactory(cellData -> {
-            int usuarioId = cellData.getValue().getUsuario().getId(); // Asumiendo que tienes getUsuarioId()
+            int usuarioId = cellData.getValue().getUsuarioDTO().getId(); // Asumiendo que tienes getUsuarioId()
             Usuario usuario = buscarUsuarioPorId(usuarioId);
             return new SimpleStringProperty(usuario != null ? usuario.getNombre() : "N/A");
         });

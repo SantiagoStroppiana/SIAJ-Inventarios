@@ -1,6 +1,8 @@
 package org.example.desktop.model;
 
 
+import org.example.desktop.dto.UsuarioDTO;
+
 import java.time.LocalDateTime;
 
 
@@ -12,7 +14,7 @@ public class Venta {
 
 
     private double total;
-
+    private UsuarioDTO usuarioDTO;
 
     private EstadoVenta estado = EstadoVenta.pendiente;
 
@@ -101,5 +103,33 @@ public class Venta {
         this.fechaPago = fechaPago;
         this.usuario = usuario;
         this.medioPago = medioPago;
+    }
+
+    public Venta(int id, double total, EstadoVenta estado, String fechaPago, UsuarioDTO usuarioDTO, MedioPago medioPago) {
+        this.id = id;
+        this.total = total;
+        this.estado = estado;
+        this.fechaPago = fechaPago;
+        this.usuarioDTO = usuarioDTO;
+        this.medioPago = medioPago;
+    }
+
+    public UsuarioDTO getUsuarioDTO() {
+        return usuarioDTO;
+    }
+
+    public void setUsuarioDTO(UsuarioDTO usuarioDTO) {
+        this.usuarioDTO = usuarioDTO;
+    }
+
+    @Override
+    public String toString() {
+        return "Venta{" +
+                "id=" + id +
+                ", total=" + total +
+                ", estado=" + estado +
+                ", fechaPago='" + fechaPago + '\'' +
+                ", medioPago=" + medioPago +
+                '}';
     }
 }

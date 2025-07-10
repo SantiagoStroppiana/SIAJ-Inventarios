@@ -19,6 +19,8 @@ public class BackendServer {
         configurarVentas(app);
         configurarDetallesVentas(app);
         configurarMedioPagos(app);
+        configurarOrdenCompra(app);
+        configurarDetalleOrdenCompra(app);
 
 
     }
@@ -71,6 +73,21 @@ public class BackendServer {
         MedioPagoService medioPagoService = new MedioPagoServiceImpl(medioPagoDAO);
         MedioPagoController medioPagoController = new MedioPagoController(medioPagoService);
         new RutasMedioPago(medioPagoController).rutaMedioPagos(app);
+    }
+
+
+    public static void configurarOrdenCompra(Javalin app) {
+        OrdenCompraDAO ordenCompraDAO = new OrdenCompraDAOImpl();
+        OrdenCompraService ordenCompraService = new OrdenCompraServiceImpl(ordenCompraDAO);
+        OrdenCompraController ordenCompraController = new OrdenCompraController(ordenCompraService);
+        new RutasOrdenCompra(ordenCompraController).rutaOrdenCompra(app);
+    }
+
+    public static void configurarDetalleOrdenCompra(Javalin app) {
+        DetalleOrdenCompraDAO detalleOrdenCompraDAO = new DetalleOrdenCompraDAOImpl();
+        DetalleOrdenCompraService detalleOrdenCompraService = new DetalleOrdenCompraServiceImpl(detalleOrdenCompraDAO);
+        DetalleOrdenCompraController detalleOrdenCompraController = new DetalleOrdenCompraController(detalleOrdenCompraService);
+        new RutasDetalleOrdenCompra(detalleOrdenCompraController).rutaDetalleOrdenCompra(app);
     }
 
 }

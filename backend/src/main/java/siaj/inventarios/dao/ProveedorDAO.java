@@ -16,5 +16,6 @@ public interface ProveedorDAO {
     List<Proveedor> listarproveedores();
 
     Proveedor buscarProveedorPorEmail(@NotBlank String email);
+    Proveedor buscarPorId(int id);
 
 }

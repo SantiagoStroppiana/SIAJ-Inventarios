@@ -10,4 +10,5 @@ public interface ProveedorService {
     MensajesResultados registrarProveedor(Proveedor proveedor);
     MensajesResultados actualizarProveedor(Proveedor proveedor);
     List<Proveedor> listarProveedores();
+    Proveedor buscarPorId(int id);
 }

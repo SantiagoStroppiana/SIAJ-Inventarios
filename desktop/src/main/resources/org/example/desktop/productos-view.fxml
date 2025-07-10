@@ -7,145 +7,130 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.ProductoController">
-
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="main-background" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.ProductoController">
     <left>
         <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
     </left>
 
     <center>
-        <AnchorPane prefHeight="800.0" prefWidth="380.0" styleClass="form-container" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="800.0" prefWidth="380.0" BorderPane.alignment="CENTER">
             <children>
-                <!-- Título del formulario -->
-                <Label layoutX="14.0" layoutY="69.0" styleClass="form-title" text="DATOS DEL PRODUCTO">
+                <Label layoutX="14.0" layoutY="20.0" styleClass="crud-title" text="DATOS DEL PRODUCTO">
                     <font>
                         <Font name="System Bold" size="16.0" />
                     </font>
                 </Label>
 
-                <VBox layoutX="14.0" layoutY="120.0" prefWidth="350.0" spacing="15.0">
-                    <children>
-                        <VBox spacing="5.0">
-                            <children>
-                                <Label styleClass="field-label" text="SKU">
-                                    <font>
-                                        <Font name="System Bold" size="12.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="txtSku" prefHeight="23.0" prefWidth="282.0" promptText="SKU" />
-                            </children>
-                        </VBox>
+                <VBox layoutX="8.0" layoutY="60.0" prefWidth="350.0" spacing="8.0"> <children>
+                    <VBox spacing="3.0"> <children>
+                        <Label styleClass="crud-label" text="SKU">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="txtSku" prefHeight="30.0" prefWidth="282.0" promptText="SKU" styleClass="crud-text-field" /> </children>
+                    </VBox>
 
-                        <VBox spacing="5.0">
-                            <children>
-                                <Label styleClass="field-label" text="Nombre Producto">
-                                    <font>
-                                        <Font name="System Bold" size="12.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="txtNombre" prefHeight="38.0" prefWidth="330.0" promptText="Nombre producto" />
-                            </children>
-                        </VBox>
+                    <VBox spacing="3.0"> <children>
+                        <Label styleClass="crud-label" text="Nombre Producto">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="txtNombre" prefHeight="30.0" prefWidth="330.0" promptText="Nombre producto" styleClass="crud-text-field" /> </children>
+                    </VBox>
 
-                        <VBox spacing="5.0">
-                            <children>
-                                <Label styleClass="field-label" text="Stock">
-                                    <font>
-                                        <Font name="System Bold" size="12.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="txtStock" prefHeight="38.0" prefWidth="330.0" promptText="Stock" />
-                            </children>
-                        </VBox>
+                    <VBox spacing="3.0"> <children>
+                        <Label styleClass="crud-label" text="Stock">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="txtStock" prefHeight="30.0" prefWidth="330.0" promptText="Stock" styleClass="crud-text-field" /> </children>
+                    </VBox>
 
-                        <VBox prefWidth="306.0" spacing="5.0">
-                            <children>
-                                <Label styleClass="field-label" text="Precio">
-                                    <font>
-                                        <Font name="System Bold" size="12.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="txtPrecio" prefHeight="38.0" prefWidth="309.0" promptText="Precio" />
-                            </children>
-                        </VBox>
+                    <VBox prefWidth="306.0" spacing="3.0"> <children>
+                        <Label styleClass="crud-label" text="Precio">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="txtPrecio" prefHeight="30.0" prefWidth="309.0" promptText="Precio" styleClass="crud-text-field" /> </children>
+                    </VBox>
 
-                        <VBox spacing="5.0">
-                            <children>
-                                <Label styleClass="field-label" text="Categorías">
-                                    <font>
-                                        <Font name="System Bold" size="12.0" />
-                                    </font>
-                                </Label>
-                                <ComboBox fx:id="menuCategorias" prefHeight="38.0" prefWidth="330.0" promptText="Seleccione categoría" styleClass="combo-field">
-                                    <items>
-                                        <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="Categoría 1" />
-                                            <String fx:value="Categoría 2" />
-                                        </FXCollections>
-                                    </items>
-                                </ComboBox>
-                            </children>
-                        </VBox>
+                    <VBox prefWidth="306.0" spacing="3.0"> <children>
+                        <Label styleClass="crud-label" text="Precio Costo">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="txtPrecioCosto" prefHeight="30.0" prefWidth="309.0" promptText="Precio Costo" styleClass="crud-text-field" /> </children>
+                    </VBox>
 
-                        <VBox spacing="5.0">
-                            <children>
-                                <Label styleClass="field-label" text="Estado">
-                                    <font>
-                                        <Font name="System Bold" size="12.0" />
-                                    </font>
-                                </Label>
-                                <ComboBox fx:id="menuEstado" prefHeight="38.0" prefWidth="330.0" promptText="Seleccione estado" styleClass="combo-field">
-                                    <items>
-                                        <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="Activo" />
-                                            <String fx:value="Inactivo" />
-                                        </FXCollections>
-                                    </items>
-                                </ComboBox>
-                            </children>
-                        </VBox>
-
-                        <VBox spacing="5.0">
-                            <children>
-                                <Label styleClass="field-label" text="Proveedor">
-                                    <font>
-                                        <Font name="System Bold" size="12.0" />
-                                    </font>
-                                </Label>
-                                <ComboBox fx:id="menuProveedor" prefHeight="38.0" prefWidth="330.0" promptText="Seleccione proveedor" styleClass="combo-field">
-                                    <items>
-                                        <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="Proveedor 1" />
-                                            <String fx:value="Proveedor 2" />
-                                        </FXCollections>
-                                    </items>
-                                </ComboBox>
-                            </children>
-                        </VBox>
+                    <VBox spacing="3.0"> <children>
+                        <Label styleClass="crud-label" text="Categorías">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <ComboBox fx:id="menuCategorias" prefHeight="30.0" prefWidth="330.0" promptText="Seleccione categoría" styleClass="crud-combo"> <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Categoría 1" />
+                                <String fx:value="Categoría 2" />
+                            </FXCollections>
+                        </items>
+                        </ComboBox>
                     </children>
+                    </VBox>
+
+                    <VBox spacing="3.0"> <children>
+                        <Label styleClass="crud-label" text="Estado">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <ComboBox fx:id="menuEstado" prefHeight="30.0" prefWidth="330.0" promptText="Seleccione estado" styleClass="crud-combo"> <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Activo" />
+                                <String fx:value="Inactivo" />
+                            </FXCollections>
+                        </items>
+                        </ComboBox>
+                    </children>
+                    </VBox>
+
+                    <VBox spacing="3.0"> <children>
+                        <Label styleClass="crud-label" text="Proveedor">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <ComboBox fx:id="menuProveedor" prefHeight="30.0" prefWidth="330.0" promptText="Seleccione proveedor" styleClass="crud-combo"> <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Proveedor 1" />
+                                <String fx:value="Proveedor 2" />
+                            </FXCollections>
+                        </items>
+                        </ComboBox>
+                    </children>
+                    </VBox>
+                </children>
                 </VBox>
 
-                <VBox layoutX="8.0" layoutY="668.0" prefWidth="350.0" spacing="10.0">
-                    <children>
-                        <HBox spacing="15.0">
-                            <children>
-                                <Button fx:id="agregar" prefHeight="46.0" prefWidth="165.0" styleClass="button-primary" text="Agregar" />
-                                <Button fx:id="ver" prefHeight="46.0" prefWidth="165.0" styleClass="button-modify" text="Modificar" />
-                            </children>
-                        </HBox>
+                <VBox layoutX="5.0" layoutY="730.0" prefWidth="350.0" spacing="8.0"> <children>
+                    <HBox spacing="10.0"> <children>
+                        <Button fx:id="agregar" prefHeight="38.0" prefWidth="165.0" styleClass="crud-button-primary" text="Agregar" /> <Button fx:id="ver" prefHeight="38.0" prefWidth="165.0" styleClass="crud-button-modify" text="Modificar" /> </children>
+                    </HBox>
 
-                        <HBox spacing="15.0">
-                            <children>
-                                <Button fx:id="actualizar" prefHeight="46.0" prefWidth="165.0" styleClass="button-secondary" text="Actualizar" />
-                                <Button fx:id="desactivar" prefHeight="46.0" prefWidth="165.0" styleClass="button-danger" text="Desactivar" />
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER" spacing="15.0">
-                            <children>
-                                <Button fx:id="categorias" prefHeight="46.0" prefWidth="165.0" styleClass="button-categoria" text="Categorias" />
-                            </children>
-                        </HBox>
-                    </children>
+                    <HBox spacing="10.0"> <children>
+                        <Button fx:id="actualizar" prefHeight="38.0" prefWidth="165.0" styleClass="crud-button-secondary" text="Actualizar" /> <Button fx:id="desactivar" prefHeight="38.0" prefWidth="165.0" styleClass="crud-button-danger" text="Desactivar" /> </children>
+                    </HBox>
+
+                    <HBox alignment="CENTER" spacing="10.0">
+                        <children>
+                            <Button fx:id="categorias" prefHeight="38.0" prefWidth="340.0" styleClass="crud-button-categoria" text="Categorias" /> </children>
+                    </HBox>
+                </children>
                 </VBox>
             </children>
         </AnchorPane>
@@ -154,24 +139,25 @@
     <right>
         <AnchorPane prefHeight="900.0" prefWidth="1020.0" BorderPane.alignment="CENTER">
             <children>
-                <TextField fx:id="txtBuscarProducto" layoutX="14.0" layoutY="14.0" prefHeight="39.0" prefWidth="349.0" promptText="Buscar Producto..." />
+                <TextField fx:id="txtBuscarProducto" layoutX="14.0" layoutY="14.0" prefHeight="39.0" prefWidth="349.0" promptText="Buscar Producto..." styleClass="crud-text-field" />
 
-                <TableView fx:id="tablaProductos" layoutX="10.0" layoutY="66.0" prefHeight="798.0" prefWidth="990.0">
+                <TableView fx:id="tablaProductos" layoutX="10.0" layoutY="66.0" prefHeight="798.0" prefWidth="990.0" styleClass="tabla">
                     <columns>
                         <TableColumn fx:id="skuColumn" prefWidth="150.0" text="SKU" />
-                        <TableColumn fx:id="nombreColumn" prefWidth="320.0" text="PRODUCTO" />
-                        <TableColumn fx:id="stockColumn" prefWidth="100.0" text="STOCK" />
+                        <TableColumn fx:id="nombreColumn" prefWidth="226.0" text="PRODUCTO" />
+                        <TableColumn fx:id="stockColumn" prefWidth="71.0" text="STOCK" />
                         <TableColumn fx:id="precioColumn" prefWidth="120.0" text="PRECIO" />
-                        <TableColumn fx:id="estadoColumn" prefWidth="100.0" text="ESTADO" />
-                        <TableColumn fx:id="proveedorColumn" prefWidth="210.0" text="PROVEEDORES" />
+                        <TableColumn fx:id="precioCostoColumn" prefWidth="136.0" text="PRECIO COSTO" />
+                        <TableColumn fx:id="estadoColumn" prefWidth="103.0" text="ESTADO" />
+                        <TableColumn fx:id="proveedorColumn" prefWidth="178.0" text="PROVEEDORES" />
                     </columns>
                 </TableView>
             </children>
         </AnchorPane>
     </right>
 
+
     <stylesheets>
-        <URL value="@estilos/estilos-globales.css" />
-        <URL value="@estilos/tabla.css" />
+        <URL value="@estilos/crud.css" />
     </stylesheets>
 </BorderPane>

@@ -1,180 +1,286 @@
-.root {
-    -fx-background-color: #1a1a1a;
-    -fx-font-family: "Segoe UI", "System", sans-serif;
+
+.login-register-container,
+.login-register-container * {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
 }
 
-.left-panel {
-    -fx-background-color: #2d2d2d;
-    -fx-border-color: #3d3d3d;
-    -fx-border-width: 0 1 0 0;
-    -fx-padding: 20;
-    -fx-background-radius: 8 0 0 8;
-    -fx-effect: dropshadow(gaussian, #000000, 6, 0.2, -1, 0);
+.login-register-container {
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-padding: 0;
+    -fx-spacing: 0;
 }
 
-.right-panel {
-    -fx-background-color: #1a1a1a;
-    -fx-border-color: #3d3d3d;
-    -fx-border-width: 0 0 0 1;
-    -fx-padding: 20;
-    -fx-background-radius: 0 8 8 0;
-    -fx-effect: dropshadow(gaussian, #000000, 4, 0.1, 1, 0);
+.login-register-left-panel {
+    -fx-background-color: linear-gradient(to bottom right, #374151, #1f2937);
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 25, 0, 5, 0);
+    -fx-padding: 40 30 40 30;
 }
 
-.title-label {
-    -fx-text-fill: #4caf50;
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-effect: dropshadow(gaussian, #4caf5040, 2, 0.3, 0, 1);
+.login-register-logo-container {
+    -fx-spacing: 15;
+    -fx-alignment: center;
 }
 
-.form-title {
-    -fx-text-fill: #4caf50;
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-effect: dropshadow(gaussian, #4caf5040, 2, 0.3, 0, 1);
-}
-
-.field-label {
-    -fx-text-fill: #cccccc;
-    -fx-font-size: 14px;
-    -fx-font-weight: 600;
-    -fx-padding: 0 0 5 0;
-    -fx-letter-spacing: 0.3px;
-}
-
-.info-text {
-    -fx-text-fill: #bbbbbb;
-    -fx-font-size: 13px;
-    -fx-font-weight: 400;
-}
-
-.text-field {
-    -fx-background-color: #505050;
-    -fx-text-fill: white;
-    -fx-border-color: #606060;
-    -fx-border-radius: 6;
-    -fx-background-radius: 6;
-    -fx-padding: 10 12;
-    -fx-font-size: 14px;
-    -fx-effect: dropshadow(gaussian, #000000, 3, 0.1, 0, 1);
-}
-
-.text-field:focused {
-    -fx-border-color: #4caf50;
-    -fx-border-width: 2;
-    -fx-background-color: #555555;
-    -fx-effect: dropshadow(gaussian, #4caf5040, 4, 0.3, 0, 0);
-}
-
-.text-field:hover {
-    -fx-border-color: #4caf5080;
-    -fx-background-color: #555555;
-}
-
-.password-field {
-    -fx-background-color: #505050;
-    -fx-text-fill: white;
-    -fx-border-color: #606060;
-    -fx-border-radius: 6;
-    -fx-background-radius: 6;
-    -fx-padding: 10 12;
-    -fx-font-size: 14px;
-    -fx-effect: dropshadow(gaussian, #000000, 3, 0.1, 0, 1);
-}
-
-.password-field:focused {
-    -fx-border-color: #4caf50;
-    -fx-border-width: 2;
-    -fx-background-color: #555555;
-    -fx-effect: dropshadow(gaussian, #4caf5040, 4, 0.3, 0, 0);
-}
-
-.password-field:hover {
-    -fx-border-color: #4caf5080;
-    -fx-background-color: #555555;
-}
-
-.primary-button {
-    -fx-background-color: #4caf50;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-font-size: 14px;
-    -fx-padding: 12 20;
-    -fx-border-radius: 6;
-    -fx-background-radius: 6;
+.login-register-logo-image {
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.4), 20, 0, 0, 5);
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, #4caf5040, 4, 0.3, 0, 2);
 }
 
-.primary-button:hover {
-    -fx-background-color: #3d8b40;
-    -fx-effect: dropshadow(gaussian, #4caf5060, 6, 0.4, 0, 3);
-    -fx-scale-x: 1.01;
-    -fx-scale-y: 1.01;
+.login-register-logo-image:hover {
+    -fx-scale-y: 1.05;
+    -fx-scale-x: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.6), 25, 0, 0, 8);
 }
 
-.primary-button:pressed {
-    -fx-background-color: #2d6a30;
-    -fx-effect: dropshadow(gaussian, #4caf5030, 3, 0.2, 0, 1);
-    -fx-scale-x: 0.99;
-    -fx-scale-y: 0.99;
+.login-register-brand-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1bb910;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.3), 10, 0, 0, 2);
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
 }
 
-.secondary-button {
+.login-register-brand-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #9ca3af;
+    -fx-font-weight: normal;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+}
+
+.login-register-register-section {
+    -fx-spacing: 15;
+    -fx-alignment: center;
+}
+
+.login-register-register-text {
+    -fx-font-size: 16px;
+    -fx-text-fill: #d1d5db;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+}
+
+.login-register-register-button {
     -fx-background-color: transparent;
-    -fx-text-fill: #4caf50;
-    -fx-font-weight: 600;
-    -fx-font-size: 13px;
-    -fx-padding: 10 20;
-    -fx-border-color: #4caf50;
-    -fx-border-width: 1.5;
-    -fx-border-radius: 6;
-    -fx-background-radius: 6;
+    -fx-border-color: #21b910;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-text-fill: #27b910;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.2), 10, 0, 0, 2);
+    -fx-pref-height: 45;
+    -fx-pref-width: 180;
+}
+
+.login-register-register-button:hover {
+    -fx-background-color: #10b981;
+    -fx-text-fill: white;
+    -fx-scale-y: 1.05;
+    -fx-scale-x: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.4), 15, 0, 0, 3);
+}
+
+.login-register-register-button:pressed {
+    -fx-scale-y: 0.98;
+    -fx-scale-x: 0.98;
+}
+
+.login-register-right-panel {
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-padding: 50 40 50 40;
+}
+
+.login-register-form-header {
+    -fx-spacing: 15;
+    -fx-alignment: center;
+}
+
+.login-register-form-logo {
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.3), 15, 0, 0, 0);
     -fx-cursor: hand;
 }
 
-.secondary-button:hover {
-    -fx-background-color: #4caf5015;
-    -fx-border-color: #3d8b40;
-    -fx-text-fill: #3d8b40;
-    -fx-effect: dropshadow(gaussian, #4caf5030, 4, 0.2, 0, 0);
+.login-register-form-logo:hover {
+    -fx-scale-y: 1.05;
+    -fx-scale-x: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.5), 20, 0, 0, 5);
 }
 
-.secondary-button:pressed {
-    -fx-background-color: #4caf5025;
-    -fx-border-color: #2d6a30;
-    -fx-text-fill: #2d6a30;
+.login-register-form-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #27b910;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 24, 0.2), 8, 0, 0, 1);
+    -fx-text-alignment: center;
 }
 
-.link-text {
-    -fx-text-fill: #4caf50;
+.login-register-form-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #94a3b8;
+    -fx-text-alignment: center;
+}
+
+/* ===== FORMULARIO ===== */
+.login-register-form-container {
+    -fx-spacing: 20;
+    -fx-max-width: 320;
+}
+
+.login-register-field-group {
+    -fx-spacing: 8;
+}
+
+.login-register-field-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: #e2e8f0;
+    -fx-font-weight: 500;
+}
+
+.login-register-input-field {
+    -fx-background-color: rgba(30, 41, 59, 0.8);
+    -fx-border-color: #334155;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #64748b;
+    -fx-padding: 15 20 15 20;
+    -fx-font-size: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-pref-height: 50;
+}
+
+.login-register-input-field:focused {
+    -fx-border-color: #10b91e;
+    -fx-background-color: rgba(30, 41, 59, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.3), 10, 0, 0, 0);
+}
+
+.login-register-forgot-password-container {
+    -fx-alignment: center-right;
+}
+
+.login-register-forgot-password-link {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #10b981;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-cursor: hand;
+    -fx-underline: false;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.login-register-forgot-password-link:hover {
+    -fx-text-fill: #34d399;
+    -fx-underline: true;
+}
+
+.login-register-primary-button {
+    -fx-background-color: linear-gradient(to right, #10b981, #059669);
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.4), 15, 0, 0, 5);
+    -fx-pref-height: 45;
+}
+
+.login-register-primary-button:hover {
+    -fx-scale-y: 1.02;
+    -fx-scale-x: 1.02;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.6), 20, 0, 0, 8);
+}
+
+.login-register-primary-button:pressed {
+    -fx-scale-y: 0.98;
+    -fx-scale-x: 0.98;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.3), 10, 0, 0, 2);
+}
+
+.login-register-container TextField,
+.login-register-container PasswordField {
+    -fx-background-color: rgba(30, 41, 59, 0.8);
+    -fx-border-color: #334155;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #64748b;
+    -fx-padding: 15 20 15 20;
+    -fx-font-size: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-pref-height: 50;
+}
+
+.login-register-container TextField:focused,
+.login-register-container PasswordField:focused {
+    -fx-border-color: #10b981;
+    -fx-background-color: rgba(30, 41, 59, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.3), 10, 0, 0, 0);
+}
+
+.login-register-container Button {
     -fx-cursor: hand;
 }
 
-.link-text:hover {
-    -fx-text-fill: #3d8b40;
+.login-register-container Label {
+    -fx-text-alignment: center;
 }
 
-.text-field.error, .password-field.error {
-    -fx-border-color: #e57373;
-    -fx-background-color: #e5737315;
+.login-register-input-field:error {
+    -fx-border-color: #ef4444;
+    -fx-effect: dropshadow(gaussian, rgba(239, 68, 68, 0.3), 10, 0, 0, 0);
 }
 
-.text-field.error:focused, .password-field.error:focused {
-    -fx-border-color: #d32f2f;
-    -fx-effect: dropshadow(gaussian, #e5737340, 4, 0.3, 0, 0);
+.login-register-success-message {
+    -fx-text-fill: #10b981;
+    -fx-font-size: 14px;
 }
 
-.text-field.success, .password-field.success {
-    -fx-border-color: #81c784;
-    -fx-background-color: #81c78415;
+.login-register-error-message {
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 14px;
 }
 
-HBox:hover .left-panel {
-    -fx-effect: dropshadow(gaussian, #000000, 8, 0.3, -2, 0);
+.login-register-logo-image,
+.login-register-form-logo,
+.login-register-register-button,
+.login-register-primary-button {
+    -fx-transition: all 0.3s ease;
 }
 
-HBox:hover .right-panel {
-    -fx-effect: dropshadow(gaussian, #000000, 6, 0.2, 2, 0);
+@media (max-width: 768px) {
+    .login-register-brand-title {
+        -fx-font-size: 24px;
+    }
+
+    .login-register-form-title {
+        -fx-font-size: 28px;
+    }
+
+    .login-register-logo-image {
+        -fx-fit-width: 100px;
+        -fx-fit-height: 100px;
+    }
+
+    .login-register-form-logo {
+        -fx-fit-width: 70px;
+        -fx-fit-height: 70px;
+    }
 }

@@ -2,6 +2,7 @@ package siaj.inventarios.service;
 
 import siaj.inventarios.dao.VentaDAO;
 import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.dto.UsuarioDTO;
 import siaj.inventarios.dto.VentaDTO;
 import siaj.inventarios.model.Venta;
 
@@ -29,7 +30,8 @@ public class VentaServiceImpl implements VentaService{
             dto.setTotal(v.getTotal());
             dto.setEstado(v.getEstado().name());
             dto.setFechaPago(v.getFechaPago().toString());
-            dto.setUsuario(v.getUsuario());
+            UsuarioDTO usuarioDTO = new UsuarioDTO(v.getUsuario().getId(), v.getUsuario().getNombre(), v.getUsuario().getApellido(), v.getUsuario().getEmail(),v.getUsuario().getNombreRol());
+            dto.setUsuarioDTO(usuarioDTO);
             dto.setMedioPago(v.getMedioPago());
             return dto;
         }).collect(Collectors.toList()).reversed();

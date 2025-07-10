@@ -7,6 +7,7 @@ public class Proveedor {
     private String email;
     private String telefono;
     private String direccion;
+    private String cuit;
     private boolean activo;
     private long fecha_alta;
 
@@ -14,12 +15,13 @@ public class Proveedor {
 
     public Proveedor() {}
 
-    public Proveedor(int id, String razonSocial, String email, String telefono, String direccion, boolean activo, long fecha_alta) {
+    public Proveedor(int id, String razonSocial, String email, String telefono, String direccion, String cuit,boolean activo, long fecha_alta) {
         this.id = id;
         this.razonSocial = razonSocial;
         this.email = email;
         this.telefono = telefono;
         this.direccion = direccion;
+        this.cuit = cuit;
         this.activo = activo;
         this.fecha_alta = fecha_alta;
     }
@@ -94,5 +96,15 @@ public class Proveedor {
         return isActivo();
     }
 
+    public String getCuit() {
+        return cuit;
+    }
 
+    public void setCuit(String cuit) {
+        this.cuit = cuit;
+    }
+
+    public Proveedor(int id) {
+        this.id = id;
+    }
 }

@@ -8,4 +8,5 @@ import java.util.List;
 public interface MedioPagoDAO {
     MensajesResultados crearMedioPago(MedioPago medioPago);
     List<MedioPago> listarMedioPago();
+    MedioPago buscarPorId(int id);
 }
