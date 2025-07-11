@@ -6,43 +6,43 @@ public class VariablesEntorno {
 
     private static final Dotenv dotenv = Dotenv.load();
 
-    public static String getHost(){
-        return dotenv.get("DB_HOST");
-    }
-
-    public static String getPort(){
-        return dotenv.get("DB_PORT");
-    }
-
-    public static String getDatabase(){
-        return dotenv.get("DB_DATABASE");
-    }
-
-    public static String getUser(){
-        return dotenv.get("DB_USER");
-    }
-
-    public static String getPassword(){
-        return dotenv.get("DB_PASSWORD");
-    }
-
-    public static String getJWTSecret(){
-        return dotenv.get("JWT_SECRET");
-    }
-
-    public static String getJWTExpiration(){
-        return dotenv.get("JWT_EXPIRATION");
-    }
+//    public static String getHost(){
+//        return dotenv.get("DB_HOST");
+//    }
+//
+//    public static String getPort(){
+//        return dotenv.get("DB_PORT");
+//    }
+//
+//    public static String getDatabase(){
+//        return dotenv.get("DB_DATABASE");
+//    }
+//
+//    public static String getUser(){
+//        return dotenv.get("DB_USER");
+//    }
+//
+//    public static String getPassword(){
+//        return dotenv.get("DB_PASSWORD");
+//    }
+//
+//    public static String getJWTSecret(){
+//        return dotenv.get("JWT_SECRET");
+//    }
+//
+//    public static String getJWTExpiration(){
+//        return dotenv.get("JWT_EXPIRATION");
+//    }
 
     public static String getServerHost(){
         return dotenv.get("SERVER_HOST");
     }
 
-    public static String getServerPort(){
-        return dotenv.get("SERVER_PORT");
-    }
+//    public static String getServerPort(){
+//        return "";
+//    }
 
     public static String getServerURL(){
-        return getServerHost()+":"+getServerPort();
+        return getServerHost();
     }
 }
