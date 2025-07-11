@@ -1,6 +1,6 @@
 [build]
-builder = "Dockerfile"
-context = "backend"            # <--- esta línea le indica a Railway que use /backend
+builder = "dockerfile"
+context = "backend"
 dockerfilePath = "Dockerfile"
 
 [deploy]
