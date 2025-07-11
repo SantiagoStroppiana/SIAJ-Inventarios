@@ -10,7 +10,10 @@ public class BackendServer {
 
     public static void iniciar(){
 
-        Javalin app = Javalin.create().start(7000);
+//        Javalin app = Javalin.create().start(7000);
+
+        int port = Integer.parseInt(System.getenv().getOrDefault("PORT", "7000"));
+        Javalin app = Javalin.create().start(port);
 
         configurarUsuarios(app);
         configurarProductos(app);

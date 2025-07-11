@@ -1,0 +1,12 @@
+[build]
+builder = "Dockerfile"
+context = "backend"            # <--- esta línea le indica a Railway que use /backend
+dockerfilePath = "Dockerfile"
+
+[deploy]
+restartPolicyType = "always"
+restartPolicyMaxRetries = 10
+
+[variables]
+JAVA_OPTS = "-Xmx512m -Xms256m"
+PORT = "7000"
