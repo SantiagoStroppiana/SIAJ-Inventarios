@@ -1,15 +1,22 @@
-# Etapa de construcción
+# Build stage
 FROM maven:3.9.6-eclipse-temurin-21 AS build
+
 WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests -B
+RUN ls -lh target
+RUN ls -lh target && find target
 
-# Etapa de ejecución
+# Runtime stage
 FROM eclipse-temurin:21-jre
-WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
 
-# Expone el puerto esperado por Railway
+WORKDIR /app
+
+# Copy the original JAR (forget about the name change for now)
+COPY --from=build /app/target/app.jar app.jar
+
+
 EXPOSE 7000
 
-CMD ["java", "-jar", "app.jar"]
+# Use ENTRYPOINT instead of CMD
+ENTRYPOINT ["java", "-jar", "app.jar"]
