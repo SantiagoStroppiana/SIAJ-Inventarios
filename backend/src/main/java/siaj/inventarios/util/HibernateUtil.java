@@ -15,7 +15,7 @@ public class HibernateUtil {
 
     static {
         try {
-            Dotenv dotenv = Dotenv.load();
+//            Dotenv dotenv = Dotenv.load();
             Properties properties = new Properties();
             properties.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
 //            properties.setProperty("hibernate.connection.url", "jdbc:mysql://" + dotenv.get("DB_HOST") + ":" + dotenv.get("DB_PORT") + "/" + dotenv.get("DB_NAME"));
@@ -31,6 +31,7 @@ public class HibernateUtil {
             properties.setProperty("hibernate.connection.url", "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName);
             properties.setProperty("hibernate.connection.username", dbUser);
             properties.setProperty("hibernate.connection.password", dbPassword);
+
 
             properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
             properties.setProperty("hibernate.show_sql", "true");
