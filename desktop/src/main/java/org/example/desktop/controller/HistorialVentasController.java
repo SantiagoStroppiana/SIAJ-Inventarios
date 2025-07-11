@@ -74,8 +74,6 @@ public class HistorialVentasController implements Initializable {
     private Button btnGenerarPDF;
     @FXML
     private Button btnExportar;
-    @FXML
-    private Button btnVolver;
 
     // Labels de estadísticas
     @FXML
@@ -94,6 +92,8 @@ public class HistorialVentasController implements Initializable {
     // Otros campos necesarios
     private HttpClient httpClient;
     private Gson gson;
+    private Venta[] ventasOriginales;
+
 
 
     private MedioPago[] mediosPago;
@@ -114,6 +114,34 @@ public class HistorialVentasController implements Initializable {
         cargarUsuarios();
         cargarMediosPago();
         cargarMediosPagoComboBox();
+        txtBuscarVenta.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (ventasOriginales == null) return;
+
+            String filtro = newValue.toLowerCase();
+
+            tablaVentas.getItems().setAll(
+                    java.util.Arrays.stream(ventasOriginales)
+                            .filter(v -> {
+                                String vendedor = buscarUsuarioPorId(v.getUsuarioDTO().getId()) != null ?
+                                        buscarUsuarioPorId(v.getUsuarioDTO().getId()).getNombre().toLowerCase() : "";
+
+                                String medioPago = buscarMedioPagoPorId(v.getMedioPago().getId()) != null ?
+                                        buscarMedioPagoPorId(v.getMedioPago().getId()).getTipo().toLowerCase() : "";
+
+                                //String observaciones = v.getObservaciones() != null ? v.getObservaciones().toLowerCase() : "";
+
+                                return vendedor.contains(filtro)
+                                        || medioPago.contains(filtro)
+                                        //|| observaciones.contains(filtro)
+                                        || String.valueOf(v.getId()).contains(filtro)
+                                        || String.valueOf(v.getTotal()).contains(filtro)
+                                        || (v.getFechaPago() != null && v.getFechaPago().toLowerCase().contains(filtro))
+                                        || v.getEstado().toString().toLowerCase().contains(filtro);
+                            })
+                            .toList()
+            );
+        });
+
     }
 
 
@@ -249,16 +277,16 @@ public class HistorialVentasController implements Initializable {
             String responseBody = response.body();
 
             System.out.println("Ventas del BackEnd"+responseBody+"\n\n\n\n");
-            Venta[] ventas = gson.fromJson(responseBody, Venta[].class);
+            ventasOriginales = gson.fromJson(responseBody, Venta[].class);
 
-            // Limpiar la tabla y agregar las nuevas ventas
             tablaVentas.getItems().clear();
-            tablaVentas.getItems().addAll(ventas);
+            tablaVentas.getItems().addAll(ventasOriginales);
+
 
             // Actualizar las estadísticas
-            actualizarEstadisticas(ventas);
+            actualizarEstadisticas(ventasOriginales);
 
-            System.out.println("Ventas cargadas correctamente: " + ventas.length);
+            System.out.println("Ventas cargadas correctamente: " + ventasOriginales.length);
 
         } catch (Exception e) {
             e.printStackTrace();

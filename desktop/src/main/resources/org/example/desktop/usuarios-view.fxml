@@ -1,61 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.*?>
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="usuarios-border-pane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.UsuarioController">
+<BorderPane prefHeight="900.0" prefWidth="1600.0" styleClass="usuarios-border-pane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.UsuarioController">
 
     <left>
         <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
     </left>
 
-    <stylesheets>
-    <URL value="@estilos/estilos-globales.css" />
-    <URL value="@estilos/tabla.css" />
-    <URL value="@estilos/users.css" />
-</stylesheets>
-
     <center>
-        <VBox prefHeight="900.0" prefWidth="700.0" spacing="20.0" styleClass="usuarios-center-pane" BorderPane.alignment="CENTER">
+        <!-- FORMULARIO PERFIL DE USUARIO A LA IZQUIERDA (COMO el form de productos) -->
+        <AnchorPane prefHeight="800.0" prefWidth="380.0" BorderPane.alignment="CENTER">
             <children>
-                <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="20.0">
+                <VBox layoutX="10.0" layoutY="20.0" prefWidth="360.0" spacing="15.0">
                     <children>
-                        <Label styleClass="usuarios-panel-title" text="Panel de Usuarios" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnAgregarUsuario" onAction="#irRegistro" styleClass="usuarios-btn-agregar" text="Agregar Usuarios" />
-                    </children>
-                </HBox>
+                        <Label styleClass="usuarios-panel-title" text="DATOS DEL USUARIO" />
 
-                <TableView fx:id="tablaUsuarios" prefHeight="800.0" prefWidth="950.0" styleClass="usuarios-table" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn fx:id="idColumn" prefWidth="68.0" text="ID" />
-                        <TableColumn fx:id="nombreColumn" prefWidth="158.0" text="NOMBRE" />
-                        <TableColumn fx:id="apellidoColumn" prefWidth="130.0" text="APELLIDO" />
-                        <TableColumn fx:id="emailColumn" prefWidth="259.0" text="EMAIL" />
-                        <TableColumn fx:id="rolColumn" prefWidth="134.0" text="ROL" />
-                        <TableColumn fx:id="accionColumn" prefWidth="199.0" text="ACCION" />
-                    </columns>
-                </TableView>
-            </children>
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-        </VBox>
-    </center>
-
-    <right>
-        <VBox prefHeight="900.0" prefWidth="380.0" spacing="20.0" styleClass="usuarios-right-pane" BorderPane.alignment="CENTER">
-            <children>
-                <Label styleClass="usuarios-perfil-title" text="Perfil Usuario" />
-
-                <VBox prefHeight="217.0" prefWidth="338.0" spacing="15.0" styleClass="usuarios-perfil-card">
-                    <children>
-                        <Label styleClass="usuarios-perfil-title" text="Información del Usuario" />
-                        <VBox spacing="10.0">
+                        <VBox spacing="10.0" styleClass="usuarios-perfil-card">
                             <children>
-                                <HBox prefWidth="296.0" spacing="10.0">
+                                <HBox spacing="10.0">
                                     <children>
                                         <Label styleClass="usuarios-perfil-info-label" text="ID:" />
                                         <Label fx:id="labelId" styleClass="usuarios-perfil-info-value" text="(id)" />
@@ -81,14 +46,36 @@
                                 </HBox>
                             </children>
                         </VBox>
+
+                        <Button fx:id="btnAgregarUsuario" onAction="#irRegistro" styleClass="usuarios-btn-agregar" text="Agregar Usuario" />
                     </children>
                 </VBox>
-
-                <Region VBox.vgrow="ALWAYS" />
             </children>
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-        </VBox>
+        </AnchorPane>
+    </center>
+
+    <right>
+        <AnchorPane prefHeight="900.0" prefWidth="1020.0" BorderPane.alignment="CENTER">
+            <children>
+                <TextField fx:id="txtBuscarUsuario" layoutX="14.0" layoutY="14.0" prefHeight="39.0" prefWidth="349.0" promptText="Buscar Usuario..." styleClass="crud-text-field" />
+
+                <TableView fx:id="tablaUsuarios" layoutX="10.0" layoutY="66.0" prefHeight="798.0" prefWidth="990.0" styleClass="usuarios-table">
+                    <columns>
+                        <TableColumn fx:id="idColumn" prefWidth="68.0" text="ID" />
+                        <TableColumn fx:id="nombreColumn" prefWidth="158.0" text="NOMBRE" />
+                        <TableColumn fx:id="apellidoColumn" prefWidth="130.0" text="APELLIDO" />
+                        <TableColumn fx:id="emailColumn" prefWidth="259.0" text="EMAIL" />
+                        <TableColumn fx:id="rolColumn" prefWidth="134.0" text="ROL" />
+                        <TableColumn fx:id="accionColumn" prefWidth="240.0" text="ACCION" />
+                    </columns>
+                </TableView>
+            </children>
+        </AnchorPane>
     </right>
+
+    <stylesheets>
+        <URL value="@estilos/tabla.css" />
+        <URL value="@estilos/estilos-globales.css" />
+        <URL value="@estilos/users.css" />
+    </stylesheets>
 </BorderPane>

@@ -6,7 +6,7 @@ import siaj.inventarios.model.OrdenCompra;
 import java.util.List;
 
 public interface OrdenCompraService {
-    List<OrdenCompra> obtenerTodasLasOrdenCompras();
+    List<OrdenCompraDTO> obtenerTodasLasOrdenCompras();
     OrdenCompraDTO agregarOrdenCompraDesdeDTO(OrdenCompraDTO ordenCompraDTO);
     OrdenCompra buscarPorId(int id);
 }

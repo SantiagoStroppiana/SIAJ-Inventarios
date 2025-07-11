@@ -2,11 +2,16 @@ package org.example.desktop.controller;
 import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.DetalleOrdenCompraDTO;
@@ -23,6 +28,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -79,7 +85,6 @@ public class OrdenCompraController {
     @FXML
     private Button btnRefreshCatalog;
 
-    // Cliente HTTP y Gson
     private HttpClient httpClient = HttpClient.newHttpClient();
     private Gson gson = new Gson();
 
@@ -89,13 +94,10 @@ public class OrdenCompraController {
 
     @FXML
     private void initialize() {
-        // Cargar proveedores desde el backend
         cargarProveedores();
 
-        // Configurar fecha por defecto
         orderDatePicker.setValue(LocalDate.now());
 
-        // Configurar evento cuando cambie el proveedor
         supplierComboBox.setOnAction(e -> {
             Proveedor proveedorSeleccionado = supplierComboBox.getValue();
             if (proveedorSeleccionado != null) {
@@ -105,7 +107,6 @@ public class OrdenCompraController {
             }
         });
 
-        // Configurar botones
         btnClearOrder.setOnAction(e -> limpiarOrden());
         btnGenerateOrder.setOnAction(e -> {
             try {
@@ -116,7 +117,13 @@ public class OrdenCompraController {
                 throw new RuntimeException(ex);
             }
         });
-        btnRefreshCatalog.setOnAction(e -> actualizarCatalogo());
+        btnRefreshCatalog.setOnAction(e -> {
+            try {
+                actualizarCatalogo();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 
     private void cargarProveedores() {
@@ -165,11 +172,9 @@ public class OrdenCompraController {
     private List<Producto> productos = new ArrayList<>();
 
     private void cargarProductosPorProveedor(Proveedor proveedor) {
-        // Limpiar productos anteriores
         productGrid.getChildren().clear();
 
         try {
-            // Armo la URL con el ID del proveedor
             String url = VariablesEntorno.getServerURL() + "/api/productos/proveedor/" + proveedor.getId();
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -177,10 +182,8 @@ public class OrdenCompraController {
                     .GET()
                     .build();
 
-            // Envío la petición
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // Parseo la respuesta
             String responseBody = response.body();
             Producto[] productosArray = gson.fromJson(responseBody, Producto[].class);
             productos = Arrays.asList(productosArray);
@@ -189,7 +192,6 @@ public class OrdenCompraController {
                 System.out.println("- " + p.getNombre() + " - $" + p.getPrecio());
             }
 
-            // Mostrar los productos en la UI
             if (productos.isEmpty()) {
                 mostrarEstadoVacioProductos(); // Muestra algo tipo "No hay productos"
             } else {
@@ -242,28 +244,24 @@ public class OrdenCompraController {
         tarjeta.setPrefHeight(280);
         tarjeta.setPadding(new Insets(15));
 
-        // Imagen del producto
+
         Label imagenLabel = new Label("📦");
         imagenLabel.setStyle("-fx-font-size: 48px; -fx-alignment: center;");
 
-        // Nombre del producto
         Label nombreLabel = new Label(producto.getNombre());
         nombreLabel.getStyleClass().add("pv-product-name");
         nombreLabel.setWrapText(true);
         nombreLabel.setMaxWidth(190);
         nombreLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        // Precio
         Label precioLabel = new Label(String.format("$%.2f", producto.getPrecio()));
         precioLabel.getStyleClass().add("pv-product-price");
         precioLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #2196F3;");
 
-        // Stock
         Label stockLabel = new Label("Stock: " + producto.getStock());
         stockLabel.getStyleClass().add("pv-product-stock");
         stockLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
 
-        // Botón agregar
         Button botonAgregar = new Button("+ Agregar a Orden");
         botonAgregar.getStyleClass().addAll("pv-action-btn", "pv-add-btn");
         botonAgregar.setMaxWidth(Double.MAX_VALUE);
@@ -274,7 +272,6 @@ public class OrdenCompraController {
     }
 
     private void agregarProductoAOrden(Producto producto) {
-        // Crear dialog para cantidad
         TextInputDialog dialog = new TextInputDialog("1");
         dialog.setTitle("Cantidad");
         dialog.setHeaderText("Agregar " + producto.getNombre());
@@ -304,9 +301,8 @@ public class OrdenCompraController {
     }
 
     private void agregarItemAOrden(Producto producto, int cantidad) {
-        System.out.println("🔍 agregarItemAOrden llamado - Producto: " + producto.getNombre() + ", Cantidad: " + cantidad);
-        System.out.println("🔍 itemsOrden size ANTES: " + itemsOrden.size());
-        // Verificar si el producto ya está en la orden
+
+
         ItemOrden itemExistente = null;
         for (ItemOrden item : itemsOrden) {
             if (item.getProducto().getId() == producto.getId()) {
@@ -316,41 +312,35 @@ public class OrdenCompraController {
         }
 
         if (itemExistente != null) {
-            System.out.println("🔍 Producto ya existe en orden, actualizando cantidad...");
-            // Actualizar cantidad
+
             itemExistente.setCantidad(itemExistente.getCantidad() + cantidad);
-            System.out.println("🔍 Nueva cantidad: " + itemExistente.getCantidad());
+
         } else {
-            System.out.println("🔍 Creando nuevo item en orden...");
-            // Crear nuevo item
+
+
             ItemOrden nuevoItem = new ItemOrden(producto, cantidad);
             itemsOrden.add(nuevoItem);
-            System.out.println("🔍 Item agregado a itemsOrden");
+
         }
-        System.out.println("🔍 itemsOrden size DESPUÉS: " + itemsOrden.size());
-        System.out.println("🔍 Llamando actualizarVistaOrden...");
+
         actualizarVistaOrden();
     }
 
     private void actualizarVistaOrden() {
-        System.out.println("🔍 actualizarVistaOrden llamado - itemsOrden size: " + itemsOrden.size());
         // Limpiar contenido anterior
         orderContent.getChildren().clear();
 
         if (itemsOrden.isEmpty()) {
-            System.out.println("🔍 itemsOrden está vacío, mostrando estado vacío");
             // Mostrar estado vacío
             emptyOrderState.setVisible(true);
             emptyOrderState.setManaged(true);
         } else {
-            System.out.println("🔍 itemsOrden tiene " + itemsOrden.size() + " items, creando tarjetas...");
             // Ocultar estado vacío
             emptyOrderState.setVisible(false);
             emptyOrderState.setManaged(false);
 
             // Crear tarjetas de items
             for (ItemOrden item : itemsOrden) {
-                System.out.println("🔍 Creando tarjeta para: " + item.getProducto().getNombre());
                 HBox tarjetaItem = crearTarjetaItem(item);
                 orderContent.getChildren().add(tarjetaItem);
             }
@@ -362,7 +352,6 @@ public class OrdenCompraController {
 
         // Habilitar/deshabilitar botón generar orden
         btnGenerateOrder.setDisable(itemsOrden.isEmpty());
-        System.out.println("🔍 Botón generar orden habilitado: " + !btnGenerateOrder.isDisabled());
     }
 
     private HBox crearTarjetaItem(ItemOrden item) {
@@ -453,13 +442,13 @@ public class OrdenCompraController {
     private void generarOrden() throws IOException, InterruptedException {
         System.out.println("🔍 generarOrden llamado - itemsOrden size: " + itemsOrden.size());
 
-        // Imprimir todos los items
-        for (int i = 0; i < itemsOrden.size(); i++) {
-            ItemOrden item = itemsOrden.get(i);
-            System.out.println("🔍 Item " + i + ": " + item.getProducto().getNombre() +
-                    " - Cantidad: " + item.getCantidad() +
-                    " - Precio: $" + item.getProducto().getPrecio());
-        }
+//        // Imprimir todos los items
+//        for (int i = 0; i < itemsOrden.size(); i++) {
+//            ItemOrden item = itemsOrden.get(i);
+//            System.out.println("🔍 Item " + i + ": " + item.getProducto().getNombre() +
+//                    " - Cantidad: " + item.getCantidad() +
+//                    " - Precio: $" + item.getProducto().getPrecio());
+//        }
 
         if (supplierComboBox.getValue() == null) {
             mostrarAlerta("Error", "Debe seleccionar un proveedor");
@@ -484,19 +473,24 @@ public class OrdenCompraController {
         medioPagoDummy.setTipo("TEMPORAL");
         double total = Double.parseDouble(totalLabel.getText().replace(",", "."));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        String fechaFormateada = LocalDateTime.now().format(formatter);
+        /*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String fechaFormateada = LocalDateTime.now().format(formatter);*/
 
         if (medioPagoDummy == null) {
             notificar("Error", "Seleccione un medio de pago.", false);
             return;
         }
+        long fechaTimestamp = LocalDateTime.now()
+                .atZone(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
 
         OrdenCompraDTO ordenCompraDTO = new OrdenCompraDTO(
                 proveedor.getId(),
                 medioPagoDummy.getId(),
                 new BigDecimal(total),
-                fechaFormateada,
+                fechaTimestamp,
+                //fechaFormateada,
                 OrdenCompra.EstadoOrden.pendiente.toString()
         );
 
@@ -516,7 +510,6 @@ public class OrdenCompraController {
             return;
         }
 
-        System.out.println("AAAAA\n" + response.body() + "\n\n\n");
         OrdenCompraDTO ordenCompraCreadaDTO = gson.fromJson(response.body(), OrdenCompraDTO.class);
 
         // Paso 2: Crear los detalles de la orden
@@ -546,7 +539,8 @@ public class OrdenCompraController {
             System.out.println("Respuesta detalle: " + response2.body());
 
             if (response2.statusCode() == 200 || response2.statusCode() == 201) {
-                System.out.println("Detalle creado exitosamente para producto: " + producto.getNombre());
+
+                notificar("Detalle creado", producto.getNombre(), true);
             } else {
                 System.err.println("Error al crear detalle para producto " + producto.getNombre() + ": " + response2.body());
                 notificar("Error", "No se pudo crear el detalle para " + producto.getNombre(), false);
@@ -563,17 +557,6 @@ public class OrdenCompraController {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
     private Producto buscarProductoEnLista(String nombre) {
         for (Producto producto : productos) {
             if (producto.getNombre().equalsIgnoreCase(nombre)) {
@@ -582,10 +565,6 @@ public class OrdenCompraController {
         }
         return null;
     }
-
-
-
-
 
     private void notificar(String titulo, String mensaje, boolean exito){
         Platform.runLater(() -> {
@@ -603,11 +582,36 @@ public class OrdenCompraController {
         });
     }
 
-    private void actualizarCatalogo() {
-        Proveedor proveedorSeleccionado = supplierComboBox.getValue();
+    private void actualizarCatalogo() throws IOException {
+        /*Proveedor proveedorSeleccionado = supplierComboBox.getValue();
         if (proveedorSeleccionado != null) {
             cargarProductosPorProveedor(proveedorSeleccionado);
-        }
+        }*/
+
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/ingreso-orden-view.fxml"));
+
+        Parent root = fxmlLoader.load();
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root, 1600, 900)); // Dimensiones adaptadas para la vista de historial
+        stage.setTitle("Historial de Ventas");
+        stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior
+        stage.setResizable(true); // Permite redimensionar para mejor experiencia
+        stage.setMinWidth(1200); // Ancho mínimo para que se vea bien
+        stage.setMinHeight(700);  // Alto mínimo para que se vea bien
+
+        // Opcional: Centrar la ventana en pantalla
+        stage.centerOnScreen();
+
+        // Opcional: Si querés hacer algo cuando se cierre la ventana
+        // stage.setOnCloseRequest(event -> {
+        //     // Código para ejecutar al cerrar
+        //     System.out.println("Cerrando historial de ventas");
+        // });
+
+        stage.showAndWait();
+
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {

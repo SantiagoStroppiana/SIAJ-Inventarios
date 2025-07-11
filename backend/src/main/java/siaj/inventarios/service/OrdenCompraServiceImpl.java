@@ -9,7 +9,9 @@ import siaj.inventarios.model.MedioPago;
 import siaj.inventarios.model.OrdenCompra;
 import siaj.inventarios.model.Proveedor;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 public class OrdenCompraServiceImpl implements OrdenCompraService{
@@ -22,16 +24,20 @@ public class OrdenCompraServiceImpl implements OrdenCompraService{
 
 
     @Override
-    public List<OrdenCompra> obtenerTodasLasOrdenCompras() {
+    public List<OrdenCompraDTO> obtenerTodasLasOrdenCompras() {
         return ordenCompraDAO.obtenerTodasLasOrdenCompras();
     }
 
     public OrdenCompraDTO agregarOrdenCompraDesdeDTO(OrdenCompraDTO dto) {
         OrdenCompra orden = new OrdenCompra();
-
         orden.setEstado(OrdenCompra.EstadoOrden.valueOf(dto.getEstado()));
         orden.setTotal(dto.getTotal());
-        orden.setFechaPago(LocalDateTime.parse(dto.getFechaPago()));
+        LocalDateTime fechaPago = Instant.ofEpochMilli(dto.getFechaPago())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
+        orden.setFechaPago(fechaPago);
+        //orden.setFechaPago(LocalDateTime.parse(dto.getFechaPago()));
 
         // Acá se hacen las búsquedas
         Proveedor proveedor = proveedorService.buscarPorId(dto.getProveedorId());
@@ -47,7 +53,10 @@ public class OrdenCompraServiceImpl implements OrdenCompraService{
                 proveedor.getId(),
                 medioPago.getId(),
                 creada.getTotal(),
-                creada.getFechaPago().toString(),
+                creada.getFechaPago()
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant()
+                        .toEpochMilli(), // 👈 Convertimos el LocalDateTime a long
                 creada.getEstado().toString()
         );
     }

@@ -47,15 +47,82 @@ TextField:focused {
 /* COMBOBOX */
 .crud-combo,
 ComboBox {
-    -fx-background-color: rgba(30, 41, 59, 0.9);
+    -fx-background-color: rgba(45, 62, 89, 0.9);
     -fx-border-color: #334155;
     -fx-border-width: 1; /* Más fino */
     -fx-border-radius: 8; /* Menos redondeado */
     -fx-background-radius: 8;
     -fx-padding: 6; /* Más compacto */
     -fx-font-size: 13px; /* Más pequeño */
-    -fx-text-fill: white;
+    -fx-text-fill: white !important; /* AÑADE !important AQUÍ */
     -fx-prompt-text-fill: #94a3b8;
+}
+
+/* Campo de texto editable del ComboBox */
+.crud-combo .combo-box-base,
+.combo-box .combo-box-base {
+    -fx-background-color: transparent;
+    -fx-text-fill: white !important;
+}
+
+/* Texto mostrado en el ComboBox */
+.crud-combo .text,
+.combo-box .text {
+    -fx-fill: white !important;
+    -fx-font-size: 13px;
+}
+
+/* Campo de entrada de texto */
+.crud-combo .text-field,
+.combo-box .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: white !important;
+    -fx-prompt-text-fill: #94a3b8;
+}
+
+/* Botón de flecha */
+.crud-combo .arrow-button,
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Flecha del botón */
+.crud-combo .arrow,
+.combo-box .arrow {
+    -fx-background-color: white;
+    -fx-shape: "M 0 0 L 4 4 L 8 0 Z";
+}
+
+/* Lista desplegable */
+.crud-combo .list-view,
+.combo-box .list-view {
+    -fx-background-color: rgba(45, 62, 89, 0.95);
+    -fx-border-color: #334155;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+/* Celdas de la lista */
+.crud-combo .list-cell,
+.combo-box .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-padding: 8 12;
+}
+
+/* Celda seleccionada */
+.crud-combo .list-cell:selected,
+.combo-box .list-cell:selected {
+    -fx-text-fill: white;
+}
+
+/* Celda hover */
+.crud-combo .list-cell:hover,
+.combo-box .list-cell:hover {
+    -fx-background-color: rgba(59, 130, 246, 0.3);
+    -fx-text-fill: white;
 }
 
 .crud-combo:focused,

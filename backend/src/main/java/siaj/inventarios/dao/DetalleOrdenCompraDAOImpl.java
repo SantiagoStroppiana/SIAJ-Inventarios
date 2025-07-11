@@ -6,6 +6,8 @@ import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.model.DetalleOrdenCompra;
 import siaj.inventarios.util.HibernateUtil;
 
+import java.util.List;
+
 public class DetalleOrdenCompraDAOImpl implements DetalleOrdenCompraDAO {
 
     @Override
@@ -24,6 +26,11 @@ public class DetalleOrdenCompraDAOImpl implements DetalleOrdenCompraDAO {
             session.close();
         }
         return null;
+    }
+
+    @Override
+    public List<DetalleOrdenCompraDTO> obtenerDetalles() {
+        return List.of();
     }
 
 }

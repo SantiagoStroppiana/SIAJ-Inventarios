@@ -183,65 +183,102 @@ public class VentaController implements Initializable {
         } else {
 
 
-        // Si ya existe en el carrito, sumar la cantidad
-        if (productosEnCarrito.containsKey(producto.getId())) {
-            HBox itemExistente = productosEnCarrito.get(producto.getId());
-            TextField cantidadField = (TextField) itemExistente.getChildren().get(1);
+            if (cantidadInicial < 1) {
+                cantidadInicial = 1;
+                notificar("Cantidad inválida", "La cantidad inicial de " + producto.getNombre() + " no puede ser menor al stock disponible (" + producto.getStock() + " unidades). Se ajustó a 1.", false);
+            }
+            if (cantidadInicial > producto.getStock()) {
+                notificar("Cantidad inválida", "La cantidad inicial de " + producto.getNombre() + " no puede ser mayor al stock disponible (" + producto.getStock() + " unidades). Se ajustó a 1.", false);
+                cantidadInicial = 1; // Se ajusta a 1 si excede el stock
+            }
+            if (productosEnCarrito.containsKey(producto.getId())) {
+                HBox itemExistente = productosEnCarrito.get(producto.getId());
+                TextField cantidadField = (TextField) itemExistente.getChildren().get(1);
 
-            try {
-                int cantidadActual = Integer.parseInt(cantidadField.getText());
-                if (cantidadActual+cantidadInicial>producto.getStock()) {
-                    notificar("Falta de stock", "No alcanza el stock del producto " + producto.getNombre()+"\nhay "+producto.getStock()+ " unidades", false);
-                } else {
-                    cantidadField.setText(String.valueOf(cantidadActual + cantidadInicial));
+                try {
+                    int cantidadActual = Integer.parseInt(cantidadField.getText());
+                    int nuevaCantidad = cantidadActual + cantidadInicial; // Cantidad propuesta
+
+
+                    if (nuevaCantidad < 1) {
+                        nuevaCantidad = 1;
+                    }
+                    if (nuevaCantidad > producto.getStock()) {
+                        notificar("Falta de stock", "No alcanza el stock del producto " + producto.getNombre() + ".\nHay " + producto.getStock() + " unidades disponibles. Se ajustó a 1.", false);
+                        cantidadField.setText(String.valueOf(1));
+                    } else {
+                        cantidadField.setText(String.valueOf(nuevaCantidad));
+                    }
+
+                } catch (NumberFormatException ignored) {
+
+                    int cantidadParaCampo = cantidadInicial;
+                    if (cantidadInicial > producto.getStock()) {
+                        notificar("Cantidad inválida", "La cantidad ingresada para " + producto.getNombre() + " excede el stock disponible (" + producto.getStock() + " unidades). Se ajustó a 1.", false);
+                        cantidadParaCampo = 1;
+                    } else if (cantidadInicial < 1) {
+                        cantidadParaCampo = 1;
+                    }
+                    cantidadField.setText(String.valueOf(cantidadParaCampo));
                 }
-            } catch (NumberFormatException ignored) {
-                cantidadField.setText(String.valueOf(cantidadInicial));
+
+                actualizarSubtotal(itemExistente, producto.getPrecio().doubleValue());
+                actualizarTotales();
+                return;
             }
 
-            actualizarSubtotal(itemExistente, producto.getPrecio().doubleValue());
-            actualizarTotales();
-            return;
-        }
+            HBox item = new HBox();
+            item.setSpacing(10);
+            item.setAlignment(Pos.CENTER_LEFT);
+            item.getStyleClass().add("pv-cart-item");
 
-        // Crear nueva fila para el producto
-        HBox item = new HBox();
-        item.setSpacing(10);
-        item.setAlignment(Pos.CENTER_LEFT);
-        item.getStyleClass().add("pv-cart-item");
+            Label nombre = new Label(producto.getNombre());
+            nombre.setPrefWidth(130);
+            nombre.getStyleClass().add("pv-cart-item-name");
 
-        Label nombre = new Label(producto.getNombre());
-        nombre.setPrefWidth(130);
-        nombre.getStyleClass().add("pv-cart-item-name");
+            TextField cantidadField = new TextField(String.valueOf(cantidadInicial));
+            cantidadField.setPrefWidth(70);
+            cantidadField.setAlignment(Pos.CENTER);
 
-        TextField cantidadField = new TextField(String.valueOf(cantidadInicial));
-        cantidadField.setPrefWidth(70);
-        cantidadField.setAlignment(Pos.CENTER);
+            Label precioUnitario = new Label("$" + producto.getPrecio());
+            precioUnitario.setPrefWidth(80);
+            precioUnitario.getStyleClass().add("pv-cart-item-price");
 
-        Label precioUnitario = new Label("$" + producto.getPrecio());
-        precioUnitario.setPrefWidth(80);
-        precioUnitario.getStyleClass().add("pv-cart-item-price");
+            Label subtotalLabel = new Label();
+            subtotalLabel.setPrefWidth(85);
+            subtotalLabel.getStyleClass().add("pv-cart-item-price");
+            subtotalLabel.setStyle("-fx-text-fill: #ffffff");
 
-        Label subtotalLabel = new Label();
-        subtotalLabel.setPrefWidth(85);
-        subtotalLabel.getStyleClass().add("pv-cart-item-price");
-        subtotalLabel.setStyle("-fx-text-fill: #ffffff");
-
-        Button eliminarBtn = crearBotonEliminar(item, producto);
+            Button eliminarBtn = crearBotonEliminar(item, producto);
 
             cantidadField.textProperty().addListener((obs, oldVal, newVal) -> {
+                try {
+                    int cantidadIngresada = Integer.parseInt(newVal);
+                    if (cantidadIngresada < 1) {
+                        cantidadField.setText("1"); // Si es menor a 1, se pone 1
+                        notificar("Cantidad inválida", "La cantidad mínima es 1.", false);
+                    } else if (cantidadIngresada > producto.getStock()) {
+                        cantidadField.setText("1"); // Si excede el stock, se pone 1
+                        notificar("Falta de stock", "No hay suficiente stock de " + producto.getNombre() + ".\nSolo hay " + producto.getStock() + " unidades disponibles. Se ajustó a 1.", false);
+                    }
+                } catch (NumberFormatException e) {
+
+                    cantidadField.setText("1");
+                    notificar("Entrada inválida", "Por favor, ingrese un número válido.", false);
+                }
+                // -------------------------------------------------
+
+                actualizarSubtotal(item, producto.getPrecio().doubleValue());
+                actualizarTotales();
+            });
+
+            item.getChildren().addAll(nombre, cantidadField, precioUnitario, subtotalLabel, eliminarBtn);
+            cartContent.getChildren().add(item);
+            productosEnCarrito.put(producto.getId(), item);
+
             actualizarSubtotal(item, producto.getPrecio().doubleValue());
             actualizarTotales();
-        });
-
-        item.getChildren().addAll(nombre, cantidadField, precioUnitario, subtotalLabel, eliminarBtn);
-        cartContent.getChildren().add(item);
-        // long productoId = producto.getId();
-        productosEnCarrito.put(producto.getId(), item);  // Guardar referencia
-
-        actualizarSubtotal(item, producto.getPrecio().doubleValue());
-        actualizarTotales();
-    }
+        }
     }
     private Button crearBotonEliminar(Node item, Producto producto) {
         Button eliminarBtn = new Button("X");
@@ -398,7 +435,6 @@ public class VentaController implements Initializable {
             }
 
             Venta ventaCreada = gson.fromJson(ventaResponse.body(), Venta.class);
-            System.out.println("VENTAA CREADA CARAACK:" + ventaCreada);
             // Paso 2: Enviar los detalles
             for (Node node : cartContent.getChildren()) {
                 if (node instanceof HBox item) {

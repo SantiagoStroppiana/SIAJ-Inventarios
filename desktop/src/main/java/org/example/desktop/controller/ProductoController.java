@@ -39,6 +39,8 @@ public class ProductoController implements Initializable {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
+    private Producto[] productosOriginales; // para guardar todos los productos
+
 
     @FXML private TextField txtBuscarProducto;
     @FXML private TableView<Producto> tablaProductos;
@@ -62,8 +64,6 @@ public class ProductoController implements Initializable {
     private static final Logger logger = Logger.getLogger(ProductoController.class.getName());
 
 
-
-
     @FXML
     public void mostrarProductos() {
 
@@ -79,19 +79,20 @@ public class ProductoController implements Initializable {
             String responseBody = response.body();
             System.out.println(responseBody);
 
-            Producto[] productos = gson.fromJson(responseBody, Producto[].class);
+            productosOriginales = gson.fromJson(responseBody, Producto[].class);
 
             tablaProductos.getItems().clear();
-            tablaProductos.getItems().addAll(productos);
+            tablaProductos.getItems().addAll(productosOriginales);
 
-            for (Producto p : productos) {
+
+            for (Producto p : productosOriginales) {
                 System.out.println("Producto: " + p.getNombre() + ", SKU: " + p.getSku());
             }
 
             System.out.println("Respuesta del backend:");
             System.out.println(responseBody);
 
-            for (Producto p : productos) {
+            for (Producto p : productosOriginales) {
                 System.out.println("Producto: " + p.getNombre() + ", Proveedor: " +
                         (p.getProveedorid() != null ? p.getProveedorid().getRazonSocial() : "null"));
             }
@@ -240,6 +241,19 @@ public class ProductoController implements Initializable {
         mostrarCategorias();
         mostrarEstado();
         mostrarProveedores();
+        txtBuscarProducto.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (productosOriginales == null) return;
+
+            String filtro = newValue.toLowerCase();
+
+            tablaProductos.getItems().setAll(
+                    java.util.Arrays.stream(productosOriginales)
+                            .filter(p -> p.getNombre().toLowerCase().contains(filtro)
+                                    || p.getSku().toLowerCase().contains(filtro))
+                            .toList()
+            );
+        });
+
     }
 
 
