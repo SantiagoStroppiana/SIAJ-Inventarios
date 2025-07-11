@@ -1,6 +1,6 @@
 .menuprincipal-container {
     -fx-background-color: linear-gradient(to bottom right, #0f172a, #1e293b);
-    -fx-padding: 20;
+    /*-fx-padding: 20; ESTO HACE QUE SEA FLOTANTE*/
 }
 
 .menuprincipal-welcome-title {

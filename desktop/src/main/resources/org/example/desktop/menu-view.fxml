@@ -25,8 +25,8 @@
                             <Image url="@images/ion--home.png" />
                         </ImageView>
                         <VBox>
-                            <Label fx:id="labelBienvenida" styleClass="menuprincipal-welcome-title" text="Bienvenido, Pepe Perez" />
-                            <Label styleClass="menuprincipal-welcome-subtitle" text="(Administrador) - Seleccione módulo" />
+                            <Label fx:id="labelBienvenida" styleClass="menuprincipal-welcome-title" text="Bienvenido, (usuario)" />
+                            <Label styleClass="menuprincipal-welcome-subtitle" text="Seleccione módulo para trabajar" />
                         </VBox>
                     </HBox>
 

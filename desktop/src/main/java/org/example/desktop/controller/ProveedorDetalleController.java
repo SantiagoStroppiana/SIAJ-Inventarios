@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SplitMenuButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.model.MensajesResultados;
@@ -40,6 +37,9 @@ public class ProveedorDetalleController {
     @FXML private Button modificar;
     @FXML private Button guardar;
     @FXML private SplitMenuButton menuEstado;
+    @FXML private Label lblProveedorNombre;
+    @FXML private Label lblProveedorCuit;
+    @FXML private Label lblEstadoActual;
     private Proveedor proveedorSeleccionado = null;
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
@@ -56,7 +56,6 @@ public class ProveedorDetalleController {
         menuEstado.setText(proveedor.getEstado() ? "Activo" : "Inactivo");
 
 
-        // TextFields
         txtRazonSocial.setEditable(false);
         txtRazonSocial.setDisable(true);
         txtRazonSocial.setMouseTransparent(true);
@@ -82,11 +81,13 @@ public class ProveedorDetalleController {
         txtCUIT.setMouseTransparent(true);
         txtCUIT.setFocusTraversable(false);
 
-        // SplitMenuButton
         menuEstado.setDisable(true);
         menuEstado.setMouseTransparent(true);
         menuEstado.setFocusTraversable(false);
 
+        lblProveedorNombre.setText(proveedor.getRazonSocial());
+        lblProveedorCuit.setText(proveedor.getCuit());
+        lblEstadoActual.setText(proveedor.getEstado() ? "Activo" : "Inactivo");
 
         mostrarProveedores();
         mostrarEstado();

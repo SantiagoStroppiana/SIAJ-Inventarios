@@ -48,6 +48,11 @@ public class MenuController {
         StageManager.loadScene("/org/example/desktop/punto-venta-view.fxml" , 1600, 900);
     }
 
+//    @FXML
+//    public void irOrdenCompra() {
+//        StageManager.loadScene("/org/example/desktop/punto-venta-view.fxml" , 1600, 900);
+//    }
+
     @FXML
     public void irInventario() {
         StageManager.loadScene("/org/example/desktop/inventario-view.fxml" , 1600, 900);

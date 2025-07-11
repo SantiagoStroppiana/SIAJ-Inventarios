@@ -62,8 +62,6 @@ public class ProductoController implements Initializable {
     private static final Logger logger = Logger.getLogger(ProductoController.class.getName());
 
 
-
-
     @FXML
     public void mostrarProductos() {
 

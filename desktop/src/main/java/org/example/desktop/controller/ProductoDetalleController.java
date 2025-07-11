@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SplitMenuButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.model.MensajesResultados;
@@ -36,6 +33,10 @@ public class ProductoDetalleController {
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
+    @FXML private Label lblProductoNombre;
+    @FXML private Label lblProductoSku;
+    @FXML private Label lblEstadoActual;
+    @FXML private Label lblStockActual;
     @FXML private TextField txtSku;
     @FXML private TextField txtNombre;
     @FXML private TextField txtStock;
@@ -69,6 +70,11 @@ public class ProductoDetalleController {
         menuEstado.setDisable(true);
         mostrarProveedores();
         mostrarEstado();
+
+        lblProductoNombre.setText(producto.getNombre());
+        lblProductoSku.setText(producto.getSku());
+        lblEstadoActual.setText(producto.getEstado() ? "Activo" : "Inactivo");
+        lblStockActual.setText(String.valueOf(producto.getStock()));
 
 
         txtStock.setEditable(false);

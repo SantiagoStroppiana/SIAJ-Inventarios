@@ -5,13 +5,13 @@
 
 /* === ROOT CONTAINER === */
 .pv-root {
-    -fx-background-color: linear-gradient(to bottom right, #1a1a1a, #2d2d2d);
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);
     -fx-font-family: "Segoe UI", "Arial", sans-serif;
 }
 
 /* === SIDEBAR STYLES === */
 .pv-sidebar {
-    -fx-background-color: linear-gradient(to bottom, #2d2d2d, #1a1a1a);
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);
     -fx-border-color: #4CAF50;
     -fx-border-width: 0 2 0 0;
     -fx-padding: 20 0 20 0;
@@ -80,13 +80,13 @@
 
 /* === PANEL STYLES === */
 .pv-product-panel, .pv-cart-panel {
-    -fx-background-color: rgba(45, 45, 45, 0.85);
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);
     -fx-background-radius: 16;
     -fx-border-radius: 16;
     -fx-border-color: rgba(76, 175, 80, 0.3);
     -fx-border-width: 1;
     -fx-padding: 25;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 0, 4);
+    -fx-effect: dropshadow(gaussian, rgba(26, 26, 43, 0.4), 12, 0, 0, 4);
 }
 
 .pv-panel-title {
@@ -128,7 +128,7 @@
 
 /* === PRODUCT CARDS === */
 .pv-product-card {
-    -fx-background-color: linear-gradient(to bottom right, #3a3a3a, #2d2d2d);
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);
     -fx-background-radius: 12;
     -fx-border-radius: 12;
     -fx-border-color: rgba(76, 175, 80, 0.3);
@@ -233,7 +233,7 @@
 
 /* === CART ITEMS === */
 .pv-cart-item {
-    -fx-background-color: rgba(58, 58, 58, 0.6);
+    -fx-background-color: rgb(22, 45, 73);
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-border-color: rgba(76, 175, 80, 0.2);
@@ -490,7 +490,7 @@
 
 /* Contenedor visual del ComboBox */
 .pv-payment-combobox {
-    -fx-background-color: #2b2b2b;
+    -fx-background-color: #1a2845;
     -fx-border-color: #4caf50;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
@@ -510,7 +510,7 @@
 }
 
 .combo-box-popup .list-view .list-cell:hover {
-    -fx-background-color: #333333;
+    -fx-background-color: #1a2845;
 }
 
 /* Estilo del ítem seleccionado */
