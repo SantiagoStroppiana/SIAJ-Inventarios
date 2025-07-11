@@ -3,14 +3,18 @@ package org.example.desktop.controller;
 import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
-import org.example.desktop.model.MedioPago;
-import org.example.desktop.model.Usuario;
-import org.example.desktop.model.Venta;
+import org.example.desktop.dto.DetalleVentaDTO;
+import org.example.desktop.model.*;
 import org.example.desktop.util.VariablesEntorno;
 
 import java.net.URI;
@@ -19,6 +23,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.property.SimpleStringProperty;
@@ -98,7 +104,7 @@ public class HistorialVentasController implements Initializable {
 
     private MedioPago[] mediosPago;
     private Usuario[] usuarios;
-
+    private DetalleVentaDTO[] detalleVentasDTO;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Inicializar HttpClient y Gson
@@ -114,6 +120,8 @@ public class HistorialVentasController implements Initializable {
         cargarUsuarios();
         cargarMediosPago();
         cargarMediosPagoComboBox();
+        mostrarProductos();
+        mostrarDetallesVentas();
         txtBuscarVenta.textProperty().addListener((obs, oldValue, newValue) -> {
             if (ventasOriginales == null) return;
 
@@ -293,6 +301,81 @@ public class HistorialVentasController implements Initializable {
             notificar("Error Crítico", "Error al cargar las ventas: " + e.getMessage(), false);
         }
     }
+    DetalleVenta[] detalleVentas;
+    @FXML
+    public void mostrarDetallesVentas() {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/detalle-ventas"))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+
+            System.out.println("Ventas del BackEnd"+responseBody+"\n\n\n\n");
+            detalleVentasDTO = gson.fromJson(responseBody, DetalleVentaDTO[].class);
+
+
+            System.out.println("Detalles de ventas cargados correctamente: " + detalleVentasDTO.length);
+
+             detalleVentas = new DetalleVenta[detalleVentasDTO.length];
+            for (int i = 0; i < detalleVentasDTO.length; i++) {
+                DetalleVentaDTO dto = detalleVentasDTO[i];
+
+                // Buscar la venta y producto en tus listas originales
+                Venta venta = buscarVentaPorId(dto.getVentaId());
+                Producto producto = buscarProductoPorId(dto.getProductoId());
+
+                // Construir el DetalleVenta real
+                detalleVentas[i] = new DetalleVenta(dto.getId(), venta, dto.getCantidad(), dto.getPrecioUnitario(), producto);
+            }
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            notificar("Error Crítico", "Error al cargar las ventas: " + e.getMessage(), false);
+        }
+    }
+
+    private Venta buscarVentaPorId(int id) {
+        for (Venta v : ventasOriginales) {
+            if (v.getId() == id) return v;
+        }
+        return null; // o lanzar una excepción si es crítico
+    }
+    Producto[] productosOriginales;
+    public void mostrarProductos() {
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/productos"))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+
+            productosOriginales = gson.fromJson(responseBody, Producto[].class);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            notificar("Error Crítico", e.getMessage(), false);
+        }
+
+    }
+
+    private Producto buscarProductoPorId(int id) {
+        for (Producto p : productosOriginales) {
+            if (p.getId() == id) return p;
+        }
+        return null;
+    }
+
+
+
 
     private void actualizarEstadisticas(Venta[] ventas) {
         int totalVentas = ventas.length;
@@ -407,11 +490,6 @@ public class HistorialVentasController implements Initializable {
 
     // Métodos para los botones - implementar funcionalidad después
     @FXML
-    private void onVerDetalles() {
-        // Implementar después
-    }
-
-    @FXML
     private void onCambiarEstado() {
         // Implementar después
     }
@@ -440,4 +518,43 @@ public class HistorialVentasController implements Initializable {
     private void onVolver() {
         // Implementar después
     }
+    @FXML
+    private void onVerDetalles() {
+        Venta ventaSeleccionada = tablaVentas.getSelectionModel().getSelectedItem();
+        if (ventaSeleccionada == null) {
+            notificar("Advertencia", "Debe seleccionar una venta para ver sus detalles.", false);
+            return;
+        }
+
+        try {
+            // Filtrar los detalles que pertenecen a esa venta
+            List<DetalleVenta> detallesDeLaVenta = Arrays.stream(detalleVentasDTO)
+                    .filter(dto -> dto.getVentaId() == ventaSeleccionada.getId())
+                    .map(dto -> new DetalleVenta(
+                            dto.getId(),
+                            ventaSeleccionada,
+                            dto.getCantidad(),
+                            dto.getPrecioUnitario(),
+                            buscarProductoPorId(dto.getProductoId())
+                    ))
+                    .toList();
+
+            // Cargar la vista nueva
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/desktop/DetalleVentaView.fxml"));
+            Parent root = loader.load();
+
+            DetalleVentaController controller = loader.getController();
+            controller.setDetalles(detallesDeLaVenta);
+
+            Stage stage = new Stage();
+            stage.setTitle("Detalle de Venta #" + ventaSeleccionada.getId());
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            notificar("Error", "No se pudo abrir la ventana de detalles: " + e.getMessage(), false);
+        }
+    }
+
 }
