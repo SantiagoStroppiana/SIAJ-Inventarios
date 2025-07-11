@@ -11,4 +11,5 @@ public interface OrdenCompraDAO {
     List<OrdenCompraDTO> obtenerTodasLasOrdenCompras();
     OrdenCompra agregarOrdenCompra(OrdenCompra ordenCompra);
     OrdenCompra buscarPorId(int id);
+    void modificarOrdenCompra(OrdenCompra ordenCompra);
 }

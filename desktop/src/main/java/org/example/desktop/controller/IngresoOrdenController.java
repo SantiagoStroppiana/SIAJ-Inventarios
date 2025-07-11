@@ -14,6 +14,7 @@ import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.DetalleOrdenCompraDTO;
 import org.example.desktop.dto.OrdenCompraDTO;
 import org.example.desktop.model.*;
+import org.example.desktop.util.LocalDateTimeAdapter;
 import org.example.desktop.util.VariablesEntorno;
 
 
@@ -24,8 +25,14 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+
+
+
 
 public class IngresoOrdenController {
 
@@ -46,7 +53,13 @@ public class IngresoOrdenController {
 
     // Cliente HTTP y Gson
     private HttpClient httpClient = HttpClient.newHttpClient();
-    private Gson gson = new Gson();
+
+
+
+    private Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+            .create();
+
 
     // Lista para manejar los detalles de la orden
     private List<DetalleOrdenCompraDTO> detallesOrden = new ArrayList<>();
@@ -185,10 +198,6 @@ public class IngresoOrdenController {
                     mostrarAlerta("Error", "No se pudieron cargar los productos");
                     return;
                 }
-
-
-
-
 
 
 
@@ -360,6 +369,70 @@ public class IngresoOrdenController {
         // 1. Actualizar el stock de los productos
         // 2. Marcar la orden como recibida/procesada
         // 3. Registrar el ingreso en el sistema
+
+
+        Entrada entrada = new Entrada();
+        entrada.setFecha(LocalDateTime.now());
+        OrdenCompra ordenCompra = new OrdenCompra();
+        ordenCompra.setId(ordenSeleccionada.getId());
+        entrada.setOrdenCompra(ordenCompra);
+
+
+        ///  ACA VA LA PETICION HTTP
+
+
+        String ordenJson = gson.toJson(entrada);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crear-entrada"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(ordenJson))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200 && response.statusCode() != 201) {
+            System.err.println("Error al crear entrada: " + response.body());
+            notificar("Error", "No se pudo crear la entrada.", false);
+            return;
+        }
+
+        Entrada entradaCreada = gson.fromJson(response.body(), Entrada.class);
+        System.out.println("Creaste la entrada: "+entradaCreada);
+
+
+        boolean detallesOk = true;
+
+        for (ItemIngreso item : itemsIngreso) {
+            if (item.getCantidadIngresada() > 0) {
+                DetalleEntradaDTO detalle = new DetalleEntradaDTO();
+                detalle.setEntradaId(entradaCreada.getId());
+                detalle.setProductoId(item.getDetalle().getProductoId());
+                detalle.setCantidad(item.getCantidadIngresada());
+                detalle.setPrecioUnitario(item.getDetalle().getPrecioUnitario());
+
+                String detalleJson = gson.toJson(detalle);
+                HttpRequest requestDetalle = HttpRequest.newBuilder()
+                        .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crear-detalle-entrada"))
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(detalleJson))
+                        .build();
+
+                HttpResponse<String> responseDetalle = httpClient.send(requestDetalle, HttpResponse.BodyHandlers.ofString());
+
+                if (responseDetalle.statusCode() != 200 && responseDetalle.statusCode() != 201) {
+                    System.err.println("❌ Error al crear detalle de entrada: " + responseDetalle.body());
+                    notificar("Error", "No se pudo crear detalle de entrada para ID: " + item.getDetalle().getProductoId(), false);
+                    detallesOk = false;
+                } else {
+                    System.out.println("✅ Detalle de entrada creado: " + responseDetalle.body());
+                }
+            }
+        }
+
+
+
+
 
         // Por ahora, simulo el proceso exitoso
         boolean ingresoExitoso = true;

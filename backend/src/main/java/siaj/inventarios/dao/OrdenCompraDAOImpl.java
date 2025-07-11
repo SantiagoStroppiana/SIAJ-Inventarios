@@ -1,8 +1,10 @@
 package siaj.inventarios.dao;
 
 import org.hibernate.Session;
+import siaj.inventarios.dto.MensajesResultados;
 import siaj.inventarios.dto.OrdenCompraDTO;
 import siaj.inventarios.model.OrdenCompra;
+import siaj.inventarios.model.Producto;
 import siaj.inventarios.util.HibernateUtil;
 
 import java.time.ZoneId;
@@ -66,5 +68,25 @@ public class OrdenCompraDAOImpl implements OrdenCompraDAO {
         } finally {
             session.close();
         }
+    }
+
+    public void modificarOrdenCompra (OrdenCompra ordenCompra){
+
+        Session session = HibernateUtil.getSession();
+
+        try{
+            session.beginTransaction();
+            session.merge(ordenCompra);
+            session.getTransaction().commit();
+
+
+        }catch (Exception e) {
+
+            session.getTransaction().rollback();
+
+        }finally {
+            session.close();
+        }
+
     }
 }

@@ -10,6 +10,7 @@ public class Entrada {
 
     private OrdenCompra ordenCompra;
 
+
     private LocalDateTime fecha;
 
     public Entrada(int id, OrdenCompra ordenCompra, LocalDateTime fecha) {
@@ -44,5 +45,14 @@ public class Entrada {
 
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
+    }
+
+    @Override
+    public String toString() {
+        return "Entrada{" +
+                "id=" + id +
+                ", ordenCompra=" + ordenCompra +
+                ", fecha=" + fecha +
+                '}';
     }
 }
