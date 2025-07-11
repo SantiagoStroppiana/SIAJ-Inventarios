@@ -1,0 +1,12 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "java -jar app.jar"
+restartPolicyType = "always"
+restartPolicyMaxRetries = 10
+
+[variables]
+JAVA_OPTS = "-Xmx512m -Xms256m"
+PORT = "7000"
