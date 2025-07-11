@@ -107,6 +107,51 @@
         </dependency>
     </dependencies>
 
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            &lt;!&ndash; Compiler Plugin &ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <version>3.11.0</version>-->
+<!--                <configuration>-->
+<!--                    <release>21</release>-->
+<!--                    <source>21</source>-->
+<!--                    <target>21</target>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+
+<!--            &lt;!&ndash; Assembly Plugin (más confiable que shade) &ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-assembly-plugin</artifactId>-->
+<!--                <version>3.6.0</version>-->
+<!--                <configuration>-->
+<!--                    <descriptorRefs>-->
+<!--                        <descriptorRef>jar-with-dependencies</descriptorRef>-->
+<!--                    </descriptorRefs>-->
+<!--                    <archive>-->
+<!--                        <manifest>-->
+<!--                            <mainClass>org.example.Main</mainClass>-->
+<!--                        </manifest>-->
+<!--                    </archive>-->
+<!--                    <finalName>app</finalName>-->
+<!--                    <appendAssemblyId>false</appendAssemblyId>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>make-assembly</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>single</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
+
+
     <build>
         <plugins>
             <!-- Compiler Plugin -->
@@ -121,29 +166,24 @@
                 </configuration>
             </plugin>
 
-            <!-- Assembly Plugin (más confiable que shade) -->
+            <!-- Shade Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.6.0</version>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
                 <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>org.example.Main</mainClass>
-                        </manifest>
-                    </archive>
                     <finalName>app</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>org.example.Main</mainClass>
+                        </transformer>
+                    </transformers>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>shade</goal>
                         </goals>
                     </execution>
                 </executions>
