@@ -1,44 +1,45 @@
-# Multi-stage build optimizado para Railway
+# Build stage
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 
-# Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar solo pom.xml primero (para cache de dependencias)
+# Copy pom.xml
 COPY pom.xml .
-
-# Descargar dependencias (se cachea si pom.xml no cambia)
 RUN mvn dependency:go-offline -B
 
-# Copiar código fuente
+# Copy source code
 COPY src ./src
 
-# Compilar con assembly plugin para generar JAR con dependencias
+# Build with Spring Boot plugin
 RUN mvn clean package -DskipTests -B
 
-# Verificar que el JAR se generó correctamente
-RUN ls -la target/ && echo "Verificando contenido del JAR:" && jar -tf target/app.jar | head -20
+# DEBUGGING: Show all files in target
+RUN echo "=== TODOS LOS ARCHIVOS EN TARGET ===" && ls -la target/
 
-# Imagen final más liviana
+# DEBUGGING: Show JAR size
+RUN echo "=== TAMAÑO DEL JAR ===" && du -h target/app.jar
+
+# DEBUGGING: Verify JAR contains Javalin
+RUN echo "=== VERIFICANDO JAVALIN EN JAR ===" && jar -tf target/app.jar | grep -i javalin || echo "JAVALIN NO ENCONTRADO!"
+
+# DEBUGGING: Show first 100 entries in JAR
+RUN echo "=== PRIMERAS 100 ENTRADAS DEL JAR ===" && jar -tf target/app.jar | head -100
+
+# Runtime stage
 FROM eclipse-temurin:21-jre
-
-# Crear usuario no-root para seguridad
-RUN addgroup --system --gid 1001 appgroup && \
-    adduser --system --uid 1001 --gid 1001 appuser
 
 WORKDIR /app
 
-# Copiar JAR con dependencias
+# Copy the correct JAR
 COPY --from=build /app/target/app.jar app.jar
 
-# Cambiar propietario del archivo
-RUN chown appuser:appgroup app.jar
+# Verify JAR exists and show size
+RUN ls -la app.jar && echo "JAR copiado correctamente"
 
-# Cambiar a usuario no-root
-USER appuser
+# Test if JAR is executable
+RUN java -jar app.jar --help 2>/dev/null || echo "JAR no es ejecutable directamente"
 
-# Exponer puerto (Railway asigna automáticamente)
 EXPOSE 7000
 
-# Comando para ejecutar la aplicación
-CMD ["java", "-Xmx512m", "-Xms256m", "-jar", "app.jar"]
+# Run the application
+CMD ["java", "-jar", "app.jar"]
