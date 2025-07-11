@@ -435,7 +435,6 @@ public class VentaController implements Initializable {
             }
 
             Venta ventaCreada = gson.fromJson(ventaResponse.body(), Venta.class);
-            System.out.println("VENTAA CREADA CARAACK:" + ventaCreada);
             // Paso 2: Enviar los detalles
             for (Node node : cartContent.getChildren()) {
                 if (node instanceof HBox item) {

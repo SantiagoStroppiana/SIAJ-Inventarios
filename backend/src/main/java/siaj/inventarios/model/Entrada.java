@@ -14,6 +14,7 @@ public class Entrada {
     @JoinColumn(name = "orden_compra_id", referencedColumnName = "id")
     private OrdenCompra ordenCompra;
 
+
     @Column(name = "fecha", nullable = false)
     private LocalDateTime fecha;
 

@@ -37,6 +37,7 @@ public class CategoriaController implements Initializable {
     private final Gson gson = new Gson();
     @FXML private TextField txtNombre;
     @FXML private TextField txtDescripcion;
+    @FXML private TextField txtBuscarCategoria;
     @FXML private TableView<Categoria> tablaCategorias;
     @FXML private TableColumn<Producto, String> nombreColumn;
     @FXML private TableColumn<Producto, String> descripcionColumn;
@@ -62,8 +63,21 @@ public class CategoriaController implements Initializable {
         });
 
         mostrarCategorias();
+        txtBuscarCategoria.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (categoriasOriginales == null) return;
+
+            String filtro = newValue.toLowerCase();
+
+            tablaCategorias.getItems().setAll(
+                    java.util.Arrays.stream(categoriasOriginales)
+                            .filter(c -> c.getNombre().toLowerCase().contains(filtro)
+                                    || c.getDescripcion().toLowerCase().contains(filtro))
+                            .toList()
+            );
+        });
 
     }
+    private Categoria[] categoriasOriginales;
     @FXML
     public void mostrarCategorias() {
 
@@ -79,12 +93,12 @@ public class CategoriaController implements Initializable {
             String responseBody = response.body();
             System.out.println(responseBody);
 
-            Categoria[] categorias = gson.fromJson(responseBody, Categoria[].class);
+            categoriasOriginales = gson.fromJson(responseBody, Categoria[].class);
 
             tablaCategorias.getItems().clear();
-            tablaCategorias.getItems().addAll(categorias);
+            tablaCategorias.getItems().addAll(categoriasOriginales);
 
-            for (Categoria c : categorias) {
+            for (Categoria c : categoriasOriginales) {
                 System.out.println("Categoria: " + c.getNombre());
             }
 

@@ -20,6 +20,8 @@ public class OrdenCompra {
 
     private LocalDateTime fechaPago;
 
+    public OrdenCompra() {}
+
     // --- Getters y Setters ---
 
     public int getId() {
@@ -93,6 +95,18 @@ public class OrdenCompra {
         this.total = total;
         this.medioPago = medioPago;
         this.fechaPago = fechaPago;
+    }
+
+    @Override
+    public String toString() {
+        return "OrdenCompra{" +
+                "id=" + id +
+                ", estado=" + estado +
+                ", proveedor=" + proveedor +
+                ", total=" + total +
+                ", medioPago=" + medioPago +
+                ", fechaPago=" + fechaPago +
+                '}';
     }
 }
 

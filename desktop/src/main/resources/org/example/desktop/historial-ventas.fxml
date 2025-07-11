@@ -109,8 +109,6 @@
             </children>
         </HBox>
 
-        <!-- Botón de volver -->
-        <Button fx:id="btnVolver" onAction="#onVolver" layoutX="1450.0" layoutY="20.0" prefHeight="38.0" prefWidth="120.0" styleClass="button-danger" text="← Volver" />
     </children>
 
     <stylesheets>

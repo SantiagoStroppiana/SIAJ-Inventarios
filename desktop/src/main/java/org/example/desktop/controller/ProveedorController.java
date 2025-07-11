@@ -34,6 +34,8 @@ public class ProveedorController implements Initializable {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
+    Proveedor[] proveedoresOriginales;
+
 
     @FXML private TextField txtBuscarProveedor;
     @FXML private TableView<Proveedor> tablaProveedores;
@@ -67,12 +69,12 @@ public class ProveedorController implements Initializable {
             String responseBody = response.body();
             System.out.println(responseBody);
 
-            Proveedor[] proveedores = gson.fromJson(responseBody, Proveedor[].class);
+            proveedoresOriginales = gson.fromJson(responseBody, Proveedor[].class);
 
             tablaProveedores.getItems().clear();
-            tablaProveedores.getItems().addAll(proveedores);
+            tablaProveedores.getItems().addAll(proveedoresOriginales);
 
-            for (Proveedor p : proveedores) {
+            for (Proveedor p : proveedoresOriginales) {
                 System.out.println("Proveedor: " + p.getRazonSocial() + ", Teléfono: " + p.getTelefono());
             }
 
@@ -121,6 +123,20 @@ public class ProveedorController implements Initializable {
             }
         });
         mostrarProveedores();
+        txtBuscarProveedor.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (proveedoresOriginales == null) return;
+
+            String filtro = newValue.toLowerCase();
+
+            tablaProveedores.getItems().setAll(
+                    java.util.Arrays.stream(proveedoresOriginales)
+                            .filter(p -> p.getRazonSocial().toLowerCase().contains(filtro)
+                                    || p.getEmail().toLowerCase().contains(filtro) || p.getDireccion().toLowerCase().contains(filtro))
+                            .toList()
+            );
+        });
+
+
     }
 
 
