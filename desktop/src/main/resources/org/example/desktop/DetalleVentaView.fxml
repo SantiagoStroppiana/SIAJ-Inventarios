@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.desktop.controller.DetalleVentaController">
+
+    <stylesheets>
+        <URL value="@estilos/detalleventa.css"/>
+        <URL value="@estilos/tabla.css"/>
+    </stylesheets>
+
+    <children>
+        <VBox spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10">
+
+            <!-- Título -->
+            <Label fx:id="tituloLabel" text="Detalle de Venta" styleClass="titulo"/>
+
+            <!-- Tabla con detalles -->
+            <TableView fx:id="tablaDetalles" prefHeight="210" maxHeight="400">
+
+            <columns>
+                    <TableColumn fx:id="productoColumn" text="Producto" prefWidth="300"/>
+                    <TableColumn fx:id="cantidadColumn" text="Cantidad" prefWidth="100"/>
+                    <TableColumn fx:id="precioUnitarioColumn" text="Precio Unitario" prefWidth="150"/>
+                </columns>
+            </TableView>
+
+            <!-- Botón de cierre -->
+            <HBox alignment="CENTER_RIGHT">
+                <Button text="Cerrar" onAction="#onCerrar" />
+            </HBox>
+
+        </VBox>
+    </children>
+</AnchorPane>
