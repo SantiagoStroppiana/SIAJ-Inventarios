@@ -1,4 +1,4 @@
-package org.example.desktop.DTO;
+package org.example.desktop.dto;
 
 public class ProductoVentaDTO {
 

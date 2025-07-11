@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SplitMenuButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.model.MensajesResultados;
@@ -20,6 +17,10 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.TimeZone;
 
 public class ProductoDetalleController {
 
@@ -32,10 +33,15 @@ public class ProductoDetalleController {
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
+    @FXML private Label lblProductoNombre;
+    @FXML private Label lblProductoSku;
+    @FXML private Label lblEstadoActual;
+    @FXML private Label lblStockActual;
     @FXML private TextField txtSku;
     @FXML private TextField txtNombre;
     @FXML private TextField txtStock;
     @FXML private TextField txtPrecio;
+    @FXML private TextField txtPrecioCosto;
     @FXML private Button modificar;
     @FXML private Button guardar;
     @FXML private SplitMenuButton menuProveedor;
@@ -54,6 +60,7 @@ public class ProductoDetalleController {
         txtSku.setText(producto.getSku());
         txtNombre.setText(producto.getNombre());
         txtPrecio.setText(String.valueOf(producto.getPrecio()));
+        txtPrecioCosto.setText(String.valueOf(producto.getPrecioCosto()));
         txtStock.setText(String.valueOf(producto.getStock()));
         menuProveedor.setText(producto.getProveedor());
         menuEstado.setText(producto.getEstado() ? "Activo" : "Inactivo");
@@ -64,18 +71,24 @@ public class ProductoDetalleController {
         mostrarProveedores();
         mostrarEstado();
 
+        lblProductoNombre.setText(producto.getNombre());
+        lblProductoSku.setText(producto.getSku());
+        lblEstadoActual.setText(producto.getEstado() ? "Activo" : "Inactivo");
+        lblStockActual.setText(String.valueOf(producto.getStock()));
+
 
         txtStock.setEditable(false);
         txtSku.setEditable(false);
         txtNombre.setEditable(false);
         txtPrecio.setEditable(false);
+        txtPrecioCosto.setEditable(false);
 
         modificar.setOnAction(event -> {habilitarEdicion();});
         guardar.setOnAction(event -> {modificarProducto();});
     }
 
     public void habilitarEdicion() {
-        if (txtSku.isEditable() && txtNombre.isEditable() && txtStock.isEditable() && txtPrecio.isEditable()) {
+        if (txtSku.isEditable() && txtNombre.isEditable() && txtStock.isEditable() && txtPrecio.isEditable() && txtPrecioCosto.isEditable()) {
          /*   txtStock.setEditable(false);
             txtSku.setEditable(false);
             txtNombre.setEditable(false);
@@ -85,6 +98,7 @@ public class ProductoDetalleController {
             txtSku.setEditable(true);
             txtNombre.setEditable(true);
             txtPrecio.setEditable(true);
+            txtPrecioCosto.setEditable(true);
             menuProveedor.setDisable(false);
             menuCategorias.setDisable(false);
             menuEstado.setDisable(false);
@@ -96,6 +110,7 @@ public class ProductoDetalleController {
         txtSku.setEditable(false);
         txtNombre.setEditable(false);
         txtPrecio.setEditable(false);
+        txtPrecioCosto.setEditable(false);
         menuProveedor.setDisable(true);
         menuCategorias.setDisable(true);
         menuEstado.setDisable(true);
@@ -110,6 +125,7 @@ public class ProductoDetalleController {
             String nombre = txtNombre.getText().trim();
             String stockStr = txtStock.getText().trim();
             String precioStr = txtPrecio.getText().trim();
+            String precioCostoStr = txtPrecioCosto.getText().trim();
 
 
             if (sku.isEmpty() || nombre.isEmpty() ||  stockStr.isEmpty() || precioStr.isEmpty()) {
@@ -130,6 +146,7 @@ public class ProductoDetalleController {
                 return;
             }
 
+            BigDecimal precioCosto;
             BigDecimal precio;
             try {
                 double precioDouble = Double.parseDouble(precioStr);
@@ -142,12 +159,34 @@ public class ProductoDetalleController {
                 notificar("Error de formato", "El precio debe ser un número válido.", false);
                 return;
             }
+
+
+            try {
+                double precioCostoDouble = Double.parseDouble(precioCostoStr);
+                if (precioCostoDouble < 0) {
+                    notificar("Precio inválido", "El precio de costo no puede ser negativo.", false);
+                    return;
+                }
+                precioCosto = BigDecimal.valueOf(precioCostoDouble);
+            } catch (NumberFormatException e) {
+                notificar("Error de formato", "El precio de costo debe ser un número válido.", false);
+                return;
+            }
+
+
             Producto producto2 = new Producto();
             producto2.setId(producto.getId());
             producto2.setSku(sku);
             producto2.setNombre(nombre);
             producto2.setStock(stock);
             producto2.setPrecio(precio);
+            producto2.setPrecioCosto(precioCosto);
+
+            LocalDateTime now = LocalDateTime.now();
+            long timestamp = now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            producto2.setFecha_alta(timestamp);
+            System.out.println("PRODUCTO 2:"+producto2);
+            //producto2.setFecha_alta(LocalDateTime.now().toString();
             //producto.setCategoria(producto.getCategoria());
 
             producto2.setActivo(menuEstado.getText().equals("Activo") ? true : false);

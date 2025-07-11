@@ -61,5 +61,13 @@ public class ProveedorServiceImpl implements ProveedorService {
     @Override
     public List<Proveedor> listarProveedores(){return proveedorDAO.listarproveedores();}
 
+    @Override
+    public Proveedor buscarPorId(int id) {
+        Proveedor proveedor = proveedorDAO.buscarPorId(id);
+        if (proveedor == null) {
+            throw new RuntimeException("Proveedor no encontrado con ID: " + id);
+        }
+        return proveedor;
 
+    }
 }

@@ -17,6 +17,11 @@ public class UsuarioDTO {
         this.nombreRol = rol;
     }
 
+    public UsuarioDTO(int id) {
+        this.id = id;
+    }
+
+
     public int getId() {
         return id;
     }

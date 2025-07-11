@@ -2,6 +2,7 @@ package siaj.inventarios.service;
 
 import siaj.inventarios.dao.ProductoDAO;
 import siaj.inventarios.dto.MensajesResultados;
+import siaj.inventarios.model.OrdenCompra;
 import siaj.inventarios.model.Producto;
 
 import java.math.BigDecimal;
@@ -43,7 +44,8 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public MensajesResultados crearProducto (Producto producto) {
         BigDecimal precio = producto.getPrecio();
-        MensajesResultados mr = validaciones(producto.getSku(), producto.getNombre(), producto.getStock(), precio.doubleValue()/*,categoria*/, producto.isActivo(),producto.getProveedorid().getId());
+        BigDecimal precioCosto = producto.getPrecioCosto();
+        MensajesResultados mr = validaciones(producto.getSku(), producto.getNombre(), producto.getStock(), precio.doubleValue(), precioCosto.doubleValue() /*,categoria*/, producto.isActivo(),producto.getProveedorid().getId());
        if (mr.isExito()){
            filtrarCategoria(1);//NO IRIA ACA
            return productoDAO.crearProducto(producto);
@@ -57,7 +59,8 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public MensajesResultados modificarProducto (Producto producto){
         BigDecimal precio = producto.getPrecio();
-        MensajesResultados mr = validacionesModificar(producto.getId(), producto.getSku(), producto.getNombre(), producto.getStock(), precio.doubleValue()/*,categoria*/, producto.isActivo(),producto.getProveedorid().getId());
+        BigDecimal precioCosto = producto.getPrecioCosto();
+        MensajesResultados mr = validacionesModificar(producto.getId(), producto.getSku(), producto.getNombre(), producto.getStock(), precio.doubleValue(), precioCosto.doubleValue()/*,categoria*/, producto.isActivo(),producto.getProveedorid().getId());
         if (mr.isExito()){
             return productoDAO.modificarProducto(producto);
 
@@ -67,7 +70,16 @@ public class ProductoServiceImpl implements ProductoService {
         }
     }
 
-    public MensajesResultados validaciones(String sku, String nombre, int stock, double precio,/* String categoria,*/ boolean estado, Integer proveedorId) {
+    @Override
+    public Producto buscarPorId(int id) {
+        Producto producto = productoDAO.buscarPorId(id);
+        if (producto == null) {
+            throw new RuntimeException("Producto no encontrado con ID: " + id);
+        }
+        return producto;
+    }
+
+    public MensajesResultados validaciones(String sku, String nombre, int stock, double precio, double precioCosto, /* String categoria,*/ boolean estado, Integer proveedorId) {
 
         if (productoDAO.buscarSku(sku)) {
             return new MensajesResultados(false, "Ya existe un producto con ese SKU");
@@ -89,12 +101,16 @@ public class ProductoServiceImpl implements ProductoService {
             return new MensajesResultados(false, "El nombre solo puede contener letras, números y espacios");
         }
 
-        if (stock < 0) {
+        if (stock <= 0) {
             return new MensajesResultados(false, "El stock no puede ser negativo");
         }
 
-        if (precio < 0) {
-            return new MensajesResultados(false, "El precio no puede ser negativo");
+        if (precio <= 0) {
+            return new MensajesResultados(false, "El precio no puede ser menor a cero");
+        }
+
+        if (precioCosto <= 0){
+            return  new MensajesResultados(false, "El precio de costo no puede ser menor a cero");
         }
 /*
         if (categoria == null ||  categoria.trim().isEmpty()) {
@@ -110,7 +126,7 @@ public class ProductoServiceImpl implements ProductoService {
         return new MensajesResultados(true, "Validación exitosa");
     }
 
-    public MensajesResultados validacionesModificar(int id, String sku, String nombre, int stock, double precio,/* String categoria,*/ boolean estado, Integer proveedorId) {
+    public MensajesResultados validacionesModificar(int id, String sku, String nombre, int stock, double precio, double precioCosto,/* String categoria,*/ boolean estado, Integer proveedorId) {
         Producto productoConSku = productoDAO.buscarPorSku(sku);
         if (productoConSku != null && productoConSku.getId() != id) {
             return new MensajesResultados(false, "Ya existe un producto con ese SKU");
@@ -131,12 +147,16 @@ public class ProductoServiceImpl implements ProductoService {
             return new MensajesResultados(false, "El nombre solo puede contener letras, números y espacios");
         }
 
-        if (stock < 0) {
+        if (stock <= 0) {
             return new MensajesResultados(false, "El stock no puede ser negativo");
         }
 
-        if (precio < 0) {
-            return new MensajesResultados(false, "El precio no puede ser negativo");
+        if (precio <= 0) {
+            return new MensajesResultados(false, "El precio no puede ser menor a cero");
+        }
+
+        if (precioCosto <= 0){
+            return  new MensajesResultados(false, "El precio de costo no puede ser menor a cero");
         }
 /*
         if (categoria == null ||  categoria.trim().isEmpty()) {

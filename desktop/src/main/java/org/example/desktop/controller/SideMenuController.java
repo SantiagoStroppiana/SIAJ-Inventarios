@@ -39,6 +39,7 @@ public class SideMenuController {
             btnOrdenCompra.setManaged(false);
             btnVentas.setVisible(true);
             btnVentas.setManaged(true);
+
         }
     }
 
@@ -59,7 +60,7 @@ public class SideMenuController {
     }
 
     public void irReportes(ActionEvent actionEvent){
-        StageManager.loadScene("/org/example/desktop/menu-view.fxml", 1600, 900);
+        StageManager.loadScene("/org/example/desktop/graficos-ventas-view.fxml", 1600, 900);
     }
 
     public void irPuntoVenta(ActionEvent actionEvent){

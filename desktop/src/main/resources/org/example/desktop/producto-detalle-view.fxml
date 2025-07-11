@@ -2,71 +2,100 @@
 
 <?import java.net.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
 <BorderPane prefHeight="620.0" prefWidth="901.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.ProductoDetalleController">
 
-    <!-- Sidebar izquierdo: lo dejamos tal cual -->
-    <left>
-        <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
-    </left>
-
-    <!-- Estilos -->
     <stylesheets>
-        <URL value="@estilos/estilos-globales.css" />
-        <URL value="@estilos/tabla.css" />
+        <URL value="@estilos/detalle.css" />
     </stylesheets>
 
-    <!-- Contenido principal centrado -->
+    <top>
+        <VBox styleClass="detalle-header">
+            <HBox styleClass="detalle-header-content">
+                <Label styleClass="detalle-title" text="Detalles del Producto" />
+                <Region HBox.hgrow="ALWAYS" />
+            </HBox>
+        </VBox>
+    </top>
+
     <center>
-        <AnchorPane prefHeight="594.0" prefWidth="593.0" BorderPane.alignment="CENTER">
-            <children>
+        <ScrollPane fitToWidth="true" styleClass="detalle-scroll-pane">
+            <VBox styleClass="detalle-main-container">
 
-                <!-- Botón: Modificar -->
-                <Button fx:id="modificar" layoutX="349.0" layoutY="469.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Modificar" />
+                <HBox styleClass="detalle-image-section">
+                    <VBox styleClass="detalle-image-container">
+                        <ImageView fx:id="imgProducto" fitHeight="200.0" fitWidth="200.0" preserveRatio="true" styleClass="detalle-product-image">
+                     <image>
+                        <Image url="@images/mage--package-box-fill.png" />
+                     </image></ImageView>
+                    </VBox>
 
-                <!-- Botón: Guardar -->
-                <Button fx:id="guardar" layoutX="471.0" layoutY="469.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Guardar" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+                    <VBox styleClass="detalle-basic-info">
+                        <Label fx:id="lblProductoNombre" styleClass="detalle-product-name" text="Nombre del Producto" />
+                        <Label fx:id="lblProductoSku" styleClass="detalle-product-sku" text="SKU: " />
+                        <HBox styleClass="detalle-status-row">
+                            <Label fx:id="lblEstadoActual" styleClass="detalle-status-badge" text="Activo" />
+                            <Label fx:id="lblStockActual" styleClass="detalle-stock-badge" text="Stock: 0" />
+                        </HBox>
+                    </VBox>
+                </HBox>
 
+                <VBox styleClass="detalle-form-container">
+                    <Label styleClass="detalle-section-title" text="Información del Producto" />
 
-                <!-- Datos del producto, centrados horizontalmente (ajustado con layoutX) -->
-                <TextField fx:id="txtSku" layoutX="330.0" layoutY="83.0" prefHeight="38.0" prefWidth="230.0" promptText="SKU" />
-                <Label layoutX="210.0" layoutY="97.0" text="SKU" textFill="WHITE">
-                    <font><Font name="System Bold" size="12.0" /></font>
-                </Label>
+                    <GridPane styleClass="detalle-form-grid">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="120.0" prefWidth="120.0" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="200.0" />
+                            <ColumnConstraints hgrow="NEVER" minWidth="120.0" prefWidth="120.0" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="200.0" />
+                        </columnConstraints>
 
-                <TextField fx:id="txtNombre" layoutX="330.0" layoutY="129.0" prefHeight="38.0" prefWidth="230.0" promptText="Nombre producto" />
-                <Label layoutX="210.0" layoutY="138.0" text="Nombre Producto" textFill="WHITE">
-                    <font><Font name="System Bold" size="12.0" /></font>
-                </Label>
+                        <Label styleClass="detalle-form-label" text="SKU:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtSku" promptText="Ingrese SKU" styleClass="detalle-form-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <TextField fx:id="txtStock" layoutX="330.0" layoutY="174.0" prefHeight="38.0" prefWidth="230.0" promptText="Stock" />
-                <Label layoutX="210.0" layoutY="186.0" text="Stock" textFill="WHITE">
-                    <font><Font name="System Bold" size="12.0" /></font>
-                </Label>
+                        <Label styleClass="detalle-form-label" text="Nombre:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtNombre" promptText="Nombre del producto" styleClass="detalle-form-field" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
-                <TextField fx:id="txtPrecio" layoutX="330.0" layoutY="220.0" prefHeight="38.0" prefWidth="230.0" promptText="Precio" />
-                <Label layoutX="210.0" layoutY="229.0" text="Precio" textFill="WHITE">
-                    <font><Font name="System Bold" size="12.0" /></font>
-                </Label>
+                        <Label styleClass="detalle-form-label" text="Stock:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtStock" promptText="Cantidad disponible" styleClass="detalle-form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                <SplitMenuButton fx:id="menuCategorias" layoutX="330.0" layoutY="268.0" prefHeight="30.0" prefWidth="230.0" text="Categorias" />
-                <Label layoutX="210.0" layoutY="273.0" text="Categorias" textFill="WHITE">
-                    <font><Font name="System Bold" size="12.0" /></font>
-                </Label>
+                        <Label styleClass="detalle-form-label" text="Precio:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtPrecio" promptText="Precio de venta" styleClass="detalle-form-field" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
-                <SplitMenuButton fx:id="menuEstado" layoutX="330.0" layoutY="309.0" prefHeight="30.0" prefWidth="230.0" text="Estado" />
-                <Label layoutX="210.0" layoutY="314.0" text="Estado" textFill="WHITE">
-                    <font><Font name="System Bold" size="12.0" /></font>
-                </Label>
+                        <Label styleClass="detalle-form-label" text="Precio Costo:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtPrecioCosto" promptText="Precio de costo" styleClass="detalle-form-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                <SplitMenuButton fx:id="menuProveedor" layoutX="330.0" layoutY="350.0" prefHeight="30.0" prefWidth="230.0" text="Proveedor" />
-                <Label layoutX="210.0" layoutY="360.0" text="Proveedor" textFill="WHITE">
-                    <font><Font name="System Bold" size="12.0" /></font>
-                </Label>
+                        <Label styleClass="detalle-form-label" text="Categoría:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <SplitMenuButton fx:id="menuCategorias" styleClass="detalle-form-combo" text="Categorias" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
-            </children>
-        </AnchorPane>
+                        <Label styleClass="detalle-form-label" text="Estado:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                        <SplitMenuButton fx:id="menuEstado" styleClass="detalle-form-combo" text="Estado" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                        <Label styleClass="detalle-form-label" text="Proveedor:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <SplitMenuButton fx:id="menuProveedor" styleClass="detalle-form-combo" text="Proveedor" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <rowConstraints>
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                  </rowConstraints>
+                    </GridPane>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
     </center>
+
+    <bottom>
+        <HBox styleClass="detalle-footer">
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnCancelar" styleClass="detalle-btn-secondary" text="Cancelar" />
+            <Button fx:id="modificar" styleClass="detalle-btn-primary" text="Modificar" />
+            <Button fx:id="guardar" styleClass="detalle-btn-success" text="Guardar" />
+        </HBox>
+    </bottom>
+
 </BorderPane>

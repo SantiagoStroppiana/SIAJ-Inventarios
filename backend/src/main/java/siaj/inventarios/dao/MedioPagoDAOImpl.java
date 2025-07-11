@@ -54,4 +54,15 @@ public class MedioPagoDAOImpl implements MedioPagoDAO {
 
         return mediosPagos;
     }
+
+    @Override
+    public MedioPago buscarPorId(int id) {
+        Session session = HibernateUtil.getSession();
+        try {
+            return session.get(MedioPago.class, id);
+        } finally {
+            session.close();
+        }
+    }
+
 }

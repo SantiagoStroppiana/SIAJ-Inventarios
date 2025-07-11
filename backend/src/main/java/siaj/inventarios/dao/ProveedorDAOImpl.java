@@ -57,7 +57,6 @@ public class ProveedorDAOImpl implements ProveedorDAO{
 
             session.getTransaction().commit();
         } catch (Exception e) {
-            // Siempre conviene loguear o imprimir la traza para debug
             System.err.println("Error al listar proveedores: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Error al listar proveedores", e);
@@ -86,6 +85,16 @@ public class ProveedorDAOImpl implements ProveedorDAO{
             session.close();
         }
         return proveedor;
+    }
+
+    @Override
+    public Proveedor buscarPorId(int id) {
+        Session session = HibernateUtil.getSession();
+        try {
+            return session.get(Proveedor.class, id);
+        } finally {
+            session.close();
+        }
     }
 
 

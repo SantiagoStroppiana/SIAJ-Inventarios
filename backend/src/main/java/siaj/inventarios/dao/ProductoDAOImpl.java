@@ -34,15 +34,7 @@ public class ProductoDAOImpl implements ProductoDAO {
         return productos;
     }
 
-    @Override
-    public Producto obtenerPorId(int id) {
-        Session session = HibernateUtil.getSession();
-        try {
-            return session.get(Producto.class, id);
-        } finally {
-            session.close();
-        }
-    }
+
 
     @Override
     public MensajesResultados crearProducto (Producto producto){
@@ -55,19 +47,15 @@ public class ProductoDAOImpl implements ProductoDAO {
             session.persist(producto);
             session.getTransaction().commit();
             return new MensajesResultados(true, "Producto registrado con exito");
-//            re= "Producto registtrado con exito";
 
         }catch (Exception e) {
 
             session.getTransaction().rollback();
             return new MensajesResultados(false, "Error al crear producto: " + e.getMessage());
-//            re="Error al crear producto: " + e.getMessage();
 
-//            throw new RuntimeException("Erorr al crear producto" + e.getMessage());
         }finally {
             session.close();
         }
-//        return re;
     }
 
 
@@ -111,15 +99,12 @@ public class ProductoDAOImpl implements ProductoDAO {
             session.merge(producto);
             session.getTransaction().commit();
             return new MensajesResultados(true, "Producto Modificado con exito");
-//            re= "Producto editado con exito";
 
         }catch (Exception e) {
 
             session.getTransaction().rollback();
             return new MensajesResultados(false, "Error al modificar producto: " + e.getMessage());
-//            re="Error al editar producto: " + e.getMessage();
 
-//            throw new RuntimeException("Erorr al editar producto" + e.getMessage());
         }finally {
             session.close();
         }
@@ -169,6 +154,16 @@ public class ProductoDAOImpl implements ProductoDAO {
         }
 
         return productos;
+    }
+
+    @Override
+    public Producto buscarPorId(int id) {
+        Session session = HibernateUtil.getSession();
+        try {
+            return session.get(Producto.class, id);
+        } finally {
+            session.close();
+        }
     }
 
 }

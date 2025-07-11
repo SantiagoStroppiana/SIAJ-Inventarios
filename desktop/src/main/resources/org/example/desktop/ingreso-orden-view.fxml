@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+
+<BorderPane prefHeight="680.0" prefWidth="1080.0"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.desktop.controller.IngresoOrdenController"
+            styleClass="pv-root">
+
+
+
+    <center>
+        <VBox spacing="10.0" styleClass="pv-main-container">
+            <padding>
+                <Insets top="10" right="30" bottom="20" left="30"/>
+            </padding>
+
+            <!-- Header -->
+            <HBox spacing="10.0" alignment="CENTER_LEFT" styleClass="pv-header-section">
+                <children>
+                    <Label text="📦 Ingreso por Orden de Compra" styleClass="pv-panel-title">
+                        <font>
+                            <Font name="System Bold" size="24.0" />
+                        </font>
+                    </Label>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Label text="Orden:" styleClass="pv-payment-label"/>
+                    <ComboBox fx:id="ordenCompraComboBox" prefWidth="300"
+                              promptText="Seleccione una orden" styleClass="pv-payment-combobox"/>
+                </children>
+            </HBox>
+
+            <!-- Productos esperados -->
+            <VBox spacing="15.0" VBox.vgrow="ALWAYS">
+                <children>
+                    <Label text="📋 Productos Solicitados" styleClass="pv-panel-title">
+                        <font>
+                            <Font name="System Bold" size="20.0"/>
+                        </font>
+                    </Label>
+
+                    <ScrollPane fitToWidth="true" prefHeight="350" styleClass="pv-cart-scroll">
+                        <content>
+                            <VBox fx:id="productosIngresadosContainer" spacing="10.0"
+                                  styleClass="pv-cart-content">
+                                <!-- Aquí se cargan los productos con campos editables -->
+                                <!-- Cada ítem tendrá: nombre producto, cantidad solicitada, cantidad ingresada -->
+                            </VBox>
+                        </content>
+                    </ScrollPane>
+                </children>
+            </VBox>
+
+            <!-- Notas y botón de confirmar -->
+            <VBox spacing="15.0" styleClass="pv-cart-footer">
+                <children>
+                    <Label text="📝 Notas del Ingreso" styleClass="pv-payment-label"/>
+                    <TextArea fx:id="notaIngresoTextArea" promptText="Observaciones del ingreso"
+                              wrapText="true" prefRowCount="3"
+                              styleClass="pv-notes-textarea"/>
+
+                    <HBox alignment="CENTER_RIGHT" spacing="20.0">
+                        <Button fx:id="btnConfirmarIngreso" text="✅ Confirmar Ingreso"
+                                styleClass="pv-action-btn, pv-process-btn"
+                                prefHeight="45.0" />
+                        <Button fx:id="btnCancelar" text="❌ Cancelar"
+                                styleClass="pv-action-btn, pv-clear-btn"
+                                prefHeight="35.0" />
+                    </HBox>
+                </children>
+            </VBox>
+        </VBox>
+    </center>
+
+    <stylesheets>
+        <URL value="@estilos/estilos-globales.css" />
+        <URL value="@estilos/punto-venta.css" />
+    </stylesheets>
+</BorderPane>

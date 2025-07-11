@@ -46,7 +46,6 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
     }*/
 
 
-
     @Override
     public MensajesResultados registrarDetalle(DetalleVenta detalleVenta) {
         Session session = HibernateUtil.getSession();
@@ -57,22 +56,19 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
             Producto producto = session.get(Producto.class, detalleVenta.getProducto().getId());
 
             if (venta == null || producto == null) {
-                throw new RuntimeException("Venta o producto no encontrado");
+                return new MensajesResultados(false, "No se puede registrar la venta porque no hay producto seleccionado");
             }
 
-            // Asignar instancias persistidas
             detalleVenta.setVenta(venta);
             detalleVenta.setProducto(producto);
 
-            // Descontar stock
             int stockNuevo = producto.getStock() - detalleVenta.getCantidad();
-            if (stockNuevo < 0) {
-                throw new RuntimeException("Stock insuficiente");
+            if (stockNuevo <= 0) {
+                return new MensajesResultados(false, "El producto no tiene el suficiente stock");
             }
             producto.setStock(stockNuevo);
             session.merge(producto);
 
-            // Guardar el detalle
             session.persist(detalleVenta);
 
             session.getTransaction().commit();
@@ -80,15 +76,11 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
 
         } catch (Exception e) {
             session.getTransaction().rollback();
-            throw new RuntimeException("Error en registrarConStock: " + e.getMessage());
+            return new MensajesResultados(false, e.getMessage());
         } finally {
             session.close();
         }
     }
-
-
-
-
 
     @Override
     public List <DetalleVentaDTO> obtenerDetalles (){

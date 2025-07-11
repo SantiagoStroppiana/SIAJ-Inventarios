@@ -15,6 +15,5 @@ public interface ProductoDAO {
     List<Producto> filtrarProveedor(int id);
     List<Producto> filtrarCategoria(int idCategoria);
     Producto buscarPorSku(String sku);
-    Producto obtenerPorId(int id);
-
+    Producto buscarPorId(int id);
 }

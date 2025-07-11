@@ -23,4 +23,14 @@ public class MedioPagoServiceImpl implements MedioPagoService {
     public MensajesResultados crearMedioPago(MedioPago medioPago) {
         return medioPagoDAO.crearMedioPago(medioPago);
     }
+
+    @Override
+    public MedioPago buscarPorId(int id) {
+        MedioPago medioPago = medioPagoDAO.buscarPorId(id);
+        if (medioPago == null) {
+            throw new RuntimeException("Medio de pago no encontrado con ID: " + id);
+        }
+        return medioPago;
+    }
+
 }

@@ -34,6 +34,8 @@ public class ProveedorController implements Initializable {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
+    Proveedor[] proveedoresOriginales;
+
 
     @FXML private TextField txtBuscarProveedor;
     @FXML private TableView<Proveedor> tablaProveedores;
@@ -42,6 +44,7 @@ public class ProveedorController implements Initializable {
     @FXML private TableColumn<Proveedor, Integer> telefonoColumn;
     @FXML private TableColumn<Proveedor, String> direccionColumn;
     @FXML private TableColumn<Proveedor, Boolean> activoColumn;
+    @FXML private TableColumn<Proveedor, String> cuitColumn;
     @FXML private TableColumn<Proveedor, Date> fecha_altaColumn;
     @FXML private TableColumn<Proveedor, String> emailColumn;
 
@@ -66,12 +69,12 @@ public class ProveedorController implements Initializable {
             String responseBody = response.body();
             System.out.println(responseBody);
 
-            Proveedor[] proveedores = gson.fromJson(responseBody, Proveedor[].class);
+            proveedoresOriginales = gson.fromJson(responseBody, Proveedor[].class);
 
             tablaProveedores.getItems().clear();
-            tablaProveedores.getItems().addAll(proveedores);
+            tablaProveedores.getItems().addAll(proveedoresOriginales);
 
-            for (Proveedor p : proveedores) {
+            for (Proveedor p : proveedoresOriginales) {
                 System.out.println("Proveedor: " + p.getRazonSocial() + ", Teléfono: " + p.getTelefono());
             }
 
@@ -94,6 +97,7 @@ public class ProveedorController implements Initializable {
         razonSocialColumn.setCellValueFactory(new PropertyValueFactory<>("razonSocial"));
         telefonoColumn.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         direccionColumn.setCellValueFactory(new PropertyValueFactory<>("direccion"));
+        cuitColumn.setCellValueFactory(new PropertyValueFactory<>("cuit"));
         activoColumn.setCellValueFactory(new PropertyValueFactory<>("activo"));
         //fecha_altaColumn.setCellValueFactory(new PropertyValueFactory<>("fecha_alta"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -119,6 +123,20 @@ public class ProveedorController implements Initializable {
             }
         });
         mostrarProveedores();
+        txtBuscarProveedor.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (proveedoresOriginales == null) return;
+
+            String filtro = newValue.toLowerCase();
+
+            tablaProveedores.getItems().setAll(
+                    java.util.Arrays.stream(proveedoresOriginales)
+                            .filter(p -> p.getRazonSocial().toLowerCase().contains(filtro)
+                                    || p.getEmail().toLowerCase().contains(filtro) || p.getDireccion().toLowerCase().contains(filtro))
+                            .toList()
+            );
+        });
+
+
     }
 
 
@@ -143,6 +161,7 @@ public class ProveedorController implements Initializable {
     @FXML private TextField txtRazonSocial;
     @FXML private TextField txtTelefono;
     @FXML private TextField txtDireccion;
+    @FXML private TextField txtCUIT;
     @FXML private TextField txtActivo;
     @FXML private TextField txtFecha_Alta;
     @FXML private TextField txtId;
@@ -212,6 +231,7 @@ public class ProveedorController implements Initializable {
             String telefono = txtTelefono.getText().trim();
             String email = txtEmail.getText().trim();
             String direccion = txtDireccion.getText().trim();
+            String cuit = txtCUIT.getText().trim();
             boolean activo = true;
             //String fecha_alta = txtFecha_Alta.getText().trim();
 
@@ -257,6 +277,7 @@ public class ProveedorController implements Initializable {
 
             proveedor.setDireccion(direccion);
 
+            proveedor.setCuit(cuit);
             proveedor.setActivo(true);
 
             proveedor.setEmail(email);

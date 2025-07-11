@@ -19,7 +19,10 @@ public class BackendServer {
         configurarVentas(app);
         configurarDetallesVentas(app);
         configurarMedioPagos(app);
-
+        configurarOrdenCompra(app);
+        configurarDetalleOrdenCompra(app);
+        configurarEntrada(app);
+        configurarDetalleEntrada(app);
 
     }
 
@@ -71,6 +74,35 @@ public class BackendServer {
         MedioPagoService medioPagoService = new MedioPagoServiceImpl(medioPagoDAO);
         MedioPagoController medioPagoController = new MedioPagoController(medioPagoService);
         new RutasMedioPago(medioPagoController).rutaMedioPagos(app);
+    }
+
+
+    public static void configurarOrdenCompra(Javalin app) {
+        OrdenCompraDAO ordenCompraDAO = new OrdenCompraDAOImpl();
+        OrdenCompraService ordenCompraService = new OrdenCompraServiceImpl(ordenCompraDAO);
+        OrdenCompraController ordenCompraController = new OrdenCompraController(ordenCompraService);
+        new RutasOrdenCompra(ordenCompraController).rutaOrdenCompra(app);
+    }
+
+    public static void configurarDetalleOrdenCompra(Javalin app) {
+        DetalleOrdenCompraDAO detalleOrdenCompraDAO = new DetalleOrdenCompraDAOImpl();
+        DetalleOrdenCompraService detalleOrdenCompraService = new DetalleOrdenCompraServiceImpl(detalleOrdenCompraDAO);
+        DetalleOrdenCompraController detalleOrdenCompraController = new DetalleOrdenCompraController(detalleOrdenCompraService);
+        new RutasDetalleOrdenCompra(detalleOrdenCompraController).rutaDetalleOrdenCompra(app);
+    }
+
+    public static void configurarEntrada(Javalin app) {
+        EntradaDAO entradaDAO = new EntradaDAOImpl();
+        EntradaService entradaService = new EntradaServiceImpl(entradaDAO);
+        EntradaController entradaController = new EntradaController(entradaService);
+        new RutasEntrada(entradaController).rutaEntradas(app);
+    }
+
+    public static void configurarDetalleEntrada(Javalin app) {
+        DetalleEntradaDAO detalleEntradaDAO = new DetalleEntradaDAOImpl();
+        DetalleEntradaService detalleEntradaService = new DetalleEntradaServiceImpl(detalleEntradaDAO);
+        DetalleEntradaController detalleEntradaController = new DetalleEntradaController(detalleEntradaService);
+        new RutaDetalleEntrada(detalleEntradaController).rutaDetalleEntrada(app);
     }
 
 }

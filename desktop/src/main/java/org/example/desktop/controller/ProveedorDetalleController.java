@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SplitMenuButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.model.MensajesResultados;
@@ -36,16 +33,17 @@ public class ProveedorDetalleController {
     @FXML private TextField txtDireccion;
     @FXML private TextField txtTelefono;
     @FXML private TextField txtEmail;
+    @FXML private TextField txtCUIT;
     @FXML private Button modificar;
     @FXML private Button guardar;
     @FXML private SplitMenuButton menuEstado;
+    @FXML private Label lblProveedorNombre;
+    @FXML private Label lblProveedorCuit;
+    @FXML private Label lblEstadoActual;
     private Proveedor proveedorSeleccionado = null;
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
     private Boolean estadoSeleccionado = null;
-
-
-
 
     public void cargarProveedor() {
 
@@ -54,10 +52,10 @@ public class ProveedorDetalleController {
         txtDireccion.setText(proveedor.getDireccion());
         txtTelefono.setText(proveedor.getTelefono());
         txtEmail.setText(proveedor.getEmail());
+        txtCUIT.setText(proveedor.getCuit());
         menuEstado.setText(proveedor.getEstado() ? "Activo" : "Inactivo");
 
 
-        // TextFields
         txtRazonSocial.setEditable(false);
         txtRazonSocial.setDisable(true);
         txtRazonSocial.setMouseTransparent(true);
@@ -78,11 +76,18 @@ public class ProveedorDetalleController {
         txtEmail.setMouseTransparent(true);
         txtEmail.setFocusTraversable(false);
 
-        // SplitMenuButton
+        txtCUIT.setEditable(false);
+        txtCUIT.setDisable(true);
+        txtCUIT.setMouseTransparent(true);
+        txtCUIT.setFocusTraversable(false);
+
         menuEstado.setDisable(true);
         menuEstado.setMouseTransparent(true);
         menuEstado.setFocusTraversable(false);
 
+        lblProveedorNombre.setText(proveedor.getRazonSocial());
+        lblProveedorCuit.setText(proveedor.getCuit());
+        lblEstadoActual.setText(proveedor.getEstado() ? "Activo" : "Inactivo");
 
         mostrarProveedores();
         mostrarEstado();
@@ -120,6 +125,11 @@ public class ProveedorDetalleController {
             txtEmail.setMouseTransparent(false);
             txtEmail.setFocusTraversable(true);
 
+            txtCUIT.setEditable(true);
+            txtCUIT.setDisable(false);
+            txtCUIT.setMouseTransparent(false);
+            txtCUIT.setFocusTraversable(true);
+
 // SplitMenuButton
             menuEstado.setDisable(false);
             menuEstado.setMouseTransparent(false);
@@ -150,6 +160,11 @@ public class ProveedorDetalleController {
         txtEmail.setMouseTransparent(true);
         txtEmail.setFocusTraversable(false);
 
+        txtCUIT.setEditable(false);
+        txtCUIT.setDisable(true);
+        txtCUIT.setMouseTransparent(true);
+        txtCUIT.setFocusTraversable(false);
+
 // SplitMenuButton
         menuEstado.setDisable(true);
         menuEstado.setMouseTransparent(true);
@@ -166,9 +181,10 @@ public class ProveedorDetalleController {
             String direccion = txtDireccion.getText().trim();
             String telefono = txtTelefono.getText().trim();
             String email = txtEmail.getText().trim();
+            String cuit = txtCUIT.getText().trim();
 
 
-            if (razonSocial.isEmpty() || direccion.isEmpty() ||  telefono.isEmpty() || email.isEmpty()) {
+            if (razonSocial.isEmpty() || direccion.isEmpty() ||  telefono.isEmpty() || email.isEmpty() || cuit.isEmpty()) {
                 notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
                 return;
             }
@@ -180,9 +196,9 @@ public class ProveedorDetalleController {
             proveedor2.setDireccion(direccion);
             proveedor2.setTelefono(telefono);
             proveedor2.setEmail(email);
+            proveedor2.setCuit(cuit);
 
             proveedor2.setActivo(menuEstado.getText().equals("Activo") ? true : false);
-
 
             String json = gson.toJson(proveedor2);
 

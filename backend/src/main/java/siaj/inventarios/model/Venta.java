@@ -1,6 +1,8 @@
 package siaj.inventarios.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import siaj.inventarios.dto.UsuarioDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -44,6 +46,12 @@ import java.util.Date;
         @ManyToOne
         @JoinColumn(name = "medio_pago_id", nullable = false)
         private MedioPago medioPago;
+
+
+
+        @Transient
+        @JsonProperty("usuarioDTO")
+        private UsuarioDTO usuarioDTO;
 
         public int getId() {
             return id;
@@ -101,6 +109,16 @@ import java.util.Date;
             this.usuario = usuario;
             this.medioPago = medioPago;
         }
+
+        public Venta(int id, BigDecimal total, EstadoVenta estado, LocalDateTime fechaPago, UsuarioDTO usuarioDTO, MedioPago medioPago) {
+            this.id = id;
+            this.total = total;
+            this.estado = estado;
+            this.fechaPago = fechaPago;
+            this.usuarioDTO = usuarioDTO;
+            this.medioPago = medioPago;
+        }
+
 
         @Override
         public String toString() {

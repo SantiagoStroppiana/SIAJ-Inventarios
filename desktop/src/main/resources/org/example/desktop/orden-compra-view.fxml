@@ -1,105 +1,208 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
-<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import java.net.URL?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="800.0" prefWidth="1400.0"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.desktop.controller.OrdenCompraController"
+            styleClass="pv-root">
+
     <left>
         <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
     </left>
 
     <center>
-        <VBox spacing="20" styleClass="main-content">
+        <VBox styleClass="pv-main-container" spacing="20.0">
             <padding>
-                <Insets bottom="30" left="40" right="40" top="30" />
+                <Insets bottom="20" left="30" right="30" top="20" />
             </padding>
 
-            <HBox alignment="CENTER_LEFT" spacing="15">
-                <Text style="-fx-font-size: 24px;" text="📋" />
-                <Text styleClass="page-title" text="Formulario Orden de Compra">
-                    <font>
-                        <Font name="System Bold" size="24.0" />
-                    </font>
-                </Text>
-            </HBox>
-
-            <HBox alignment="CENTER_LEFT" spacing="30">
-                <VBox spacing="8" HBox.hgrow="ALWAYS">
-                    <Label styleClass="field-label" text="Proveedor">
+            <!-- Header con título y controles principales -->
+            <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="pv-header-section">
+                <children>
+                    <Label text="📋 Orden de Compra" styleClass="pv-panel-title">
                         <font>
-                            <Font name="System Bold" size="14.0" />
+                            <Font name="System Bold" size="24.0" />
                         </font>
                     </Label>
-                    <ComboBox fx:id="supplierComboBox" prefWidth="300" promptText="Seleccione un proveedor" styleClass="custom-combo-box" />
-                </VBox>
+                    <Pane HBox.hgrow="SOMETIMES"/>
 
-                <VBox spacing="8">
-                    <Label styleClass="field-label" text="Fecha orden">
-                        <font>
-                            <Font name="System Bold" size="14.0" />
-                        </font>
-                    </Label>
-                    <DatePicker fx:id="orderDatePicker" prefWidth="200" styleClass="custom-date-picker" />
-                </VBox>
-            </HBox>
-
-            <VBox spacing="15" VBox.vgrow="ALWAYS">
-                <HBox alignment="CENTER_LEFT" spacing="15">
-                    <Label styleClass="section-title" text="Items">
-                        <font>
-                            <Font name="System Bold" size="18.0" />
-                        </font>
-                    </Label>
-                    <Region HBox.hgrow="ALWAYS" />
-                    <Button fx:id="addItemButton" styleClass="add-button" text="+ Agregar Item" />
-                </HBox>
-
-                <VBox styleClass="items-container" VBox.vgrow="ALWAYS">
-                    <padding>
-                        <Insets bottom="20" left="20" right="20" top="20" />
-                    </padding>
-
-                    <VBox fx:id="emptyStateContainer" alignment="CENTER" spacing="10" VBox.vgrow="ALWAYS">
-                        <Text styleClass="empty-state-text" text="No hay items agregados">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Text>
+                    <!-- Controles de filtrado -->
+                    <VBox spacing="5.0" alignment="CENTER_LEFT">
+                        <children>
+                            <Label text="Proveedor:" styleClass="pv-payment-label" />
+                            <ComboBox fx:id="supplierComboBox" prefWidth="250"
+                                      promptText="Seleccione un proveedor"
+                                      styleClass="pv-payment-combobox" />
+                        </children>
                     </VBox>
 
-                    <TableView fx:id="itemsTableView" managed="false" visible="false" VBox.vgrow="ALWAYS">
-                        <columns>
-                            <TableColumn fx:id="productColumn" prefWidth="200.0" text="Product" />
-                            <TableColumn fx:id="quantityColumn" prefWidth="100.0" text="Quantity" />
-                            <TableColumn fx:id="unitPriceColumn" prefWidth="120.0" text="Unit Price" />
-                            <TableColumn fx:id="totalColumn" prefWidth="120.0" text="Total" />
-                            <TableColumn fx:id="actionsColumn" prefWidth="100.0" text="Actions" />
-                        </columns>
-                    </TableView>
-                </VBox>
-            </VBox>
+                    <VBox spacing="5.0" alignment="CENTER_LEFT">
+                        <children>
+                            <Label text="Fecha:" styleClass="pv-payment-label" />
+                            <DatePicker fx:id="orderDatePicker" prefWidth="150"
+                                        styleClass="pv-payment-combobox" />
+                        </children>
+                    </VBox>
+                </children>
+            </HBox>
 
-            <VBox spacing="8">
-                <Label styleClass="field-label" text="Notas">
-                    <font>
-                        <Font name="System Bold" size="14.0" />
-                    </font>
-                </Label>
-                <TextArea fx:id="notesTextArea" prefRowCount="3" promptText="Agregue instrucciones a su proveedor" styleClass="custom-text-area" wrapText="true" />
-            </VBox>
+            <!-- Contenedor principal con productos y orden -->
+            <HBox styleClass="pv-main-container" spacing="30.0" VBox.vgrow="ALWAYS">
+                <children>
 
-            <!-- Bottom Actions -->
-            <HBox alignment="CENTER_RIGHT" spacing="15">
-                <Button fx:id="clearAllButton" styleClass="secondary-button" text="Limpiar Items" />
-                <Button fx:id="generateOrderButton" disable="true" styleClass="primary-button" text="Generar Orden Compra" />
+                    <!-- Panel de productos/catálogo -->
+                    <VBox styleClass="pv-product-panel" prefWidth="800.0">
+                        <children>
+
+                            <!-- Título del catálogo -->
+                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                <children>
+                                    <Label text="📦 Catálogo de Productos" styleClass="pv-panel-title">
+                                        <font>
+                                            <Font name="System Bold" size="20.0" />
+                                        </font>
+                                    </Label>
+                                    <Pane HBox.hgrow="ALWAYS"/>
+                                    <Button text="Actualizar Catálogo" styleClass="button" fx:id="btnRefreshCatalog"/>
+                                </children>
+                            </HBox>
+
+                            <!-- Scroll con el catálogo de productos -->
+                            <ScrollPane fitToWidth="true" styleClass="pv-products-scroll" prefHeight="600.0">
+                                <content>
+                                    <VBox fx:id="productsContainer" spacing="10.0" styleClass="pv-products-grid">
+                                        <!-- Estado vacío inicial -->
+                                        <VBox fx:id="emptyProductsState" alignment="CENTER" spacing="15.0"
+                                              prefHeight="400.0" styleClass="pv-empty-state">
+                                            <children>
+                                                <Label text="📦" styleClass="pv-empty-icon">
+                                                    <font>
+                                                        <Font size="48.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Seleccione un proveedor para ver productos"
+                                                       styleClass="pv-empty-text">
+                                                    <font>
+                                                        <Font size="16.0" />
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Aquí el controlador cargará dinámicamente los productos -->
+                                        <GridPane fx:id="productGrid" hgap="20.0" vgap="20.0"
+                                                  styleClass="pv-products-grid" managed="false" visible="false">
+                                        </GridPane>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+
+                        </children>
+                    </VBox>
+
+                    <!-- Panel de la orden -->
+                    <VBox styleClass="pv-cart-panel" prefWidth="600.0">
+                        <children>
+                            <Label fx:id="orderTitleLabel" text="📝 Items de la Orden (0)" styleClass="pv-panel-title">
+                                <font>
+                                    <Font name="System Bold" size="20.0" />
+                                </font>
+                            </Label>
+
+                            <!-- Scroll con los items de la orden -->
+                            <ScrollPane fx:id="orderScrollPane" fitToWidth="true" styleClass="pv-cart-scroll"
+                                        prefHeight="400.0">
+                                <content>
+                                    <VBox fx:id="orderContent" spacing="10.0" styleClass="pv-cart-content">
+                                        <!-- Estado vacío inicial -->
+                                        <VBox fx:id="emptyOrderState" alignment="CENTER" spacing="15.0"
+                                              prefHeight="300.0" styleClass="pv-empty-state">
+                                            <children>
+                                                <Label text="📝" styleClass="pv-empty-icon">
+                                                    <font>
+                                                        <Font size="48.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="No hay items en la orden" styleClass="pv-empty-text">
+                                                    <font>
+                                                        <Font size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="Agregue productos del catálogo" styleClass="pv-empty-subtitle">
+                                                    <font>
+                                                        <Font size="14.0" />
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </VBox>
+                                        <!-- Aquí el controlador cargará los ítems de la orden -->
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+
+                            <!-- Footer de la orden -->
+                            <VBox spacing="15.0" styleClass="pv-cart-footer">
+                                <children>
+                                    <Separator styleClass="pv-separator" />
+
+                                    <!-- Total -->
+                                    <HBox alignment="CENTER_RIGHT" spacing="15.0" styleClass="pv-total-section">
+                                        <children>
+                                            <Label text="Total Orden:" styleClass="pv-total-label">
+                                                <font>
+                                                    <Font name="System Bold" size="18.0" />
+                                                </font>
+                                            </Label>
+                                            <Label fx:id="totalLabel" text="0.00" styleClass="pv-total-amount">
+                                                <font>
+                                                    <Font name="System Bold" size="22.0" />
+                                                </font>
+                                            </Label>
+                                        </children>
+                                    </HBox>
+
+                                    <!-- Notas -->
+                                    <VBox spacing="6.0" styleClass="pv-payment-container">
+                                        <children>
+                                            <Label text="📝 Notas para el Proveedor" styleClass="pv-payment-label" />
+                                            <TextArea fx:id="notesTextArea" prefRowCount="3"
+                                                      promptText="Agregue instrucciones especiales para el proveedor"
+                                                      styleClass="pv-notes-textarea" wrapText="true" />
+                                        </children>
+                                    </VBox>
+
+                                    <!-- Botones de acción -->
+                                    <VBox spacing="10.0" styleClass="pv-action-buttons">
+                                        <children>
+                                            <Button fx:id="btnGenerateOrder" text="📋 Generar Orden de Compra"
+                                                    styleClass="pv-action-btn, pv-process-btn"
+                                                    prefHeight="45.0" disable="true" />
+                                            <Button fx:id="btnClearOrder" text="🗑️ Limpiar Orden"
+                                                    styleClass="pv-action-btn, pv-clear-btn"
+                                                    prefHeight="35.0" />
+                                        </children>
+                                    </VBox>
+                                </children>
+                            </VBox>
+                        </children>
+                    </VBox>
+
+                </children>
             </HBox>
         </VBox>
     </center>
 
-<!--    <stylesheets>-->
-<!--        <URL value="@styles/purchase-order.css" />-->
-<!--    </stylesheets>-->
+    <stylesheets>
+        <URL value="@estilos/estilos-globales.css" />
+        <URL value="@estilos/punto-venta.css" />
+    </stylesheets>
 </BorderPane>

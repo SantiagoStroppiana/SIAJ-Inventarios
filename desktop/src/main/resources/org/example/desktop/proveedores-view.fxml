@@ -1,108 +1,148 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import java.net.URL?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.ProveedorController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="main-background" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.ProveedorController">
 
     <left>
         <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
     </left>
 
-    <right>
-        <AnchorPane prefHeight="800.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+    <center>
+        <AnchorPane prefHeight="800.0" prefWidth="380.0" BorderPane.alignment="CENTER">
             <children>
-                <TextField fx:id="txtBuscarProveedor" layoutX="10.0" layoutY="14.0" prefHeight="35.0" prefWidth="380.0" promptText="Buscar Proveedor..." styleClass="search-field" />
-                <TableView fx:id="tablaProveedores" layoutX="10.0" layoutY="66.0" prefHeight="720.0" prefWidth="880.0" styleClass="data-table">
+                <Label layoutX="14.0" layoutY="20.0" styleClass="crud-title" text="DATOS DEL PROVEEDOR">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Label>
+
+                <VBox layoutX="8.0" layoutY="60.0" prefWidth="350.0" spacing="8.0">
+                    <children>
+                        <VBox spacing="3.0">
+                            <children>
+                                <Label styleClass="crud-label" text="Razón Social">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Label>
+                                <TextField fx:id="txtRazonSocial" prefHeight="30.0" prefWidth="330.0" promptText="Razón social" styleClass="crud-text-field" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="3.0">
+                            <children>
+                                <Label styleClass="crud-label" text="CUIT">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Label>
+                                <TextField fx:id="txtCUIT" prefHeight="30.0" prefWidth="330.0" promptText="CUIT" styleClass="crud-text-field" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="3.0">
+                            <children>
+                                <Label styleClass="crud-label" text="Dirección">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Label>
+                                <TextField fx:id="txtDireccion" prefHeight="30.0" prefWidth="330.0" promptText="Dirección" styleClass="crud-text-field" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="3.0">
+                            <children>
+                                <Label styleClass="crud-label" text="Teléfono">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Label>
+                                <TextField fx:id="txtTelefono" prefHeight="30.0" prefWidth="330.0" promptText="Teléfono" styleClass="crud-text-field" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="3.0">
+                            <children>
+                                <Label styleClass="crud-label" text="Email">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Label>
+                                <TextField fx:id="txtEmail" prefHeight="30.0" prefWidth="330.0" promptText="Email" styleClass="crud-text-field" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="3.0">
+                            <children>
+                                <Label styleClass="crud-label" text="Estado">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Label>
+                                <ComboBox fx:id="menuEstado" prefHeight="30.0" prefWidth="353.0" promptText="Seleccione estado" styleClass="crud-combo">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Activo" />
+                                            <String fx:value="Inactivo" />
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <VBox layoutX="14.0" layoutY="702.0" prefWidth="350.0" spacing="8.0">
+                    <children>
+                        <HBox spacing="10.0">
+                            <children>
+                                <Button fx:id="agregar" prefHeight="38.0" prefWidth="177.0" styleClass="crud-button-primary" text="Agregar" />
+                                <Button fx:id="ver" prefHeight="38.0" prefWidth="181.0" styleClass="crud-button-modify" text="Modificar" />
+                            </children>
+                        </HBox>
+
+                        <HBox spacing="10.0">
+                            <children>
+                                <Button fx:id="actualizar" prefHeight="38.0" prefWidth="177.0" styleClass="crud-button-secondary" text="Actualizar" />
+                                <Button fx:id="desactivar" prefHeight="38.0" prefWidth="181.0" styleClass="crud-button-danger" text="Desactivar" />
+                            </children>
+                        </HBox>
+
+                        <HBox alignment="CENTER" spacing="10.0" />
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+    </center>
+
+    <right>
+        <AnchorPane prefHeight="900.0" prefWidth="1020.0" BorderPane.alignment="CENTER">
+            <children>
+                <TextField fx:id="txtBuscarProveedor" layoutX="14.0" layoutY="14.0" prefHeight="39.0" prefWidth="349.0" promptText="Buscar Proveedor..." styleClass="crud-text-field" />
+
+                <TableView fx:id="tablaProveedores" layoutX="10.0" layoutY="66.0" prefHeight="798.0" prefWidth="990.0" styleClass="tabla">
                     <columns>
                         <TableColumn fx:id="razonSocialColumn" prefWidth="220.0" text="RAZÓN SOCIAL" />
+                        <TableColumn fx:id="cuitColumn" prefWidth="140.0" text="CUIT" />
+                        <TableColumn fx:id="direccionColumn" prefWidth="210.0" text="DIRECCIÓN" />
                         <TableColumn fx:id="telefonoColumn" prefWidth="120.0" text="TELÉFONO" />
-                        <TableColumn fx:id="direccionColumn" prefWidth="280.0" text="DIRECCIÓN" />
-                        <TableColumn fx:id="activoColumn" prefWidth="100.0" text="ACTIVO" />
-                        <TableColumn fx:id="emailColumn" prefWidth="160.0" text="EMAIL" />
+                        <TableColumn fx:id="emailColumn" prefWidth="200.0" text="EMAIL" />
+                        <TableColumn fx:id="activoColumn" prefWidth="100.0" text="ESTADO" />
                     </columns>
                 </TableView>
             </children>
         </AnchorPane>
     </right>
 
-    <center>
-        <AnchorPane prefHeight="200.0" prefWidth="350.0" styleClass="form-container" BorderPane.alignment="CENTER">
-            <children>
-                <!-- Formulario con orden de tabulación correcto -->
-                <Label layoutX="20.0" layoutY="35.0" styleClass="form-title" text="DATOS DEL PROVEEDOR">
-                    <font>
-                        <Font name="System Bold" size="16.0" />
-                    </font>
-                </Label>
-
-                <!-- Campo 1: Razón Social -->
-                <Label layoutX="20.0" layoutY="80.0" styleClass="field-label" text="Razón Social">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                </Label>
-                <TextField fx:id="txtRazonSocial" layoutX="20.0" layoutY="100.0" prefHeight="39.0" prefWidth="360.0" promptText="Ingrese la razón social" />
-
-                <!-- Campo 2: Dirección -->
-                <Label layoutX="20.0" layoutY="150.0" styleClass="field-label" text="Dirección">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                </Label>
-                <TextField fx:id="txtDireccion" layoutX="20.0" layoutY="170.0" prefHeight="39.0" prefWidth="360.0" promptText="Ingrese la dirección" />
-
-                <!-- Campo 3: Teléfono -->
-                <Label layoutX="20.0" layoutY="220.0" styleClass="field-label" text="Teléfono">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                </Label>
-                <TextField fx:id="txtTelefono" layoutX="20.0" layoutY="240.0" prefHeight="39.0" prefWidth="360.0" promptText="Ingrese el teléfono" />
-
-                <!-- Campo 4: Email -->
-                <Label layoutX="20.0" layoutY="290.0" styleClass="field-label" text="Email">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                </Label>
-                <TextField fx:id="txtEmail" layoutX="20.0" layoutY="310.0" prefHeight="39.0" prefWidth="359.0" promptText="Ingrese el email" />
-
-                <Label layoutX="20.0" layoutY="360.0" styleClass="field-label" text="Estado">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                </Label>
-                <ComboBox fx:id="menuEstado" layoutX="20.0" layoutY="380.0" prefHeight="47.0" prefWidth="360.0" promptText="Seleccione estado" styleClass="combo-field">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Activo" />
-                            <String fx:value="Inactivo" />
-                        </FXCollections>
-                    </items>
-                </ComboBox>
-
-                <!-- Botones con orden correcto -->
-                <Button fx:id="agregar" layoutX="45.0" layoutY="450.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-primary" text="AGREGAR" />
-                <Button fx:id="actualizar" layoutX="45.0" layoutY="510.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-secondary" text="ACTUALIZAR" />
-                <Button fx:id="ver" layoutX="45.0" layoutY="570.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-modify" text="MODIFICAR" />
-                <Button fx:id="desactivar" layoutX="45.0" layoutY="630.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="310.0" styleClass="button-danger" text="DESACTIVAR" />
-            </children>
-        </AnchorPane>
-    </center>
-
     <stylesheets>
-        <URL value="@estilos/estilos-globales.css" />
+        <URL value="@estilos/crud.css" />
         <URL value="@estilos/tabla.css" />
     </stylesheets>
 </BorderPane>

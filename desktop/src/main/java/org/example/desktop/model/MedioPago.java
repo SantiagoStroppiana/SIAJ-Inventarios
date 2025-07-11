@@ -9,6 +9,10 @@ public class MedioPago {
 
     private String tipo;
 
+    public MedioPago(int id) {
+        this.id = id;
+    }
+
     public MedioPago() {
     }
 

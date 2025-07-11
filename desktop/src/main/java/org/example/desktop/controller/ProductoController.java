@@ -39,6 +39,8 @@ public class ProductoController implements Initializable {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
+    private Producto[] productosOriginales; // para guardar todos los productos
+
 
     @FXML private TextField txtBuscarProducto;
     @FXML private TableView<Producto> tablaProductos;
@@ -46,6 +48,7 @@ public class ProductoController implements Initializable {
     @FXML private TableColumn<Producto, String> nombreColumn;
     @FXML private TableColumn<Producto, Integer> stockColumn;
     @FXML private TableColumn<Producto, BigDecimal> precioColumn;
+    @FXML private TableColumn<Producto, BigDecimal> precioCostoColumn;
     @FXML private TableColumn<Producto, String> estadoColumn;
     @FXML private TableColumn<Producto, String> proveedorColumn;
     @FXML private Button agregar;
@@ -59,8 +62,6 @@ public class ProductoController implements Initializable {
     private Proveedor proveedorSeleccionado = null;
     private Boolean estadoSeleccionado = null;
     private static final Logger logger = Logger.getLogger(ProductoController.class.getName());
-
-
 
 
     @FXML
@@ -78,19 +79,20 @@ public class ProductoController implements Initializable {
             String responseBody = response.body();
             System.out.println(responseBody);
 
-            Producto[] productos = gson.fromJson(responseBody, Producto[].class);
+            productosOriginales = gson.fromJson(responseBody, Producto[].class);
 
             tablaProductos.getItems().clear();
-            tablaProductos.getItems().addAll(productos);
+            tablaProductos.getItems().addAll(productosOriginales);
 
-            for (Producto p : productos) {
+
+            for (Producto p : productosOriginales) {
                 System.out.println("Producto: " + p.getNombre() + ", SKU: " + p.getSku());
             }
 
             System.out.println("Respuesta del backend:");
             System.out.println(responseBody);
 
-            for (Producto p : productos) {
+            for (Producto p : productosOriginales) {
                 System.out.println("Producto: " + p.getNombre() + ", Proveedor: " +
                         (p.getProveedorid() != null ? p.getProveedorid().getRazonSocial() : "null"));
             }
@@ -205,6 +207,7 @@ public class ProductoController implements Initializable {
         nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
         precioColumn.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        precioCostoColumn.setCellValueFactory(new PropertyValueFactory<>("precioCosto"));
         estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
         proveedorColumn.setCellValueFactory(cellData -> {
             Producto producto = cellData.getValue();
@@ -238,6 +241,19 @@ public class ProductoController implements Initializable {
         mostrarCategorias();
         mostrarEstado();
         mostrarProveedores();
+        txtBuscarProducto.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (productosOriginales == null) return;
+
+            String filtro = newValue.toLowerCase();
+
+            tablaProductos.getItems().setAll(
+                    java.util.Arrays.stream(productosOriginales)
+                            .filter(p -> p.getNombre().toLowerCase().contains(filtro)
+                                    || p.getSku().toLowerCase().contains(filtro))
+                            .toList()
+            );
+        });
+
     }
 
 
@@ -262,14 +278,13 @@ public class ProductoController implements Initializable {
     @FXML private TextField txtNombre;
     @FXML private TextField txtStock;
     @FXML private TextField txtPrecio;
+    @FXML private TextField txtPrecioCosto;
  //   @FXML private SplitMenuButton menuProveedor;
 
 
     public void actualizarProductos() {
         mostrarProductos(); // refrescar la tabla
     }
-
-
 
 
     private Stage stage;
@@ -363,6 +378,7 @@ public class ProductoController implements Initializable {
             String nombre = txtNombre.getText().trim();
             String stockStr = txtStock.getText().trim();
             String precioStr = txtPrecio.getText().trim();
+            String precioCostoStr = txtPrecioCosto.getText().trim();
 
 
             if (sku.isEmpty() || nombre.isEmpty() ||  stockStr.isEmpty() || precioStr.isEmpty()) {
@@ -384,6 +400,7 @@ public class ProductoController implements Initializable {
             }
 
             BigDecimal precio;
+            BigDecimal precioCosto;
             try {
                 double precioDouble = Double.parseDouble(precioStr);
                 if (precioDouble < 0) {
@@ -404,11 +421,16 @@ public class ProductoController implements Initializable {
                 notificar("Error", "Debe seleccionar un estado.", false);
                 return;
             }
+
+            double precioDoubleCosto = Double.parseDouble(precioCostoStr);
+            precioCosto = BigDecimal.valueOf(precioDoubleCosto);
+
             Producto producto = new Producto();
             producto.setSku(sku);
             producto.setNombre(nombre);
             producto.setStock(stock);
             producto.setPrecio(precio);
+            producto.setPrecioCosto(precioCosto);
             producto.setActivo(estadoSeleccionado);
             producto.setProveedorid(proveedorSeleccionado);
             producto.setImg("");
