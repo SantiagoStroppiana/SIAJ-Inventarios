@@ -18,9 +18,20 @@ public class HibernateUtil {
             Dotenv dotenv = Dotenv.load();
             Properties properties = new Properties();
             properties.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
-            properties.setProperty("hibernate.connection.url", "jdbc:mysql://" + dotenv.get("DB_HOST") + ":" + dotenv.get("DB_PORT") + "/" + dotenv.get("DB_NAME"));
-            properties.setProperty("hibernate.connection.username", dotenv.get("DB_USER"));
-            properties.setProperty("hibernate.connection.password", dotenv.get("DB_PASSWORD"));
+//            properties.setProperty("hibernate.connection.url", "jdbc:mysql://" + dotenv.get("DB_HOST") + ":" + dotenv.get("DB_PORT") + "/" + dotenv.get("DB_NAME"));
+//            properties.setProperty("hibernate.connection.username", dotenv.get("DB_USER"));
+//            properties.setProperty("hibernate.connection.password", dotenv.get("DB_PASSWORD"));
+
+            String dbHost = System.getenv("DB_HOST");
+            String dbPort = System.getenv("DB_PORT");
+            String dbName = System.getenv("DB_NAME");
+            String dbUser = System.getenv("DB_USER");
+            String dbPassword = System.getenv("DB_PASSWORD");
+
+            properties.setProperty("hibernate.connection.url", "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName);
+            properties.setProperty("hibernate.connection.username", dbUser);
+            properties.setProperty("hibernate.connection.password", dbPassword);
+
             properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
             properties.setProperty("hibernate.show_sql", "true");
             properties.setProperty("hibernate.hbm2ddl.auto", "update");
