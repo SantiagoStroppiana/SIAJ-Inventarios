@@ -8,6 +8,7 @@ COPY . .
 
 # Compila el proyecto
 RUN mvn clean package -DskipTests
+RUN echo "En target:" && ls -la target/
 
 # Imagen final
 FROM eclipse-temurin:21
