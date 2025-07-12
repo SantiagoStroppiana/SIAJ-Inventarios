@@ -4,7 +4,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class VariablesEntorno {
 
-    private static final Dotenv dotenv = Dotenv.load();
+//    private static final Dotenv dotenv = Dotenv.load();
 
 //    public static String getHost(){
 //        return dotenv.get("DB_HOST");
