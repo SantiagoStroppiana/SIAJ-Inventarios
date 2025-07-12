@@ -56,8 +56,6 @@ public class RegisterController {
         if(usuarioDTO != null && usuarioDTO.getNombreRol().equals("Administrador")) {
             btnLogin.setVisible(false);
             btnLogin.setManaged(false);
-//            lblCuenta.setVisible(false);
-//            lblCuenta.setManaged(false);
         }else{
             btnLogin.setVisible(false);
             btnLogin.setManaged(true);
@@ -67,7 +65,11 @@ public class RegisterController {
 
     @FXML
     public void volverAtras(ActionEvent event) {
-        StageManager.loadScene("/org/example/desktop/usuarios-view.fxml", 1600, 900);
+        if(UserSession.getUsuarioActual() != null) {
+            StageManager.loadScene("/org/example/desktop/usuarios-view.fxml", 1600, 900);
+        }else{
+            StageManager.loadScene("/org/example/desktop/login-view.fxml", 700, 500);
+        }
     }
 
     @FXML

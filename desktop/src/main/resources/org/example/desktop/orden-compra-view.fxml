@@ -72,7 +72,7 @@
                                         </font>
                                     </Label>
                                     <Pane HBox.hgrow="ALWAYS"/>
-                                    <Button text="Actualizar Catálogo" styleClass="button" fx:id="btnRefreshCatalog"/>
+                                    <Button text="Subir Orden Compra" styleClass="button" fx:id="btnRefreshCatalog"/>
                                 </children>
                             </HBox>
 
@@ -109,7 +109,6 @@
                         </children>
                     </VBox>
 
-                    <!-- Panel de la orden -->
                     <VBox styleClass="pv-cart-panel" prefWidth="600.0">
                         <children>
                             <Label fx:id="orderTitleLabel" text="📝 Items de la Orden (0)" styleClass="pv-panel-title">
@@ -118,12 +117,10 @@
                                 </font>
                             </Label>
 
-                            <!-- Scroll con los items de la orden -->
                             <ScrollPane fx:id="orderScrollPane" fitToWidth="true" styleClass="pv-cart-scroll"
                                         prefHeight="400.0">
                                 <content>
                                     <VBox fx:id="orderContent" spacing="10.0" styleClass="pv-cart-content">
-                                        <!-- Estado vacío inicial -->
                                         <VBox fx:id="emptyOrderState" alignment="CENTER" spacing="15.0"
                                               prefHeight="300.0" styleClass="pv-empty-state">
                                             <children>
@@ -144,17 +141,14 @@
                                                 </Label>
                                             </children>
                                         </VBox>
-                                        <!-- Aquí el controlador cargará los ítems de la orden -->
                                     </VBox>
                                 </content>
                             </ScrollPane>
 
-                            <!-- Footer de la orden -->
                             <VBox spacing="15.0" styleClass="pv-cart-footer">
                                 <children>
                                     <Separator styleClass="pv-separator" />
 
-                                    <!-- Total -->
                                     <HBox alignment="CENTER_RIGHT" spacing="15.0" styleClass="pv-total-section">
                                         <children>
                                             <Label text="Total Orden:" styleClass="pv-total-label">

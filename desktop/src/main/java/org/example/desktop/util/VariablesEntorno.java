@@ -35,8 +35,11 @@ public class VariablesEntorno {
 //    }
 
     public static String getServerHost(){
-        return dotenv.get("SERVER_HOST");
+//        return dotenv.get("SERVER_HOST");
+        return "https://siaj-inventarios-production-b4ef.up.railway.app";
     }
+
+    //poner https://siaj-inventarios-production-b4ef.up.railway.app/https://siaj-inventarios-production-b4ef.up.railway.app
 
 //    public static String getServerPort(){
 //        return "";
