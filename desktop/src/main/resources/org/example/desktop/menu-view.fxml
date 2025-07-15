@@ -41,19 +41,22 @@
                     </Button>
                 </HBox>
 
-
-                <Button fx:id="bntPuntoVenta" layoutX="158.0" layoutY="203.0" mnemonicParsing="false" onAction="#irPuntoDeVenta" prefHeight="200.0" prefWidth="200.0" styleClass="menuprincipal-button, punto-venta">
+                <Button fx:id="boton" layoutX="158.0" layoutY="203.0" mnemonicParsing="false"
+                        prefHeight="200.0" prefWidth="200.0" styleClass="menuprincipal-button, punto-venta">
                     <graphic>
                         <VBox alignment="CENTER" spacing="10">
-                            <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                            <ImageView fx:id="icono" fitHeight="80.0" fitWidth="80.0"
+                                       pickOnBounds="true" preserveRatio="true">
                                 <Image url="@images/majesticons--shopping-cart.png" />
                             </ImageView>
-                            <Label styleClass="button-text" text="Punto de Venta" textFill="WHITE" />
+                            <Label fx:id="texto" styleClass="button-text"
+                                   text="Punto de Venta" textFill="WHITE" />
                         </VBox>
                     </graphic>
                 </Button>
 
-                <Button fx:id="btnInventario" layoutX="372.0" layoutY="203.0" mnemonicParsing="false" onAction="#irPuntoDeVenta" prefHeight="200.0" prefWidth="200.0" styleClass="menuprincipal-button, inventario">
+
+                <Button fx:id="btnInventario" layoutX="372.0" layoutY="203.0" mnemonicParsing="false" onAction="#irInventario" prefHeight="200.0" prefWidth="200.0" styleClass="menuprincipal-button, inventario">
                     <graphic>
                         <VBox alignment="CENTER" spacing="10">
                             <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
@@ -75,7 +78,7 @@
                     </graphic>
                 </Button>
 
-                <Button fx:id="btnGraficos" layoutX="801.0" layoutY="203.0" mnemonicParsing="false" onAction="#irInventario" prefHeight="200.0" prefWidth="200.0" styleClass="menuprincipal-button, productos">
+                <Button fx:id="btnGraficos" layoutX="801.0" layoutY="203.0" mnemonicParsing="false" onAction="#irReportes" prefHeight="200.0" prefWidth="200.0" styleClass="menuprincipal-button, productos">
                     <graphic>
                         <VBox alignment="CENTER" spacing="10">
                             <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
@@ -86,7 +89,7 @@
                     </graphic>
                 </Button>
 
-                <Button fx:id="btnGraficos1" layoutX="1015.0" layoutY="203.0" mnemonicParsing="false" onAction="#irReportes" prefHeight="200.0" prefWidth="200.0" styleClass="menuprincipal-button, productos">
+                <Button fx:id="btnGraficos1" layoutX="1015.0" layoutY="203.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" styleClass="menuprincipal-button, productos">
                     <graphic>
                         <VBox alignment="CENTER" spacing="10">
                             <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">

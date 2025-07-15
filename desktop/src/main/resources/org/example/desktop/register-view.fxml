@@ -98,6 +98,6 @@
 
    <AnchorPane pickOnBounds="false">
       <Button fx:id="btnVolver" layoutX="10" layoutY="10" onAction="#volverAtras" prefHeight="50.0" prefWidth="100.0"
-              styleClass="login-register-primary-button" text="Volver"/>
+              styleClass="login-register-primary-button" text="← Volver"/>
    </AnchorPane>
 </StackPane>

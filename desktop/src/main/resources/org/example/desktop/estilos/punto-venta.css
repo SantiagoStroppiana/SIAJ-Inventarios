@@ -435,7 +435,7 @@
     -fx-effect: none;
 }
 .root {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: #162d49;
 }
 
 .pv-products-scroll .viewport {
@@ -466,7 +466,7 @@
     -fx-border-color: transparent;
 }
 .pv-payment-section {
-    -fx-background-color: #1e1e1e;
+    -fx-background-color: #1a2845;
     -fx-padding: 10 15 10 15;
     -fx-border-color: #2e7d32;
     -fx-border-radius: 6;

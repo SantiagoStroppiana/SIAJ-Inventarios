@@ -498,13 +498,24 @@ public class VentaController implements Initializable {
                 carpetaFacturas.mkdirs();
             }
 
-            // Generar ruta del archivo PDF
-            String archivoSalida = carpetaFacturas.getAbsolutePath() + File.separator + "venta_" + ventaCreada.getId() + ".pdf";
+// Generar nombre base del archivo
+            String baseNombre = "Factura " + ventaCreada.getId();
+            String extension = ".pdf";
+            String archivoSalida;
+            int contador = 0;
 
-            // Generar PDF
+// Evitar sobrescribir archivos existentes
+            do {
+                String sufijo = (contador == 0) ? "" : " (" + contador + ")";
+                archivoSalida = carpetaFacturas.getAbsolutePath() + File.separator + baseNombre + sufijo + extension;
+                contador++;
+            } while (new File(archivoSalida).exists());
+
+// Generar PDF
             ventaCreada.setMedioPago(seleccionado);
             VentaPDFGenerator generador = new VentaPDFGenerator();
             generador.generarPDF(ventaCreada, detalles, archivoSalida);
+
 
             // Abrir el PDF automáticamente con el visor predeterminado del sistema
             Desktop.getDesktop().open(new File(archivoSalida));
