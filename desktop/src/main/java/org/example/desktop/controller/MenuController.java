@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.example.desktop.dto.UsuarioDTO;
@@ -19,16 +21,36 @@ import java.io.IOException;
 public class MenuController {
 
     @FXML private Label labelBienvenida;
+    @FXML private Button boton;
+    @FXML private ImageView icono;
+    @FXML private Label texto;
+
+    private final UsuarioDTO usuario = UserSession.getUsuarioActual();
 
     @FXML
     public void initialize() {
-        UsuarioDTO usuario = UserSession.getUsuarioActual();
+        configurarBoton();
         if(usuario != null){
             String nombreCompleto = usuario.getNombre() + " " + usuario.getApellido();
             labelBienvenida.setText("Bienvenido, " + nombreCompleto + " (" + usuario.getNombreRol() + ")");
 
         }
     }
+
+    private void configurarBoton(){
+
+        if (usuario.getNombreRol().equalsIgnoreCase("Administrador")) {
+            boton.setOnAction(event -> irOrdenCompra());
+            texto.setText("Orden Compra");
+            icono.setImage(new Image(getClass().getResourceAsStream("/org/example/desktop/images/mdi--text-box-edit.png")));
+        }else if (usuario.getNombreRol().equalsIgnoreCase("Vendedor")) {
+            boton.setOnAction(event ->  irPuntoDeVenta());
+            texto.setText("Punto de Venta");
+            icono.setImage(new Image(getClass().getResourceAsStream("/org/example/desktop/images/majesticons--shopping-cart.png")));
+        }
+
+    }
+
 
     @FXML
     public void irPerfilUsuario() throws IOException{
@@ -48,14 +70,14 @@ public class MenuController {
         StageManager.loadScene("/org/example/desktop/punto-venta-view.fxml" , 1600, 900);
     }
 
-//    @FXML
-//    public void irOrdenCompra() {
-//        StageManager.loadScene("/org/example/desktop/punto-venta-view.fxml" , 1600, 900);
-//    }
+    @FXML
+    public void irOrdenCompra() {
+        StageManager.loadScene("/org/example/desktop/orden-compra-view.fxml" , 1600, 900);
+    }
 
     @FXML
     public void irInventario() {
-        StageManager.loadScene("/org/example/desktop/inventario-view.fxml" , 1600, 900);
+        StageManager.loadScene("/org/example/desktop/productos-view.fxml" , 1600, 900);
     }
 
     @FXML

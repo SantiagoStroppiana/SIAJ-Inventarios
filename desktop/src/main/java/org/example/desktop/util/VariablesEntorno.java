@@ -4,7 +4,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class VariablesEntorno {
 
-    private static final Dotenv dotenv = Dotenv.load();
+//    private static final Dotenv dotenv = Dotenv.load();
 
 //    public static String getHost(){
 //        return dotenv.get("DB_HOST");
@@ -35,8 +35,11 @@ public class VariablesEntorno {
 //    }
 
     public static String getServerHost(){
-        return dotenv.get("SERVER_HOST");
+//        return dotenv.get("SERVER_HOST");
+        return "https://siaj-inventarios-production-b4ef.up.railway.app";
     }
+
+    //poner https://siaj-inventarios-production-b4ef.up.railway.app/https://siaj-inventarios-production-b4ef.up.railway.app
 
 //    public static String getServerPort(){
 //        return "";
