@@ -447,13 +447,17 @@
 }
 
 .pv-product-panel {
-    -fx-background-color: #1e1e1e; /* O tu color base oscuro */
+    /*-fx-background-color: #1e1e1e; !* O tu color base oscuro *!*/
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);
+
     -fx-padding: 15px;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 }
 .pv-main-container {
-    -fx-background-color: #1e1e1e;
+    /*-fx-background-color: #1e1e1e;*/
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);
+
     -fx-padding: 20px;
     -fx-background-radius: 12px;
 }

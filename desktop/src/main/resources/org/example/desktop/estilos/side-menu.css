@@ -9,11 +9,12 @@
 .side-menu .heading-2 {
     -fx-font-size: 20px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff; /* texto blanco puro */
+    -fx-fill: white; /* para Text */
     -fx-text-alignment: center;
-    -fx-effect: dropshadow(gaussian, rgba(52, 211, 153, 0.4), 5, 0, 0, 1); /* leve glow menta */
+    -fx-effect: dropshadow(gaussian, #34d399, 10, 0.3, 0, 2);
     -fx-padding: 0 0 10 0;
 }
+
 
 
 
