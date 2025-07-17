@@ -13,6 +13,7 @@ target/
 *.iml
 *.ipr
 .env
+Certificados/
 
 ### Eclipse ###
 .apt_generated
