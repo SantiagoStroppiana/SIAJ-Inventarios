@@ -12,6 +12,8 @@ module org.example.desktop {
     requires java.dotenv;
     requires java.logging;
     requires com.github.librepdf.openpdf;
+    requires org.bouncycastle.pkix;
+    requires org.bouncycastle.provider;
 
     opens org.example.desktop.controller to javafx.fxml;
     opens org.example.desktop.model to com.google.gson, javafx.base;

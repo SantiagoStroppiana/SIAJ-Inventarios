@@ -3,7 +3,7 @@ package org.example.desktop.util;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class VariablesEntorno {
-
+    private static final Dotenv dotenv = Dotenv.load();
 //    private static final Dotenv dotenv = Dotenv.load();
 
 //    public static String getHost(){
@@ -47,5 +47,18 @@ public class VariablesEntorno {
 
     public static String getServerURL(){
         return getServerHost();
+    }
+
+    public static String getCUIT(){
+        return dotenv.get("CUIT");
+    }
+    public static String getKeyPath(){
+        return dotenv.get("PATH_KEY");
+    }
+    public static String getCrtPath(){
+        return dotenv.get("PATH_CRT");
+    }
+    public static String getTA(){
+        return dotenv.get("TA_SECRET_PATH");
     }
 }
