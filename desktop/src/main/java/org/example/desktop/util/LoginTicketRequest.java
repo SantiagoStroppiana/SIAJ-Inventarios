@@ -30,17 +30,17 @@ public class LoginTicketRequest {
     //Produccion
     private static final String WSAA_URL_PROD = "https://wsaa.afip.gov.ar/ws/services/LoginCms";
     //Testing
-//    private static final String WSAA_URL_PROD = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms";
+    private static final String WSAA_URL_HOMO = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms";
 
 
-    public static String generarTicketProduccion(String service) throws Exception {
+    public static String generarTicketProduccion(String service, String ambiente) throws Exception {
         String dirPath = VariablesEntorno.getTA();
         if (dirPath == null || dirPath.isBlank()) throw new IllegalStateException("Falta TA_SECRET_DIR en .env");
         File dir = new File(dirPath);
         if (!dir.exists()) dir.mkdirs();  // asegurar que exista
 
         File ticketFile = new File(dir, "ticket" + service + ".xml");
-
+        System.out.println("absolutepath " + ticketFile.getAbsolutePath()+ " dirpath " +dirPath+" dir "+dir);
 
 
         Security.addProvider(new BouncyCastleProvider());
@@ -54,7 +54,7 @@ public class LoginTicketRequest {
             if (expirationNodes.getLength() == 0) {
                 System.out.println("⚠️ No se encontró expirationTime en ticket.xml. Se generará uno nuevo.");
                 ticketFile.delete();
-                return generarTicketProduccion(service);
+                return generarTicketProduccion(service, ambiente);
             }
 
             String expirationStr = expirationNodes.item(0).getTextContent();
@@ -66,11 +66,20 @@ public class LoginTicketRequest {
                 System.out.println("⏰ Ticket expirado. Generando uno nuevo...");
             }
         }
-
+        String crtPath;
+        String keyPath;
         // Generar nuevo ticket
-        //Produccion
-        String crtPath = VariablesEntorno.getCrtPath();
-        String keyPath = VariablesEntorno.getKeyPath();
+        System.out.println(ambiente);
+        if (ambiente.equals("Homo")) {
+            crtPath = VariablesEntorno.getCrtPathHomo();
+            keyPath = VariablesEntorno.getKeyPathHomo();
+        } else {
+            //Produccion
+            System.out.println("entre a produccion :D");
+            crtPath = VariablesEntorno.getCrtPath();
+            keyPath = VariablesEntorno.getKeyPath();
+            System.out.println(crtPath + keyPath);
+        }
 
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
         X509Certificate cert;
@@ -110,8 +119,12 @@ public class LoginTicketRequest {
                 + "<soapenv:Header/><soapenv:Body>"
                 + "<ws:loginCms><ws:in0>" + cmsB64 + "</ws:in0></ws:loginCms>"
                 + "</soapenv:Body></soapenv:Envelope>";
-
-        HttpURLConnection conn = (HttpURLConnection) new URL(WSAA_URL_PROD).openConnection();
+        HttpURLConnection conn;
+        if (ambiente.equals("Homo")) {
+            conn = (HttpURLConnection) new URL(WSAA_URL_HOMO).openConnection();
+        } else {
+            conn = (HttpURLConnection) new URL(WSAA_URL_PROD).openConnection();
+        }
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");

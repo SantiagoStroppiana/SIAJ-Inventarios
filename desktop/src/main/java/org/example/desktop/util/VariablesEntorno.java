@@ -61,4 +61,10 @@ public class VariablesEntorno {
     public static String getTA(){
         return dotenv.get("TA_SECRET_PATH");
     }
+    public static String getKeyPathHomo(){
+        return dotenv.get("PATH_KEYHOMO");
+    }
+    public static String getCrtPathHomo(){
+        return dotenv.get("PATH_CRTHOMO");
+    }
 }

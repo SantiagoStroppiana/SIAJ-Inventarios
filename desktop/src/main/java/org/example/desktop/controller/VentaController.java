@@ -1,6 +1,7 @@
 package org.example.desktop.controller;
 
 import com.google.gson.Gson;
+import com.lowagie.text.pdf.PdfWriter;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,11 +24,11 @@ import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.ProductoVentaDTO;
 import org.example.desktop.dto.UsuarioDTO;
 import org.example.desktop.model.*;
-import org.example.desktop.util.UserSession;
-import org.example.desktop.util.VariablesEntorno;
+import org.example.desktop.util.*;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -40,7 +41,6 @@ import java.util.List;
 
 import javafx.scene.text.Font;
 import javafx.collections.ObservableList;
-import org.example.desktop.util.VentaPDFGenerator;
 
 public class VentaController implements Initializable {
 
@@ -506,8 +506,11 @@ public class VentaController implements Initializable {
             VentaPDFGenerator generador = new VentaPDFGenerator();
             generador.generarPDF(ventaCreada, detalles, archivoSalida);
 
+            //Emitir factura
+            emitirFactura(detalles);
+
             // Abrir el PDF automáticamente con el visor predeterminado del sistema
-            Desktop.getDesktop().open(new File(archivoSalida));
+//            Desktop.getDesktop().open(new File(archivoSalida));
 
 
 
@@ -519,6 +522,54 @@ public class VentaController implements Initializable {
             notificar("Error", "No se pudo procesar la venta: " + e.getMessage(), false);
         }
         mostrarProductos();
+    }
+
+    private void emitirFactura (List<DetalleVenta> detalles) {
+        try {
+            // CUIT del emisor (debe coincidir con el certificado .crt/.key usado para WSAA)
+            long cuitEmisor = Long.parseLong(VariablesEntorno.getCUIT());
+            long cuitReceptor = 0L; // Consumidor Final
+
+            // Servicio para ticket WSAA
+            String servicio = "wsfe";
+            String ambiente = "Homo";
+            String soapResponse = LoginTicketRequest.generarTicketProduccion(servicio, ambiente);
+
+            // Extraer token y sign (mismo código que ya usás)
+            UtilsExtraerCredenciales.Credenciales cred = UtilsExtraerCredenciales.parsearCredenciales(soapResponse);
+            String token = cred.getToken();
+            String sign = cred.getSign();
+
+
+            System.out.println("✅ Token y sign OK");
+
+            // Preparar ítems
+
+
+            List<FacturaItem> items = new ArrayList<>();
+            for (DetalleVenta detalle : detalles) {
+                items.add(new FacturaItem(
+                        detalle.getProducto().getNombre(),
+                        detalle.getCantidad(),
+                        detalle.getPrecioUnitario()
+                ));
+            }
+
+            // Emitir la factura
+            FacturaElectronicaService srv = new FacturaElectronicaService();
+            Factura factura = srv.emitirFactura(token, sign, 1, 11, cuitEmisor, cuitReceptor, items);
+
+            System.out.println("🎉 Factura emitida con CAE=" + factura.getCae() +
+                    " — Nro: " + factura.getNumero());
+
+            // Generar pdf
+            String FacturaGenerada = new GeneradorPDF().generarPDF(factura/*, "FacturaC_" + factura.getNumero() + ".pdf"*/);
+            System.out.println("✅ PDF generado: FacturaC_" + factura.getNumero() + ".pdf");
+            Desktop.getDesktop().open(new File(FacturaGenerada));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void cargarMediosDePago() {

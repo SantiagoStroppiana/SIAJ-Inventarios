@@ -487,9 +487,10 @@ public class ProveedorController implements Initializable {
 
             // 1) Obtener token y sign
             String service = "ws_sr_padron_a13";
+            String ambiente = "Produccion";
             System.out.println("Generando ticket...");
 
-            String soapResponse = LoginTicketRequest.generarTicketProduccion(service);
+            String soapResponse = LoginTicketRequest.generarTicketProduccion(service,ambiente);
             System.out.println("Ticket generado.");
             System.out.println("🧼 Respuesta completa SOAP:");
             System.out.println(soapResponse);

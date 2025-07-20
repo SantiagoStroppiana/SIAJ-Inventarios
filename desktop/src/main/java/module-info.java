@@ -14,6 +14,7 @@ module org.example.desktop {
     requires com.github.librepdf.openpdf;
     requires org.bouncycastle.pkix;
     requires org.bouncycastle.provider;
+    requires com.google.zxing;
 
     opens org.example.desktop.controller to javafx.fxml;
     opens org.example.desktop.model to com.google.gson, javafx.base;
