@@ -30,7 +30,7 @@ public class VentaPDFGenerator {
         // Encabezado con diseño como tu sistema
         PdfPTable encabezado = new PdfPTable(1);
         encabezado.setWidthPercentage(100);
-        PdfPCell celdaEncabezado = new PdfPCell(new Phrase("SIAJ INVENTARIOS - FACTURA A",
+        PdfPCell celdaEncabezado = new PdfPCell(new Phrase("SIAJ INVENTARIOS - FACTURA C",
                 FontFactory.getFont(FontFactory.HELVETICA_BOLD, 22, Font.BOLD, Color.WHITE)));
         celdaEncabezado.setBackgroundColor(colorSecundario);
         celdaEncabezado.setHorizontalAlignment(Element.ALIGN_CENTER);
