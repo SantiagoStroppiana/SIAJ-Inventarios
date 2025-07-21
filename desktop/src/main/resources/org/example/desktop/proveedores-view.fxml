@@ -7,6 +7,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="main-background" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.ProveedorController">
 
     <left>
@@ -24,6 +26,34 @@
 
                 <VBox layoutX="8.0" layoutY="60.0" prefWidth="350.0" spacing="8.0">
                     <children>
+                        <!-- Nuevo orden: CUIT con botón + luego Razón Social -->
+                        <VBox spacing="3.0">
+                            <children>
+                                <Label styleClass="crud-label" text="CUIT">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Label>
+                                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                                    <children>
+                                        <TextField fx:id="txtCUIT" prefHeight="30.0" prefWidth="180.0" promptText="CUIT" styleClass="crud-text-field" />
+                                        <Button fx:id="btnConsultarPadron" prefHeight="40.0" prefWidth="180" styleClass="btn-consultar-padron">
+                                            <graphic>
+                                                <ImageView fitHeight="30" fitWidth="30">
+                                                    <image>
+                                                        <Image url="@images/ic_search.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                            <text>Consultar datos</text>
+                                        </Button>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+
+
+
                         <VBox spacing="3.0">
                             <children>
                                 <Label styleClass="crud-label" text="Razón Social">
@@ -35,16 +65,6 @@
                             </children>
                         </VBox>
 
-                        <VBox spacing="3.0">
-                            <children>
-                                <Label styleClass="crud-label" text="CUIT">
-                                    <font>
-                                        <Font name="System Bold" size="12.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="txtCUIT" prefHeight="30.0" prefWidth="330.0" promptText="CUIT" styleClass="crud-text-field" />
-                            </children>
-                        </VBox>
 
                         <VBox spacing="3.0">
                             <children>

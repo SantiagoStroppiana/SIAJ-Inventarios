@@ -64,6 +64,7 @@ public class ProveedorController implements Initializable {
     @FXML private Button actualizar;
     @FXML private Button desactivar;
     @FXML private Button ver;
+    @FXML private Button btnConsultarPadron;
 
     @FXML
     public void mostrarProveedores() {
@@ -125,8 +126,8 @@ public class ProveedorController implements Initializable {
 
         agregar.setOnAction(event -> crearProveedor());
         desactivar.setOnAction(event -> cambiarEstado());
-        //actualizar.setOnAction(event -> mostrarProveedores());
-        actualizar.setOnAction(event -> ConsultarDatosProveedor());
+        actualizar.setOnAction(event -> mostrarProveedores());
+        btnConsultarPadron.setOnAction(event -> ConsultarDatosProveedor());
         ver.setOnAction(event -> {
             try {
                 verProveedor();
@@ -473,6 +474,7 @@ public class ProveedorController implements Initializable {
             if (cuit.length() != 11 || !cuit.matches("\\d+")) {
                 System.out.println("CUIT INVALIDO");
                 JOptionPane.showMessageDialog(null, "CUIT inválido: debe tener 11 dígitos numéricos.");
+                notificar("Problemas con el CUIT","CUIT inválido: debe tener 11 dígitos numéricos.",false);
                 return;
             }
 
@@ -482,6 +484,8 @@ public class ProveedorController implements Initializable {
                 System.out.println("CUIT válido ✅");
             } else {
                 System.out.println("CUIT inválido ❌");
+                notificar("Problemas con el CUIT","No es un CUIT valido.",false);
+                return;
             }
 
 

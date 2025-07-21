@@ -207,3 +207,22 @@ ComboBox:focused {
     -fx-border-radius: 10;
     -fx-background-radius: 10;
 }
+.btn-consultar-padron {
+    -fx-background-color: linear-gradient(to right, #3a8dde, #1e66b0);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-padding: 0 16 0 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 3, 0.5, 0, 1);
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+}
+
+.btn-consultar-padron:hover {
+    -fx-background-color: linear-gradient(to right, #1e66b0, #3a8dde);
+}
+
+.btn-consultar-padron:pressed {
+    -fx-background-color: #0c4c8a;
+}
