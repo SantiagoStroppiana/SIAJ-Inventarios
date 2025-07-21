@@ -9,14 +9,24 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.DetalleVentaDTO;
 import org.example.desktop.model.*;
 import org.example.desktop.util.VariablesEntorno;
 
+import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
@@ -29,6 +39,8 @@ import java.util.ResourceBundle;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableCell;
+import org.example.desktop.util.VentaPDFGenerator;
+
 import java.time.format.DateTimeFormatter;
 
 public class HistorialVentasController implements Initializable {
@@ -496,13 +508,158 @@ public class HistorialVentasController implements Initializable {
 
     @FXML
     private void onGenerarPDF() {
-        // Implementar después
+        Venta ventaSeleccionada = tablaVentas.getSelectionModel().getSelectedItem();
+        if (ventaSeleccionada == null) {
+            notificar("Advertencia", "Debe seleccionar una venta para generar el PDF.", false);
+            return;
+        }
+
+        try {
+            // Buscar medio de pago completo
+            MedioPago medio = buscarMedioPagoPorId(ventaSeleccionada.getMedioPago().getId());
+            ventaSeleccionada.setMedioPago(medio);
+
+            // Filtrar detalles asociados a la venta
+            List<DetalleVenta> detallesDeLaVenta = Arrays.stream(detalleVentasDTO)
+                    .filter(dto -> dto.getVentaId() == ventaSeleccionada.getId())
+                    .map(dto -> new DetalleVenta(
+                            dto.getId(),
+                            ventaSeleccionada,
+                            dto.getCantidad(),
+                            dto.getPrecioUnitario(),
+                            buscarProductoPorId(dto.getProductoId())
+                    ))
+                    .toList();
+
+            // Crear carpeta Facturas en Documentos si no existe
+            String rutaDocumentos = System.getProperty("user.home") + File.separator + "Documents";
+            File carpetaFacturas = new File(rutaDocumentos + File.separator + "Facturas");
+            if (!carpetaFacturas.exists()) {
+                carpetaFacturas.mkdirs();
+            }
+
+            // Generar ruta del archivo PDF
+            // Ruta base sin extensión
+            String baseNombre = "Factura " + ventaSeleccionada.getId();
+            String extension = ".pdf";
+            String archivoSalida;
+            int contador = 0;
+
+            do {
+                String sufijo = (contador == 0) ? "" : "(" + contador + ")";
+                archivoSalida = carpetaFacturas.getAbsolutePath() + File.separator + baseNombre + sufijo + extension;
+                contador++;
+            } while (new File(archivoSalida).exists());
+
+
+            // Generar el PDF
+            VentaPDFGenerator generador = new VentaPDFGenerator();
+            generador.generarPDF(ventaSeleccionada, detallesDeLaVenta, archivoSalida);
+
+            // Abrir el PDF automáticamente
+            Desktop.getDesktop().open(new File(archivoSalida));
+
+            notificar("PDF generado", "La factura se generó correctamente.", true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            notificar("Error", "No se pudo generar el PDF: " + e.getMessage(), false);
+        }
     }
+
 
     @FXML
     private void onExportar() {
-        // Implementar después
+        try {
+            Workbook workbook = new XSSFWorkbook();
+
+            // Hoja 1: Ventas
+            Sheet sheetVentas = workbook.createSheet("Ventas");
+
+            // Header de ventas
+            Row headerVentas = sheetVentas.createRow(0);
+            String[] headersVentas = {"ID", "Total", "Estado", "Medio de Pago", "Vendedor", "Fecha Pago"};
+            for (int i = 0; i < headersVentas.length; i++) {
+                headerVentas.createCell(i).setCellValue(headersVentas[i]);
+            }
+
+            // Cuerpo de ventas
+            for (int i = 0; i < ventasOriginales.length; i++) {
+                Venta v = ventasOriginales[i];
+                Row row = sheetVentas.createRow(i + 1);
+
+                row.createCell(0).setCellValue(v.getId());
+                row.createCell(1).setCellValue(v.getTotal());
+                row.createCell(2).setCellValue(v.getEstado().toString());
+                row.createCell(3).setCellValue(buscarMedioPagoPorId(v.getMedioPago().getId()).getTipo());
+                row.createCell(4).setCellValue(buscarUsuarioPorId(v.getUsuarioDTO().getId()).getNombre());
+                if (v.getFechaPago() != null) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+                    LocalDateTime fecha = LocalDateTime.parse(v.getFechaPago());
+                    row.createCell(5).setCellValue(fecha.format(formatter));
+                } else {
+                    row.createCell(5).setCellValue("N/A");
+                }
+
+            }
+
+            // Hoja 2: Detalles
+            Sheet sheetDetalles = workbook.createSheet("Detalles de Venta");
+
+            // Header de detalles
+            Row headerDetalles = sheetDetalles.createRow(0);
+            String[] headersDetalles = {/*"ID Detalle",*/ "ID Venta","ID Producto", "Producto", "Cantidad", "Precio Unitario", "Subtotal"};
+            for (int i = 0; i < headersDetalles.length; i++) {
+                headerDetalles.createCell(i).setCellValue(headersDetalles[i]);
+            }
+
+            // Cuerpo de detalles
+            for (int i = 0; i < detalleVentas.length; i++) {
+                DetalleVenta d = detalleVentas[i];
+                Row row = sheetDetalles.createRow(i + 1);
+
+//                row.createCell(0).setCellValue(d.getId());
+                row.createCell(0).setCellValue(d.getVenta().getId());
+                row.createCell(1).setCellValue(d.getProducto().getId());
+                row.createCell(2).setCellValue(d.getProducto().getNombre());
+                row.createCell(3).setCellValue(d.getCantidad());
+                row.createCell(4).setCellValue(d.getPrecioUnitario());
+                row.createCell(5).setCellValue(d.getCantidad() * d.getPrecioUnitario());
+            }
+
+            // Crear carpeta Exportaciones en Documentos
+            String rutaDocumentos = System.getProperty("user.home") + File.separator + "Documents";
+            File carpetaExportaciones = new File(rutaDocumentos + File.separator + "Exportaciones");
+            if (!carpetaExportaciones.exists()) carpetaExportaciones.mkdirs();
+
+            // Nombre del archivo
+            DateTimeFormatter formatterArchivo = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm");
+            String fechaActual = LocalDateTime.now().format(formatterArchivo);
+            String nombreArchivo = "Historial de ventas " + fechaActual + ".xlsx";
+            File archivo = new File(carpetaExportaciones, nombreArchivo);
+
+            // Evitar sobreescritura
+            int contador = 1;
+            while (archivo.exists()) {
+                archivo = new File(carpetaExportaciones, "historial_ventas(" + contador + ").xlsx");
+                contador++;
+            }
+
+            // Guardar el archivo
+            FileOutputStream out = new FileOutputStream(archivo);
+            workbook.write(out);
+            out.close();
+            workbook.close();
+
+            Desktop.getDesktop().open(archivo);
+            notificar("Exportación Exitosa", "El Excel fue generado correctamente.", true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            notificar("Error", "No se pudo exportar a Excel: " + e.getMessage(), false);
+        }
     }
+
 
     @FXML
     private void onFiltrar() {

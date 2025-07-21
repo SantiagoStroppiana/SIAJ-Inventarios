@@ -15,6 +15,9 @@ module org.example.desktop {
     requires org.bouncycastle.pkix;
     requires org.bouncycastle.provider;
     requires com.google.zxing;
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
+
 
     opens org.example.desktop.controller to javafx.fxml;
     opens org.example.desktop.model to com.google.gson, javafx.base;
