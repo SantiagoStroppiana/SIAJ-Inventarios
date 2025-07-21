@@ -208,7 +208,31 @@ public class ProductoController implements Initializable {
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
         precioColumn.setCellValueFactory(new PropertyValueFactory<>("precio"));
         precioCostoColumn.setCellValueFactory(new PropertyValueFactory<>("precioCosto"));
-        estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
+//        estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        estadoColumn.setCellValueFactory(cellData -> {
+            boolean activo = cellData.getValue().isActivo();
+            String estadoTexto = activo ? "Activo" : "Inactivo";
+            return new SimpleStringProperty(estadoTexto);
+        });
+
+        estadoColumn.setCellFactory(column -> new TableCell<Producto, String>() {
+            @Override
+            protected void updateItem(String estado, boolean empty) {
+                super.updateItem(estado, empty);
+                if (empty || estado == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(estado);
+                    if (estado.equals("Activo")) {
+                        setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                    } else {
+                        setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                    }
+                }
+            }
+        });
+
         proveedorColumn.setCellValueFactory(cellData -> {
             Producto producto = cellData.getValue();
             return new SimpleStringProperty(
