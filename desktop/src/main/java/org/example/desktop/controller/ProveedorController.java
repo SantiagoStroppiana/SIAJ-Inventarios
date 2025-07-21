@@ -110,7 +110,28 @@ public class ProveedorController implements Initializable {
         telefonoColumn.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         direccionColumn.setCellValueFactory(new PropertyValueFactory<>("direccion"));
         cuitColumn.setCellValueFactory(new PropertyValueFactory<>("cuit"));
+//        activoColumn.setCellValueFactory(new PropertyValueFactory<>("activo"));
         activoColumn.setCellValueFactory(new PropertyValueFactory<>("activo"));
+
+        activoColumn.setCellFactory(column -> new TableCell<Proveedor, Boolean>() {
+            @Override
+            protected void updateItem(Boolean activo, boolean empty) {
+                super.updateItem(activo, empty);
+                if (empty || activo == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    String estado = activo ? "Activo" : "Inactivo";
+                    setText(estado);
+                    if (activo) {
+                        setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                    } else {
+                        setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                    }
+                }
+            }
+        });
+
         //fecha_altaColumn.setCellValueFactory(new PropertyValueFactory<>("fecha_alta"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
 

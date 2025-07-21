@@ -36,6 +36,7 @@ public class ProveedorDetalleController {
     @FXML private TextField txtCUIT;
     @FXML private Button modificar;
     @FXML private Button guardar;
+    @FXML private Button btnCancelar;
     @FXML private SplitMenuButton menuEstado;
     @FXML private Label lblProveedorNombre;
     @FXML private Label lblProveedorCuit;
@@ -95,6 +96,7 @@ public class ProveedorDetalleController {
 
         modificar.setOnAction(event -> {habilitarEdicion();});
         guardar.setOnAction(event -> {modificarProveedor();});
+        btnCancelar.setOnAction(event -> {cancelar();});
     }
 
     public void habilitarEdicion() {
@@ -172,6 +174,48 @@ public class ProveedorDetalleController {
 
     }
 
+    public void cancelar() {
+        txtRazonSocial.setText(proveedor.getRazonSocial());
+        txtDireccion.setText(proveedor.getDireccion());
+        txtTelefono.setText(proveedor.getTelefono());
+        txtEmail.setText(proveedor.getEmail());
+        txtCUIT.setText(proveedor.getCuit());
+        menuEstado.setText(proveedor.getEstado() ? "Activo" : "Inactivo");
+
+
+        txtRazonSocial.setEditable(false);
+        txtRazonSocial.setDisable(true);
+        txtRazonSocial.setMouseTransparent(true);
+        txtRazonSocial.setFocusTraversable(false);
+
+        txtDireccion.setEditable(false);
+        txtDireccion.setDisable(true);
+        txtDireccion.setMouseTransparent(true);
+        txtDireccion.setFocusTraversable(false);
+
+        txtTelefono.setEditable(false);
+        txtTelefono.setDisable(true);
+        txtTelefono.setMouseTransparent(true);
+        txtTelefono.setFocusTraversable(false);
+
+        txtEmail.setEditable(false);
+        txtEmail.setDisable(true);
+        txtEmail.setMouseTransparent(true);
+        txtEmail.setFocusTraversable(false);
+
+        txtCUIT.setEditable(false);
+        txtCUIT.setDisable(true);
+        txtCUIT.setMouseTransparent(true);
+        txtCUIT.setFocusTraversable(false);
+
+        menuEstado.setDisable(true);
+        menuEstado.setMouseTransparent(true);
+        menuEstado.setFocusTraversable(false);
+
+        lblProveedorNombre.setText(proveedor.getRazonSocial());
+        lblProveedorCuit.setText(proveedor.getCuit());
+        lblEstadoActual.setText(proveedor.getEstado() ? "Activo" : "Inactivo");    }
+
 
     public void modificarProveedor(){
         try {
@@ -191,6 +235,10 @@ public class ProveedorDetalleController {
 
 
             Proveedor proveedor2 = proveedor;
+            if (proveedor2 == proveedor) {
+                notificar("Error al modificar", "No hay datos para modificar.", false);
+                return;
+            }
 
             proveedor2.setRazonSocial(razonSocial);
             proveedor2.setDireccion(direccion);
