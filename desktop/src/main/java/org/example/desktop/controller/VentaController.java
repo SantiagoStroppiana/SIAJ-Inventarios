@@ -133,9 +133,9 @@ public class VentaController implements Initializable {
         nombre.setFont(Font.font("System Bold", 16));
         nombre.getStyleClass().add("pv-product-name");
 
-        Label categoria = new Label(/*producto.getCategoria() != null ?
-                producto.getCategoria().getNombre() : "Sin categoría"*/);
-        categoria.getStyleClass().add("pv-product-category");
+//        Label categoria = new Label(/*producto.getCategoria() != null ?
+//                producto.getCategoria().getNombre() : "Sin categoría"*/);
+//        categoria.getStyleClass().add("pv-product-category");
 
         Label precio = new Label("$" + producto.getPrecio());
         precio.setFont(Font.font("System Bold", 18));
@@ -162,7 +162,7 @@ public class VentaController implements Initializable {
             agregarAlCarrito(producto,cantidad);
         });
 
-        card.getChildren().addAll(nombre, categoria, precio, stock, cantidadField, agregarBtn);
+        card.getChildren().addAll(nombre/*, categoria*/, precio, stock, cantidadField, agregarBtn);
 
         return card;
     }
@@ -516,7 +516,7 @@ public class VentaController implements Initializable {
             VentaPDFGenerator generador = new VentaPDFGenerator();
             generador.generarPDF(ventaCreada, detalles, archivoSalida);
 
-            emitirFactura(detalles);
+            emitirFactura(detalles, ventaCreada);
 
 
             // Abrir el PDF automáticamente con el visor predeterminado del sistema
@@ -534,7 +534,7 @@ public class VentaController implements Initializable {
         mostrarProductos();
     }
 
-    private void emitirFactura (List<DetalleVenta> detalles) {
+    private void emitirFactura (List<DetalleVenta> detalles, Venta venta) {
         try {
             // CUIT del emisor (debe coincidir con el certificado .crt/.key usado para WSAA)
             long cuitEmisor = Long.parseLong(VariablesEntorno.getCUIT());
@@ -573,8 +573,9 @@ public class VentaController implements Initializable {
                     " — Nro: " + factura.getNumero());
 
             // Generar pdf
+            factura.setNumero(venta.getId()); // Hardcodeo porque siempre ARCA en modo homologacion te da numero 1
             String FacturaGenerada = new GeneradorPDF().generarPDF(factura/*, "FacturaC_" + factura.getNumero() + ".pdf"*/);
-            System.out.println("✅ PDF generado: FacturaC_" + factura.getNumero() + ".pdf");
+            System.out.println("✅ PDF generado: Factura C " + factura.getNumero() + ".pdf");
             Desktop.getDesktop().open(new File(FacturaGenerada));
 
         } catch (Exception e) {
