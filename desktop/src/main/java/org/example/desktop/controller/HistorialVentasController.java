@@ -22,7 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.DetalleVentaDTO;
 import org.example.desktop.model.*;
-import org.example.desktop.util.VariablesEntorno;
+import org.example.desktop.util.*;
 
 import java.awt.*;
 import java.io.File;
@@ -32,14 +32,15 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableCell;
-import org.example.desktop.util.VentaPDFGenerator;
 
 import java.time.format.DateTimeFormatter;
 
@@ -553,11 +554,34 @@ public class HistorialVentasController implements Initializable {
 
 
             // Generar el PDF
-            VentaPDFGenerator generador = new VentaPDFGenerator();
-            generador.generarPDF(ventaSeleccionada, detallesDeLaVenta, archivoSalida);
+//            VentaPDFGenerator generador = new VentaPDFGenerator();
+//            generador.generarPDF(ventaSeleccionada, detallesDeLaVenta, archivoSalida);
+
+            GeneradorPDF generadorPDF = new GeneradorPDF();
+            Factura factura = new Factura();
+            List<FacturaItem> items = new ArrayList<>();
+            for(DetalleVenta detalle : detallesDeLaVenta){
+            FacturaItem facturaItem = new FacturaItem(detalle.getProducto().getNombre(), detalle.getCantidad(), detalle.getPrecioUnitario());
+            items.add(facturaItem);
+            }
+            //Simulamos los datos
+            factura.setItems(items);
+            factura.setTipoComprobante(11);
+            factura.setCae("");
+            factura.setTotal(ventaSeleccionada.getTotal());
+            LocalDateTime dateTime = LocalDateTime.parse(ventaSeleccionada.getFechaPago());
+            LocalDate fecha = dateTime.toLocalDate();
+            factura.setFechaEmision(fecha);
+            factura.setCuitReceptor(0);
+            factura.setCuitEmisor(Long.parseLong(VariablesEntorno.getCUIT()));
+            factura.setPuntoVenta(1);
+            factura.setNumero(ventaSeleccionada.getId());
+
+            String rutasalida = generadorPDF.generarPDF(factura);
 
             // Abrir el PDF automáticamente
-            Desktop.getDesktop().open(new File(archivoSalida));
+            Desktop.getDesktop().open(new File(rutasalida));
+//            Desktop.getDesktop().open(new File(archivoSalida));
 
             notificar("PDF generado", "La factura se generó correctamente.", true);
 
@@ -707,6 +731,8 @@ public class HistorialVentasController implements Initializable {
             stage.setTitle("Detalle de Venta #" + ventaSeleccionada.getId());
             stage.setScene(new Scene(root));
             stage.show();
+            stage.setResizable(false);
+
 
         } catch (Exception e) {
             e.printStackTrace();

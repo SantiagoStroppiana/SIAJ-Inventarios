@@ -31,6 +31,7 @@ public class Factura {
         this.fechaVencimientoCAE = fechaVencimientoCAE;
         this.numero = numero;
     }
+    public Factura() {}
 
     // getters
     public int getPuntoVenta() { return puntoVenta; }
@@ -43,4 +44,44 @@ public class Factura {
     public LocalDate getFechaEmision() { return fechaEmision; }
     public LocalDate getFechaVencimientoCAE() { return fechaVencimientoCAE; }
     public int getNumero() { return numero; }
+
+    public void setPuntoVenta(int puntoVenta) {
+        this.puntoVenta = puntoVenta;
+    }
+
+    public void setTipoComprobante(int tipoComprobante) {
+        this.tipoComprobante = tipoComprobante;
+    }
+
+    public void setCuitEmisor(long cuitEmisor) {
+        this.cuitEmisor = cuitEmisor;
+    }
+
+    public void setCuitReceptor(long cuitReceptor) {
+        this.cuitReceptor = cuitReceptor;
+    }
+
+    public void setItems(List<FacturaItem> items) {
+        this.items = items;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public void setCae(String cae) {
+        this.cae = cae;
+    }
+
+    public void setFechaEmision(LocalDate fechaEmision) {
+        this.fechaEmision = fechaEmision;
+    }
+
+    public void setFechaVencimientoCAE(LocalDate fechaVencimientoCAE) {
+        this.fechaVencimientoCAE = fechaVencimientoCAE;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
 }

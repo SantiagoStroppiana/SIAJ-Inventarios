@@ -30,14 +30,28 @@ public class DetalleVentaController {
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getProducto().getNombre()));
         cantidadColumn.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
         precioUnitarioColumn.setCellValueFactory(new PropertyValueFactory<>("precioUnitario"));
-        tablaDetalles.setFixedCellSize(30);
-        int maxVisibleRows = 6;
+        tablaDetalles.setFixedCellSize(35);
+        int maxVisibleRows = 10;
+        double headerHeight = 28;
+        double padding = 4;
+        double minHeight = 200; // Altura mínima para que se vea bien
 
         tablaDetalles.prefHeightProperty().bind(
-                Bindings.when(Bindings.size(tablaDetalles.getItems()).lessThanOrEqualTo(maxVisibleRows))
-                        .then(Bindings.size(tablaDetalles.getItems()).multiply(50).add(30))
-                        .otherwise(maxVisibleRows * 30 + 30)
+                Bindings.createDoubleBinding(() -> {
+                    int itemCount = tablaDetalles.getItems().size();
+                    if (itemCount == 0) {
+                        return minHeight;
+                    }
+
+                    int visibleRows = Math.min(itemCount, maxVisibleRows);
+                    double calculatedHeight = headerHeight + (visibleRows * tablaDetalles.getFixedCellSize()) + padding;
+
+                    // Usar el mayor entre la altura calculada y la mínima
+                    return Math.max(calculatedHeight, minHeight);
+
+                }, tablaDetalles.getItems())
         );
+
 
     }
 
