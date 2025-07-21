@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
+import org.example.desktop.model.Categoria;
 import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.model.Producto;
 import org.example.desktop.model.Proveedor;
@@ -44,6 +45,7 @@ public class ProductoDetalleController {
     @FXML private TextField txtPrecioCosto;
     @FXML private Button modificar;
     @FXML private Button guardar;
+    @FXML private Button btnCancelar;
     @FXML private SplitMenuButton menuProveedor;
     @FXML private SplitMenuButton menuCategorias;
     @FXML private SplitMenuButton menuEstado;
@@ -51,12 +53,13 @@ public class ProductoDetalleController {
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
     private Boolean estadoSeleccionado = null;
-
+    private Proveedor proveedorOriginal;
 
 
 
     public void cargarProducto() {
         proveedorSeleccionado = producto.getProveedorid();
+        proveedorOriginal = producto.getProveedorid();
         txtSku.setText(producto.getSku());
         txtNombre.setText(producto.getNombre());
         txtPrecio.setText(String.valueOf(producto.getPrecio()));
@@ -70,6 +73,7 @@ public class ProductoDetalleController {
         menuEstado.setDisable(true);
         mostrarProveedores();
         mostrarEstado();
+        mostrarCategorias();
 
         lblProductoNombre.setText(producto.getNombre());
         lblProductoSku.setText(producto.getSku());
@@ -85,6 +89,7 @@ public class ProductoDetalleController {
 
         modificar.setOnAction(event -> {habilitarEdicion();});
         guardar.setOnAction(event -> {modificarProducto();});
+        btnCancelar.setOnAction(event -> {cancelar();});
     }
 
     public void habilitarEdicion() {
@@ -114,6 +119,28 @@ public class ProductoDetalleController {
         menuProveedor.setDisable(true);
         menuCategorias.setDisable(true);
         menuEstado.setDisable(true);
+    }
+
+    public void cancelar() {
+        proveedorSeleccionado = producto.getProveedorid();
+        txtSku.setText(producto.getSku());
+        txtNombre.setText(producto.getNombre());
+        txtPrecio.setText(String.valueOf(producto.getPrecio()));
+        txtPrecioCosto.setText(String.valueOf(producto.getPrecioCosto()));
+        txtStock.setText(String.valueOf(producto.getStock()));
+        menuProveedor.setText(producto.getProveedor());
+        menuEstado.setText(producto.getEstado() ? "Activo" : "Inactivo");
+
+        menuProveedor.setDisable(true);
+        menuCategorias.setDisable(true);
+        menuEstado.setDisable(true);
+
+        lblProductoNombre.setText(producto.getNombre());
+        lblProductoSku.setText(producto.getSku());
+        lblEstadoActual.setText(producto.getEstado() ? "Activo" : "Inactivo");
+        lblStockActual.setText(String.valueOf(producto.getStock()));
+        inhabilitarEdicion();
+
     }
 
 
@@ -182,17 +209,35 @@ public class ProductoDetalleController {
             producto2.setPrecio(precio);
             producto2.setPrecioCosto(precioCosto);
 
+
+
             LocalDateTime now = LocalDateTime.now();
             long timestamp = now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
             producto2.setFecha_alta(timestamp);
-            System.out.println("PRODUCTO 2:"+producto2);
+//            System.out.println("PRODUCTO 2:"+producto2);
             //producto2.setFecha_alta(LocalDateTime.now().toString();
             //producto.setCategoria(producto.getCategoria());
 
             producto2.setActivo(menuEstado.getText().equals("Activo") ? true : false);
             //producto2.setProveedorid(new Proveedor(producto.getProveedorid().getId(), null, null, null, null, true));
             producto2.setProveedorid(proveedorSeleccionado);
-            producto2.setImg("");
+            producto2.setImg(producto.getImg());
+
+            System.out.println("Producto nuevo: "+producto2+ "\nProducto original: "+ producto);
+            System.out.println("Proveedor seleccionado: "+proveedorSeleccionado+ "\nProveedor original: "+ proveedorOriginal);
+            if (
+                    producto2.getSku().equals(producto.getSku())
+                            && producto2.getNombre().equals(producto.getNombre())
+                            && producto2.getStock() == producto.getStock()
+                            && producto2.getPrecio().compareTo(producto.getPrecio()) == 0
+                            && producto2.getPrecioCosto().compareTo(producto.getPrecioCosto()) == 0
+                            && producto2.getEstado() == producto.getEstado()
+                            && proveedorOriginal == proveedorSeleccionado
+            ) {
+//            if (producto2==producto){
+                notificar("Error al modificar", "No hay datos para modificar.", false);
+                return;
+            }
 
             /*
             Producto producto = new Producto();
@@ -360,6 +405,31 @@ public class ProductoDetalleController {
 
 
 
+    }
+    public void mostrarCategorias() {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/categorias"))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+            Categoria[] categorias = gson.fromJson(responseBody, Categoria[].class);
+
+
+            for (Categoria c : categorias) {
+                MenuItem item = new MenuItem(c.getNombre());
+                item.setOnAction(event -> {
+                    menuCategorias.setText(c.getNombre());
+                });
+                menuCategorias.getItems().add(item);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            notificar("Error Crítico", e.getMessage(), false);
+        }
     }
 
 }

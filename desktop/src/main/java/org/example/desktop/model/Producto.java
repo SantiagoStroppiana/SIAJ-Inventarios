@@ -137,4 +137,21 @@ public class Producto {
     public void setPrecioCosto(BigDecimal precioCosto) {
         this.precioCosto = precioCosto;
     }
+
+    @Override
+    public String toString() {
+        return "Producto{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", precio=" + precio +
+                ", precioCosto=" + precioCosto +
+                ", sku='" + sku + '\'' +
+                ", activo=" + activo +
+                ", img='" + img + '\'' +
+                ", fecha_alta=" + fecha_alta +
+                ", stock=" + stock +
+                ", stock_minimo=" + stock_minimo +
+                ", proveedor_id=" + proveedor_id +
+                '}';
+    }
 }

@@ -266,7 +266,7 @@
 
 /* Button Styles */
 .detalle-btn-primary {
-    -fx-background-color: #34495e;
+    -fx-background-color: #FFA500; /* naranja clásico */
     -fx-text-fill: white;
     -fx-background-radius: 6;
     -fx-padding: 10 20;
@@ -277,10 +277,11 @@
 }
 
 .detalle-btn-primary:hover {
-    -fx-background-color: #2c3e50;
+    -fx-background-color: #FFB543; /* amarillo‑naranja más claro y alegre */
     -fx-scale-x: 1.03;
     -fx-scale-y: 1.03;
 }
+
 
 .detalle-btn-success {
     -fx-background-color: #27ae60;
@@ -635,22 +636,22 @@
 }
 
 /* Button Styles */
-.detalle-btn-primary {
-    -fx-background-color: #34495e;
-    -fx-text-fill: white;
-    -fx-background-radius: 6;
-    -fx-padding: 10 20;
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);
-}
+/*.detalle-btn-primary {*/
+/*    -fx-background-color: #34495e;*/
+/*    -fx-text-fill: white;*/
+/*    -fx-background-radius: 6;*/
+/*    -fx-padding: 10 20;*/
+/*    -fx-font-size: 13px;*/
+/*    -fx-font-weight: bold;*/
+/*    -fx-cursor: hand;*/
+/*    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);*/
+/*}*/
 
-.detalle-btn-primary:hover {
-    -fx-background-color: #2c3e50;
-    -fx-scale-x: 1.03;
-    -fx-scale-y: 1.03;
-}
+/*.detalle-btn-primary:hover {*/
+/*    -fx-background-color: #2c3e50;*/
+/*    -fx-scale-x: 1.03;*/
+/*    -fx-scale-y: 1.03;*/
+/*}*/
 
 .detalle-btn-success {
     -fx-background-color: #27ae60;
