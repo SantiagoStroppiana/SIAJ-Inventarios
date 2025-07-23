@@ -29,9 +29,8 @@ import java.util.*;
 
 import com.google.gson.GsonBuilder;
 
-
-
-
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
 
 public class IngresoOrdenController {
 
@@ -50,17 +49,12 @@ public class IngresoOrdenController {
     @FXML
     private Button btnCancelar;
 
-    // Cliente HTTP y Gson
     private HttpClient httpClient = HttpClient.newHttpClient();
-
-
 
     private Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .create();
 
-
-    // Lista para manejar los detalles de la orden
     private List<DetalleOrdenCompraDTO> detallesOrden = new ArrayList<>();
     private List<ItemIngreso> itemsIngreso = new ArrayList<>();
 
@@ -391,8 +385,7 @@ public class IngresoOrdenController {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200 && response.statusCode() != 201) {
-            System.err.println("Error al crear entrada: " + response.body());
-            notificar("Error", "No se pudo crear la entrada.", false);
+            notificarError("No se pudo crear la entrada del orden de compra");
             return;
         }
 
@@ -420,29 +413,23 @@ public class IngresoOrdenController {
                 HttpResponse<String> responseDetalle = httpClient.send(requestDetalle, HttpResponse.BodyHandlers.ofString());
 
                 if (responseDetalle.statusCode() != 200 && responseDetalle.statusCode() != 201) {
-                    System.err.println("❌ Error al crear detalle de entrada: " + responseDetalle.body());
-                    notificar("Error", "No se pudo crear detalle de entrada para ID: " + item.getDetalle().getProductoId(), false);
+
+                    notificarError("No se pudo crear detalle de entrada para ID: " + item.getDetalle().getProductoId());
                     detallesOk = false;
                 } else {
-                    System.out.println("✅ Detalle de entrada creado: " + responseDetalle.body());
+                    notificarExito("Detalle de entrada creado " + item.getDetalle().getProductoId());
                 }
             }
         }
-
-
-
-
 
         // Por ahora, simulo el proceso exitoso
         boolean ingresoExitoso = true;
 
         if (ingresoExitoso) {
-            notificar("Éxito", "Ingreso confirmado correctamente", true);
-
-            // Limpiar formulario
+            notificarExito("Ingreso confirmado correctamente");
             limpiarFormulario();
         } else {
-            notificar("Error", "No se pudo confirmar el ingreso", false);
+            notificarError("Error no se pudo ingresar la entrada");
         }
     }
 
@@ -471,22 +458,6 @@ public class IngresoOrdenController {
         productosIngresadosContainer.getChildren().clear();
     }
 
-    private void notificar(String titulo, String mensaje, boolean exito) {
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-
-            if (exito) {
-                notificacion.showInformation();
-            } else {
-                notificacion.showError();
-            }
-        });
-    }
-
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         alerta.setTitle(titulo);
@@ -495,7 +466,6 @@ public class IngresoOrdenController {
         alerta.showAndWait();
     }
 
-    // Clase interna para manejar items de ingreso
     private static class ItemIngreso {
         private DetalleOrdenCompraDTO detalle;
         private int cantidadIngresada;

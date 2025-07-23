@@ -16,6 +16,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
+
 public class ProveedorDetalleController {
 
     private Proveedor proveedor;
@@ -227,14 +230,16 @@ public class ProveedorDetalleController {
 
 
             if (razonSocial.isEmpty() || direccion.isEmpty() ||  telefono.isEmpty() || email.isEmpty() || cuit.isEmpty()) {
-                notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
+                notificarError("Todos los campos son obligatorios.");
                 return;
             }
 
 
             Proveedor proveedor2 = proveedor;
             if (proveedor2 == proveedor) {
-                notificar("Error al modificar", "No hay datos para modificar.", false);
+                //ESTE ERROR SALE
+//                notificar("Error al modificar", "No hay datos para modificar.", false);
+                notificarError("No hay datos para modificar");
                 return;
             }
 
@@ -257,47 +262,25 @@ public class ProveedorDetalleController {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             String responseBody = response.body();
-            System.out.println("Código de estado: " + response.statusCode());
-            System.out.println("Respuesta del servidor: " + response.body());
-            System.out.println("Datos enviados al servidor: " + json);
-
             if (responseBody.trim().startsWith("{")) {
                 MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
 
                 if (resultado.isExito()) {
-                    notificar("Proveedor modificado", resultado.getMensaje(), true);
-                    System.out.println("Proveedor modificado" + resultado.getMensaje());
+                    notificarExito( resultado.getMensaje());
                     inhabilitarEdicion();
-                    // limpiarCampos();
-
                 } else {
-                    notificar("Error al modificar proveedor", resultado.getMensaje(), false);
+                    notificarError( resultado.getMensaje());
                 }
             } else {
-                notificar("Respuesta del servidor incorrecta", responseBody, false);
+                notificarError("Respuesta del servidor incorrecta");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error critico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
     }
 
-    private void notificar(String titulo, String mensaje, boolean exito){
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-
-            if (exito) {
-                notificacion.showInformation();
-            } else {
-                notificacion.showError();
-            }
-        });
-    }
     /*
 
                 <TextField fx:id="txtRazonSocial" layoutX="330.0" layoutY="83.0" prefHeight="38.0" prefWidth="230.0" promptText="SKU" />
@@ -306,7 +289,6 @@ public class ProveedorDetalleController {
                 <TextField fx:id="txtEmail" layoutX="330.0" layoutY="220.0" prefHeight="38.0" prefWidth="230.0" promptText="Precio" />
 
      */
-
 
 
     public void mostrarProveedores() {
@@ -325,18 +307,10 @@ public class ProveedorDetalleController {
                 String responseBody = response.body();
                 System.out.println(responseBody);
 
-
-
-
-
             } catch (Exception e) {
                 e.printStackTrace();
-                notificar("Error Crítico", e.getMessage(), false);
+                notificarError("Error Crítico " + e.getMessage());
             }
-
-
-
-
 
         }
     }
@@ -374,7 +348,7 @@ public class ProveedorDetalleController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
 
 

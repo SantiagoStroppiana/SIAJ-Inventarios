@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.UsuarioDTO;
 import org.example.desktop.model.LoginResponse;
 import org.example.desktop.util.StageManager;
@@ -18,6 +15,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
 
 public class LoginController {
 
@@ -31,14 +30,14 @@ public class LoginController {
 
     @FXML
     public void olvidePassword(ActionEvent event) {
-        StageManager.loadScene("/org/example/desktop/cambiar-password-view.fxml", 700, 600);
+        StageManager.loadScene("/org/example/desktop/cambiar-password-view.fxml", 900, 600);
     }
 
     @FXML
     public void iniciarSesion(javafx.event.ActionEvent actionEvent) {
 
         if (email.getText().isEmpty() || password.getText().isEmpty()) {
-            notificar("Error", "Por favor, complete todos los campos", false);
+            notificarError("Por favor, complete todos los campos");
             return;
         }
 
@@ -68,19 +67,20 @@ public class LoginController {
                                 UserSession.iniciarSesion(usuarioLogueado);
 
                                 System.out.println("JSON de respuesta LOGIN: " + responseBody);
-
-                                notificar("Iniciar sesión exitoso", resultado.getMessage(), true);
+                                notificarExito("Has iniciado sesión correctamente. Redirigiendo al dashboard...");
                                 StageManager.loadScene("/org/example/desktop/menu-view.fxml", 1600, 900);
                             } else {
-                                notificar("Incorrecto", resultado.getMessage(), false);
+                                notificarError("Error de autenticación, verifique los campos");
                             }
 
                         } else {
-                            notificar("Error", responseBody, false);
+                            notificarError("Error de autenticación");
+
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        notificar("Error", "Error al procesar la respuesta: " + e.getMessage(), false);
+                        notificarError("Error al procesar la respuesta: " + e.getMessage());
+
                     }
                 });
 
@@ -88,33 +88,18 @@ public class LoginController {
                 e.printStackTrace();
                 final String errorMsg = e.getMessage();
                 Platform.runLater(() -> {
-                    notificar("Error Crítico", errorMsg, false);
+                    notificarError("Error critico: " + errorMsg);
                 });
             }
         }).start();
     }
 
-    private void notificar(String titulo, String mensaje, boolean exito) {
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-            if (exito) {
-                notificacion.showInformation();
-            } else {
-                notificacion.showError();
-            }
-        });
-    }
-
     public void irARegistro(javafx.event.ActionEvent actionEvent) {
         try {
-            StageManager.loadScene("/org/example/desktop/register-view.fxml", 700, 650);
+            StageManager.loadScene("/org/example/desktop/register-view.fxml", 900, 650);
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error", "No se pudo cargar la pantalla de registro: " + e.getMessage(), false);
+            notificarError("No se pudo cargar la pantalla de registro: " + e.getMessage());
         }
     }
 }

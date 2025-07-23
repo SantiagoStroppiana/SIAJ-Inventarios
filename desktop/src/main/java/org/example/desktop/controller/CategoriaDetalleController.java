@@ -17,6 +17,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
+
 public class CategoriaDetalleController {
 
     private Categoria categoria;
@@ -36,30 +39,20 @@ public class CategoriaDetalleController {
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
     private Boolean estadoSeleccionado = null;
-
-
-
+    
 
     public void cargarCategoria() {
 
-
         txtNombre.setText(categoria.getNombre());
         txtDescripcion.setText(categoria.getDescripcion());
-
-
-        // TextFields
         txtNombre.setEditable(false);
         txtNombre.setDisable(true);
         txtNombre.setMouseTransparent(true);
         txtNombre.setFocusTraversable(false);
-
-        // TextFields
         txtDescripcion.setEditable(false);
         txtDescripcion.setDisable(true);
         txtDescripcion.setMouseTransparent(true);
         txtDescripcion.setFocusTraversable(false);
-
-
 
         modificar.setOnAction(event -> {habilitarEdicion();});
         guardar.setOnAction(event -> {modificarCategoria();});
@@ -69,13 +62,10 @@ public class CategoriaDetalleController {
         if (txtNombre.isEditable() && txtDescripcion.isEditable()) {
 
         } else {
-            // TextFields
             txtNombre.setEditable(true);
             txtNombre.setDisable(false);
             txtNombre.setMouseTransparent(false);
             txtNombre.setFocusTraversable(true);
-
-            // TextFields
             txtDescripcion.setEditable(true);
             txtDescripcion.setDisable(false);
             txtDescripcion.setMouseTransparent(false);
@@ -84,13 +74,10 @@ public class CategoriaDetalleController {
     }
 
     public void inhabilitarEdicion() {
-        // TextFields
         txtNombre.setEditable(false);
         txtNombre.setDisable(true);
         txtNombre.setMouseTransparent(true);
         txtNombre.setFocusTraversable(false);
-
-        // TextFields
         txtDescripcion.setEditable(false);
         txtDescripcion.setDisable(true);
         txtDescripcion.setMouseTransparent(true);
@@ -128,41 +115,21 @@ public class CategoriaDetalleController {
                 MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
 
                 if (resultado.isExito()) {
-                    notificar("Categoria modificado", resultado.getMensaje(), true);
-                    System.out.println("Categoria modificado" + resultado.getMensaje());
+                    notificarExito("Categoria modificado " + resultado.getMensaje());
                     inhabilitarEdicion();
-                    // limpiarCampos();
-
                 } else {
-                    notificar("Error al modificar categoria", resultado.getMensaje(), false);
+                    notificarError("Error al modificar categoria " + resultado.getMensaje());
                 }
             } else {
-                notificar("Respuesta del servidor incorrecta", responseBody, false);
+                notificarError("Error del servidor: " + responseBody);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error critico", e.getMessage(), false);
+            notificarError("Error Critico: " + e.getMessage());
         }
     }
-
-    private void notificar(String titulo, String mensaje, boolean exito){
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-
-            if (exito) {
-                notificacion.showInformation();
-            } else {
-                notificacion.showError();
-            }
-        });
-    }
-
-
+    
     /*
     public void mostrarEstado() {
 
@@ -185,10 +152,6 @@ public class CategoriaDetalleController {
             e.printStackTrace();
             notificar("Error Crítico", e.getMessage(), false);
         }
-
-
-
-
 
     }*/
 

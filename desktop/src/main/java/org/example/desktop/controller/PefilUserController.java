@@ -43,7 +43,7 @@ public class PefilUserController {
         Parent root = fxmlLoader.load();
 
         Stage passwordStage = new Stage();
-        passwordStage.setScene(new Scene(root, 700, 500));
+        passwordStage.setScene(new Scene(root, 900, 600));
         passwordStage.setTitle("Cambiar Contraseña");
         passwordStage.setResizable(false);
         passwordStage.initStyle(StageStyle.UTILITY);

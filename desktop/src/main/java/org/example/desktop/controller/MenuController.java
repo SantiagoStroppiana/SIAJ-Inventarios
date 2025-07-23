@@ -291,8 +291,6 @@ public class MenuController {
             lblMiniTopProducto.setText("-");
         }
     }
-
-    // Método público para refrescar datos (útil si se llama desde otras ventanas)
     public void refrescarDatos() {
         cargarDatosVentasAsync();
     }

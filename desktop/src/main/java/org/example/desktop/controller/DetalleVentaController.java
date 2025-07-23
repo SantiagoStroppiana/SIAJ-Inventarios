@@ -34,7 +34,7 @@ public class DetalleVentaController {
         int maxVisibleRows = 10;
         double headerHeight = 28;
         double padding = 4;
-        double minHeight = 200; // Altura mínima para que se vea bien
+        double minHeight = 200;
 
         tablaDetalles.prefHeightProperty().bind(
                 Bindings.createDoubleBinding(() -> {
@@ -46,12 +46,10 @@ public class DetalleVentaController {
                     int visibleRows = Math.min(itemCount, maxVisibleRows);
                     double calculatedHeight = headerHeight + (visibleRows * tablaDetalles.getFixedCellSize()) + padding;
 
-                    // Usar el mayor entre la altura calculada y la mínima
                     return Math.max(calculatedHeight, minHeight);
 
                 }, tablaDetalles.getItems())
         );
-
 
     }
 

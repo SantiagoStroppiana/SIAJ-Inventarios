@@ -22,6 +22,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ResourceBundle;
 
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
+
 public class UsuarioController implements Initializable {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
@@ -79,7 +82,7 @@ public class UsuarioController implements Initializable {
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
 
     }
@@ -129,13 +132,13 @@ public class UsuarioController implements Initializable {
 
                                 if (response.statusCode() == 200) {
                                     mostrarUsuarios();
-                                    notificar("Éxito", "Rol actualizado correctamente", true);
+                                    notificarExito("Rol actualizado correctamente");
                                 } else {
-                                    notificar("Error", "No se pudo actualizar el rol", false);
+                                    notificarError("No se pudo actualizar el rol");
                                 }
 
                             } catch (Exception e) {
-                                notificar("Error crítico", e.getMessage(), false);
+                                notificarError("Error Crítico " + e.getMessage());
                             }
                         });
                     }
@@ -156,20 +159,5 @@ public class UsuarioController implements Initializable {
         accionColumn.setCellFactory(cellFactory);
     }
 
-
-    private void notificar(String titulo, String mensaje, boolean exito){
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-            if (exito) {
-                notificacion.showInformation();
-            }else{
-                notificacion.showError();
-            }
-        });
-    }
 
 }

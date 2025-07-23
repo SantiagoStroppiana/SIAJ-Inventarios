@@ -1,19 +1,15 @@
 package org.example.desktop.controller;
 
 import com.google.gson.Gson;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
 import org.example.desktop.model.Categoria;
 import org.example.desktop.model.MensajesResultados;
 import org.example.desktop.util.VariablesEntorno;
@@ -26,32 +22,31 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ResourceBundle;
 
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
+
 public class CategoriaController implements Initializable {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
 
-    // Campos FXML
     @FXML private TextField txtNombre;
     @FXML private TextField txtDescripcion;
     @FXML private TextField txtBuscarCategoria;
     @FXML private Label lblCategoriaNombre;
     @FXML private TableView<Categoria> tablaCategorias;
-    @FXML private TableColumn<Categoria, String> nombreColumn; // Corregido: era Producto
-    @FXML private TableColumn<Categoria, String> descripcionColumn; // Corregido: era Producto
+    @FXML private TableColumn<Categoria, String> nombreColumn;
+    @FXML private TableColumn<Categoria, String> descripcionColumn;
     @FXML private Button btnAgregar;
     @FXML private Button btnModificar;
 
-    // Variable para filtro
     private Categoria[] categoriasOriginales;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Configurar columnas de la tabla
         nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         descripcionColumn.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
 
-        // Configurar eventos de botones
         btnAgregar.setOnAction(event -> crearCategoria());
         btnModificar.setOnAction(event -> {
             try {
@@ -93,21 +88,19 @@ public class CategoriaController implements Initializable {
 
             if (response.statusCode() == 200) {
                 String responseBody = response.body();
-                System.out.println("Respuesta del backend: " + responseBody);
 
                 categoriasOriginales = gson.fromJson(responseBody, Categoria[].class);
 
                 tablaCategorias.getItems().clear();
                 tablaCategorias.getItems().addAll(categoriasOriginales);
 
-                System.out.println("Categorías cargadas: " + categoriasOriginales.length);
             } else {
-                notificar("Error de conexión", "Error al obtener categorías del servidor", false);
+                notificarError("Error al obtener categorías del servidor");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
     }
 
@@ -117,27 +110,23 @@ public class CategoriaController implements Initializable {
             String nombre = txtNombre.getText().trim();
             String descripcion = txtDescripcion.getText().trim();
 
-            // Validaciones
             if (nombre.isEmpty()) {
-                notificar("Campo requerido", "El nombre es obligatorio.", false);
+                notificarError("Campo requerido\", \"El nombre es obligatorio.");
                 txtNombre.requestFocus();
                 return;
             }
 
             if (descripcion.isEmpty()) {
-                notificar("Campo requerido", "La descripción es obligatoria.", false);
+                notificarError("Campo requerido\", \"La descripcion es obligatorio.");
                 txtDescripcion.requestFocus();
                 return;
             }
-
-            // Crear objeto categoria
             Categoria categoria = new Categoria();
             categoria.setNombre(nombre);
             categoria.setDescripcion(descripcion);
             lblCategoriaNombre.setText(categoria.getNombre());
             String json = gson.toJson(categoria);
 
-            // Enviar petición POST
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(VariablesEntorno.getServerURL() + "/api/crearCategoria"))
                     .header("Content-Type", "application/json")
@@ -147,33 +136,29 @@ public class CategoriaController implements Initializable {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             String responseBody = response.body();
-            System.out.println("Código de estado: " + response.statusCode());
-            System.out.println("Respuesta del servidor: " + responseBody);
 
             if (response.statusCode() == 200 || response.statusCode() == 201) {
                 if (responseBody.trim().startsWith("{")) {
                     MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
-
                     if (resultado.isExito()) {
                         mostrarCategorias();
                         limpiarCampos();
-                        notificar("Categoría creada", resultado.getMensaje(), true);
+                        notificarExito("Categoría creada " + resultado.getMensaje());
                     } else {
-                        notificar("Error al crear categoría", resultado.getMensaje(), false);
+                        notificarError("Error categoria creada " + resultado.getMensaje());
                     }
                 } else {
-                    // Si no es JSON, asumir que es éxito
                     mostrarCategorias();
                     limpiarCampos();
-                    notificar("Categoría creada", "Categoría creada exitosamente", true);
+//                    notificarExito("Categoría creada exitosamente");
                 }
             } else {
-                notificar("Error del servidor", "Error al crear la categoría. Código: " + response.statusCode(), false);
+                notificarError("Error al crear la categoría. Código: " + response.statusCode());
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error crítico", "Error inesperado: " + e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
     }
 
@@ -182,7 +167,7 @@ public class CategoriaController implements Initializable {
         Categoria categoria = tablaCategorias.getSelectionModel().getSelectedItem();
 
         if (categoria == null) {
-            notificar("Seleccionar categoría", "Debe seleccionar una categoría en la tabla.", false);
+            notificarError("Debe seleccionar una categoría en la tabla.");
             return;
         }
 
@@ -196,14 +181,14 @@ public class CategoriaController implements Initializable {
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root, 800, 550));
-            stage.setTitle("Detalle de Categoría"); // Corregido el typo
+            stage.setTitle("Detalle de Categoría");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setOnCloseRequest(event -> mostrarCategorias());
             stage.showAndWait();
 
         } catch (IOException e) {
             e.printStackTrace();
-            notificar("Error", "No se pudo abrir la ventana de detalle: " + e.getMessage(), false);
+            notificarError("No se pudo abrir la ventana de detalle: " + e.getMessage());
         }
     }
 
@@ -213,19 +198,4 @@ public class CategoriaController implements Initializable {
         txtNombre.requestFocus();
     }
 
-    private void notificar(String titulo, String mensaje, boolean exito) {
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-
-            if (exito) {
-                notificacion.showInformation();
-            } else {
-                notificacion.showError();
-            }
-        });
-    }
 }
