@@ -544,3 +544,9 @@
 .pv-products-scroll > .viewport {
     -fx-background-color: transparent;
 }
+
+.pv-search-container {
+    -fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);
+    -fx-padding: 15px;
+    -fx-start-margin: 10px;
+}
