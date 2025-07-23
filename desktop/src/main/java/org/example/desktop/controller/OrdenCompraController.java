@@ -443,6 +443,7 @@ public class OrdenCompraController {
     private void limpiarOrden() {
         itemsOrden.clear();
         actualizarVistaOrden();
+        notesTextArea.setText("");
     }
 
     private void generarOrden() throws IOException, InterruptedException {
@@ -574,7 +575,12 @@ public class OrdenCompraController {
                 }
 
                 String rutaArchivo = "pdfs/ordenes/OrdenCompra " + orden.getId() + ".pdf";
-                OrdenCompraPDFGenerator.generarPDF(orden, itemsOrden, rutaArchivo);
+                String comentario = "";
+                String comentario2 = notesTextArea.getText();
+                if (!comentario2.equals("") || !comentario2.isEmpty()) {
+                    comentario = comentario2;
+                }
+                OrdenCompraPDFGenerator.generarPDF(orden, itemsOrden, rutaArchivo,comentario);
                 Desktop.getDesktop().open(new File(rutaArchivo));
 
                 System.out.println("📄 PDF generado en: " + rutaArchivo);

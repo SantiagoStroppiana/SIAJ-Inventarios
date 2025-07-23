@@ -21,7 +21,7 @@ import java.util.List;
 
 public class OrdenCompraPDFGenerator {
 
-    public static void generarPDF(OrdenCompra orden, List<OrdenCompraController.ItemOrden> items, String rutaSalida) throws Exception {
+    public static void generarPDF(OrdenCompra orden, List<OrdenCompraController.ItemOrden> items, String rutaSalida,String comentario) throws Exception {
         Document doc = new Document(PageSize.A4);
         PdfWriter.getInstance(doc, new FileOutputStream(rutaSalida));
         doc.open();
@@ -149,6 +149,43 @@ public class OrdenCompraPDFGenerator {
                 FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 9, negro));
         pie.setAlignment(Element.ALIGN_CENTER);
         doc.add(pie);
+
+
+// Comentario estilizado (si existe)
+        if (comentario != null && !comentario.trim().isEmpty()) {
+            doc.add(new Paragraph(" "));
+            doc.add(new Paragraph(" "));
+
+            PdfPTable tablaComentario = new PdfPTable(1);
+            tablaComentario.setWidthPercentage(100);
+
+            Color fondoComentario = new Color(230, 245, 255); // celeste muy suave
+            Color bordeComentario = new Color(180, 220, 240); // azul grisáceo claro
+
+            PdfPCell celdaComentario = new PdfPCell();
+            celdaComentario.setBackgroundColor(fondoComentario);
+            celdaComentario.setBorderColor(bordeComentario);
+            celdaComentario.setPadding(15);
+            celdaComentario.setBorderWidth(1.2f);
+
+            Paragraph tituloComentario = new Paragraph("💬 Comentario del Responsable",
+                    FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, verde));
+            tituloComentario.setSpacingAfter(10);
+
+            Paragraph cuerpoComentario = new Paragraph(comentario,
+                    FontFactory.getFont(FontFactory.HELVETICA, 11, negro));
+            cuerpoComentario.setLeading(16); // espacio entre líneas
+            cuerpoComentario.setFirstLineIndent(10); // pequeña sangría
+
+            celdaComentario.addElement(tituloComentario);
+            celdaComentario.addElement(cuerpoComentario);
+            tablaComentario.addCell(celdaComentario);
+
+            doc.add(tablaComentario);
+        }
+
+
+
 
         doc.close();
     }
