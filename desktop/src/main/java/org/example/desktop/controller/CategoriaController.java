@@ -180,7 +180,7 @@ public class CategoriaController implements Initializable {
             controller.cargarCategoria();
 
             Stage stage = new Stage();
-            stage.setScene(new Scene(root, 800, 550));
+            stage.setScene(new Scene(root, 800, 635));
             stage.setTitle("Detalle de Categoría");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setOnCloseRequest(event -> mostrarCategorias());

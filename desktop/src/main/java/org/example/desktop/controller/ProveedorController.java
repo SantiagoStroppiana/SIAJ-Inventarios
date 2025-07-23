@@ -329,8 +329,8 @@ public class ProveedorController implements Initializable {
             controller.setProveedor(proveedor);
             controller.cargarProveedor();
 
-            Stage stage = new Stage(); // Esto NO usa StageManager
-            stage.setScene(new Scene(root, 800, 550));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, 800, 750));
             stage.setTitle("Detalle de Proveedor");
             stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés
             stage.setOnCloseRequest(event -> {mostrarProveedores();});

@@ -81,7 +81,7 @@ public class SideMenuController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             UserSession.cerrarSesion();
-            StageManager.loadScene("/org/example/desktop/login-view.fxml", 700, 500);
+            StageManager.loadScene("/org/example/desktop/login-view.fxml", 900, 600);
         }
     }
 }

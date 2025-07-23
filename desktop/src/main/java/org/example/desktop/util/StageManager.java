@@ -120,7 +120,7 @@ public class StageManager {
         );
 
         try {
-            Image appIcon = new Image(StageManager.class.getResourceAsStream("/images/logo.png"));
+            Image appIcon = new Image(StageManager.class.getResourceAsStream("resources/images/logo.png"));
             ImageView iconView = new ImageView(appIcon);
             iconView.setFitWidth(24);
             iconView.setFitHeight(24);

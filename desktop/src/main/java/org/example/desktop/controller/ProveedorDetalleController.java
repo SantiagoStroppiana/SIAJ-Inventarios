@@ -235,14 +235,10 @@ public class ProveedorDetalleController {
             }
 
 
-            Proveedor proveedor2 = proveedor;
-            if (proveedor2 == proveedor) {
-                //ESTE ERROR SALE
-//                notificar("Error al modificar", "No hay datos para modificar.", false);
-                notificarError("No hay datos para modificar");
-                return;
-            }
+            Proveedor proveedor2 = new Proveedor();
 
+            proveedor2.setId(proveedor.getId());
+            proveedor2.setFecha_alta(proveedor.getFecha_alta());
             proveedor2.setRazonSocial(razonSocial);
             proveedor2.setDireccion(direccion);
             proveedor2.setTelefono(telefono);
@@ -250,6 +246,15 @@ public class ProveedorDetalleController {
             proveedor2.setCuit(cuit);
 
             proveedor2.setActivo(menuEstado.getText().equals("Activo") ? true : false);
+
+
+            if(proveedor2.getId() == proveedor.getId()
+            && proveedor2.getFecha_alta() == proveedor.getFecha_alta()
+            && proveedor2.getRazonSocial().equalsIgnoreCase(proveedor.getRazonSocial()) && proveedor2.getDireccion().equalsIgnoreCase(proveedor.getDireccion()) && proveedor2.getTelefono().equalsIgnoreCase(proveedor.getTelefono())
+            && proveedor2.getEmail().equalsIgnoreCase(proveedor.getEmail()) && proveedor2.getCuit().equalsIgnoreCase(proveedor.getCuit()) && proveedor2.getEstado() == proveedor.getEstado()) {
+                notificarError("No hay datos para modificar");
+                return;
+            }
 
             String json = gson.toJson(proveedor2);
 

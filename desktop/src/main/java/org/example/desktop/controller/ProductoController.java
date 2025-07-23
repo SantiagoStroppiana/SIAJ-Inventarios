@@ -309,7 +309,7 @@ public class ProductoController implements Initializable {
             controller.cargarProducto();
 
             Stage stage = new Stage();
-            stage.setScene(new Scene(root, 800, 550));
+            stage.setScene(new Scene(root, 800, 750));
             stage.setTitle("Detalle de Producto");
             stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés
             stage.setOnCloseRequest(event -> {mostrarProductos();});
@@ -468,7 +468,6 @@ public class ProductoController implements Initializable {
         }
     }
     private void setupKeyboardNavigation() {
-        // Configurar navegación con Enter en campos de texto
         txtSku.setOnAction(e -> txtNombre.requestFocus());
         txtNombre.setOnAction(e -> txtStock.requestFocus());
         txtStock.setOnAction(e -> txtPrecio.requestFocus());
@@ -534,8 +533,7 @@ public class ProductoController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(root, 800, 550));
             stage.setTitle("Detalle de Categorias");
-            stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés
-            //stage.setOnCloseRequest(event -> {mostrarProductos();});
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
 
     }
