@@ -243,7 +243,6 @@ public class GraficoController {
         barChart.getData().clear();
         barChart.getData().add(series);
 
-        // Aplicar estilos a las barras después de que se rendericen
         Platform.runLater(() -> {
             barChart.applyCss();
             barChart.layout();
@@ -256,7 +255,6 @@ public class GraficoController {
         for (int i = 0; i < series.getData().size(); i++) {
             XYChart.Data<String, Number> data = series.getData().get(i);
             if (data.getNode() != null) {
-                // Usar colores sólidos en lugar de gradientes para evitar ClassCastException
                 String[] colores = {"#2196F3", "#4CAF50", "#FF9800", "#9C27B0", "#F44336", "#00BCD4"};
                 String color = colores[i % colores.length];
                 data.getNode().setStyle("-fx-bar-fill: " + color + ";");
@@ -306,7 +304,6 @@ public class GraficoController {
         cargarDatosVentasAsync();
     }
 
-    // Clase interna para encapsular los datos
     private static class VentasData {
         final Producto[] productos;
         final DetalleVentaDTO[] detallesVenta;

@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.model.MensajesResultados;
-import org.example.desktop.model.Producto;
 import org.example.desktop.model.Proveedor;
 import org.example.desktop.util.*;
 import org.w3c.dom.Document;
@@ -39,6 +38,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Date;
 import java.util.ResourceBundle;
+
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
 
 public class ProveedorController implements Initializable {
 
@@ -76,29 +78,18 @@ public class ProveedorController implements Initializable {
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response);
 
             String responseBody = response.body();
-            System.out.println(responseBody);
 
             proveedoresOriginales = gson.fromJson(responseBody, Proveedor[].class);
 
             tablaProveedores.getItems().clear();
             tablaProveedores.getItems().addAll(proveedoresOriginales);
 
-            for (Proveedor p : proveedoresOriginales) {
-                System.out.println("Proveedor: " + p.getRazonSocial() + ", Teléfono: " + p.getTelefono());
-            }
-
-            System.out.println("Respuesta del backend:");
-            System.out.println(responseBody);
-
-
-
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error Crítico" + e.getMessage());
         }
 
     }
@@ -173,25 +164,6 @@ public class ProveedorController implements Initializable {
 
     }
 
-
-
-    private void notificar(String titulo, String mensaje, boolean exito){
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-
-            if (exito) {
-                notificacion.showInformation();
-            } else {
-                notificacion.showError();
-            }
-        });
-    }
-
-
     @FXML private TextField txtRazonSocial;
     @FXML private TextField txtTelefono;
     @FXML private TextField txtDireccion;
@@ -229,27 +201,23 @@ public class ProveedorController implements Initializable {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             String responseBody = response.body();
-            System.out.println("Código de estado: " + response.statusCode());
-            System.out.println("Respuesta del servidor: " + response.body());
-            System.out.println("Datos enviados al servidor: " + json);
 
             if (responseBody.trim().startsWith("{")) {
                 MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
 
                 if (resultado.isExito()) {
-                    notificar("Proveedor modificado", resultado.getMensaje(), true);
+                    notificarExito("Proveedor actualizado exitosamente");
                     // limpiarCampos();
-
                 } else {
-                    notificar("Error al modificar proveedor", resultado.getMensaje(), false);
+                    notificarError("Error al modificar proveedor " + resultado.getMensaje());
                 }
             } else {
-                notificar("Respuesta del servidor incorrecta", responseBody, false);
+                notificarError("Respuesta del servidor incorrecta");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error critico", e.getMessage(), false);
+            notificarError("Error Crítico" + e.getMessage());
         }
 
 
@@ -259,51 +227,32 @@ public class ProveedorController implements Initializable {
     public void crearProveedor() {
         try {
 
-
-            //Integer id = Integer.valueOf(txtId.getText().trim());
             String razonsocial = txtRazonSocial.getText().trim();
             String telefono = txtTelefono.getText().trim();
             String email = txtEmail.getText().trim();
             String direccion = txtDireccion.getText().trim();
             String cuit = txtCUIT.getText().trim();
             boolean activo = true;
-            //String fecha_alta = txtFecha_Alta.getText().trim();
-
-
 
             if (/*id == null ||*/ razonsocial.isEmpty() ||  telefono.isEmpty() || email.isEmpty() || direccion.isEmpty() /*|| fecha_alta.isEmpty()*/) {
-                notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
+                notificarError("Todos los campos son obligatorios");
                 return;
             }
 
-
-            /*int idstr;
-            try {
-                idstr = Integer.parseInt(String.valueOf(id));
-                if (id < 0) {
-                    notificar("ID inválido", "El ID no puede ser negativo.", false);
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                notificar("Error de formato", "El ID debe ser un número entero.", false);
-                return;
-            }*/
 
             String razonSocialstr;
             try {
                 razonSocialstr = razonsocial;
                 if (razonsocial.isEmpty()) {
-                    notificar("Razon Social inválido", "La Razon Social no puede estar vacia.", false);
+                    notificarError("La Razon Social no puede estar vacia");
                     return;
                 }
 
             } catch (NumberFormatException e) {
-                notificar("Error de formato", "La Razon social debe tener un texto válido.", false);
+                notificarError("La razon social debe tener un texto válido");
                 return;
             }
             Proveedor proveedor = new Proveedor();
-
-            //proveedor.setId(id);
 
             proveedor.setRazonSocial(razonsocial);
 
@@ -330,33 +279,26 @@ public class ProveedorController implements Initializable {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             String responseBody = response.body();
-            System.out.println("Código de estado: " + response.statusCode());
-            System.out.println("Respuesta del servidor: " + response.body());
-            System.out.println("Datos enviados al servidor: " + json);
 
             if (responseBody.trim().startsWith("{")) {
                 MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
 
                 if (resultado.isExito()) {
-                    // Agregar el proveedor directamente a la tabla
 
-                  /*  Thread.sleep(10000);
                     mostrarProveedores();
-*/
-                    mostrarProveedores();
-                    notificar("Proveedor creado", resultado.getMensaje(), true);
+                    notificarExito("Proveedor creado exitosamente");
                     // limpiarCampos(); // si tenés esta función activa
                 } else {
-                    notificar("Error al crear proveedor", resultado.getMensaje(), false);
+                    notificarError("Error al crear proveedor " + resultado.getMensaje());
                 }
 
             } else {
-                notificar("Respuesta del servidor incorrecta", responseBody, false);
+                notificarError("Respuesta del servidor incorrecta");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error critico", e.getMessage(), false);
+            notificarError("Error Crítico" + e.getMessage());
         }
     }
 
@@ -374,7 +316,7 @@ public class ProveedorController implements Initializable {
         Proveedor proveedor = tablaProveedores.getSelectionModel().getSelectedItem();
 
         if (proveedor == null) {
-            notificar("Seleccionar proveedor", "Debe seleccionar un proveedor en la tabla.", false);
+            notificarError("Seleccione un proveedor en la tabla.");
         } else {
 
 
@@ -387,8 +329,8 @@ public class ProveedorController implements Initializable {
             controller.setProveedor(proveedor);
             controller.cargarProveedor();
 
-            Stage stage = new Stage(); // Esto NO usa StageManager
-            stage.setScene(new Scene(root, 800, 550));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, 800, 750));
             stage.setTitle("Detalle de Proveedor");
             stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés
             stage.setOnCloseRequest(event -> {mostrarProveedores();});
@@ -398,129 +340,29 @@ public class ProveedorController implements Initializable {
 
     }
 
-//    public void modificarProveedor(int id){
-//        try {
-//
-//
-//
-//            String razonsocial = txtRazonSocial.getText().trim();
-//            String telefono = txtTelefono.getText().trim();
-//            String email = txtEmail.getText().trim();
-//            String direccion = txtDireccion.getText().trim();
-//
-//
-//            if (razonsocial.isEmpty() || telefono.isEmpty() ||  email.isEmpty() || direccion.isEmpty()) {
-//                notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
-//                return;
-//            }
-//
-//
-//
-//
-//            String razonsocialStr;
-//            try {
-//                razonsocialStr = razonsocial;
-//                if (razonsocial.isEmpty()) {
-//                    notificar("Razon Social inválido", "La Razon Social no puede estar vacia.", false);
-//                    return;
-//                }
-//
-//            } catch (NumberFormatException e) {
-//                notificar("Error de formato", "La Razon social debe tener un texto válido.", false);
-//                return;
-//            }
-//            Proveedor proveedor = new Proveedor();
-//
-//            proveedor.setId(id);
-//
-//            proveedor.setRazonSocial(razonsocial);
-//
-//            proveedor.setTelefono(telefono);
-//
-//            proveedor.setDireccion(direccion);
-//
-//            proveedor.setActivo(true);
-//
-//            proveedor.setEmail(email);
-//
-//
-//
-//
-//
-//            String json = gson.toJson(proveedor);
-//
-//            HttpRequest request = HttpRequest.newBuilder()
-//                    .uri(URI.create(VariablesEntorno.getServerURL() + "/api/actualizarProveedor"))
-//                    .header("Content-Type", "application/json")
-//                    .PUT(HttpRequest.BodyPublishers.ofString(json))
-//                    .build();
-//
-//            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-//
-//            String responseBody = response.body();
-//            System.out.println("Código de estado: " + response.statusCode());
-//            System.out.println("Respuesta del servidor: " + response.body());
-//            System.out.println("Datos enviados al servidor: " + json);
-//
-//            if (responseBody.trim().startsWith("{")) {
-//                MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
-//
-//                if (resultado.isExito()) {
-//                    // Agregar el proveedor directamente a la tabla
-//
-//                  /*  Thread.sleep(10000);
-//                    mostrarProveedores();
-//*/
-//                    notificar("Proveedor modificado!", resultado.getMensaje(), true);
-//                    // limpiarCampos(); // si tenés esta función activa
-//                } else {
-//                    notificar("Error al modificar proveedor", resultado.getMensaje(), false);
-//                }
-//
-//            } else {
-//                notificar("Respuesta del servidor incorrecta", responseBody, false);
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            notificar("Error critico", e.getMessage(), false);
-//        }
-//    }
-
     public void ConsultarDatosProveedor () {
         try {
             String cuit;
             cuit = txtCUIT.getText();
-            // Validar longitud y formato básico
             if (cuit.length() != 11 || !cuit.matches("\\d+")) {
-                System.out.println("CUIT INVALIDO");
                 JOptionPane.showMessageDialog(null, "CUIT inválido: debe tener 11 dígitos numéricos.");
-                notificar("Problemas con el CUIT","CUIT inválido: debe tener 11 dígitos numéricos.",false);
+                notificarError("CUIT inválido: debe tener 11 dígitos numéricos");
                 return;
             }
 
 
 
             if (validarCUIT(cuit)) {
-                System.out.println("CUIT válido ✅");
+                notificarExito("CUIT válido");
             } else {
-                System.out.println("CUIT inválido ❌");
-                notificar("Problemas con el CUIT","No es un CUIT valido.",false);
+                notificarError("No es un CUIT válido");
                 return;
             }
 
-
-            // 1) Obtener token y sign
             String service = "ws_sr_padron_a13";
             String ambiente = "Produccion";
-            System.out.println("Generando ticket...");
 
             String soapResponse = LoginTicketRequest.generarTicketProduccion(service,ambiente);
-            System.out.println("Ticket generado.");
-            System.out.println("🧼 Respuesta completa SOAP:");
-            System.out.println(soapResponse);
-
-            // 2) Parsear respuesta para extraer token y sign
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(true);
             Document soapDoc = dbf.newDocumentBuilder()
@@ -566,30 +408,18 @@ public class ProveedorController implements Initializable {
             String sign  = creds.getElementsByTagName("sign").item(0).getTextContent();
 
 
-            System.out.println("✅ Token y sign obtenidos correctamente.");
-
             // 3) Llamada al padrón
             String TU_CUIT = VariablesEntorno.getCUIT(); // Cambiar por el propio si es necesario
             Object resultado = PadronClient.consultarCUIT(token, sign, TU_CUIT, cuit);
 
             if (resultado instanceof Persona) {
                 Persona p = (Persona) resultado;
-                System.out.println("👤 Persona:");
-                System.out.println("Nombre: " + p.getNombre() + " " + p.getApellido());
-                System.out.println("Documento: " + p.getTipoDocumento() + " " + p.getNumeroDocumento());
-                System.out.println("Actividad: " + p.getDescripcionActividadPrincipal());
-                System.out.println("Domicilio real: " + p.getDomicilioReal());
-                System.out.println("Domicilio fiscal: " + p.getDomicilioFiscal());
                 txtRazonSocial.setText(p.getApellido() +  ", " + p.getNombre());
                 txtDireccion.setText(p.getDomicilioReal());
 
 
             } else {
                 Empresa e = (Empresa) resultado;
-                System.out.println("🏢 Empresa:");
-                System.out.println("Razón social: " + e.getRazonSocial());
-                System.out.println("Actividad: " + e.getDescripcionActividadPrincipal());
-                System.out.println("Domicilio fiscal: " + e.getDomicilioFiscal());
                 txtRazonSocial.setText(e.getRazonSocial());
                 txtDireccion.setText(e.getDomicilioFiscal());
 

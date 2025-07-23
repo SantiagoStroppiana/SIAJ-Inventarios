@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.effect.*?>
 
-<BorderPane prefHeight="620.0" prefWidth="901.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.GraficoController">
+<BorderPane prefHeight="620.0" prefWidth="901.0" styleClass="grafico-container" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.GraficoController">
 
     <!-- Sidebar izquierdo -->
     <left>
@@ -16,20 +16,18 @@
 
     <!-- Estilos -->
     <stylesheets>
-        <URL value="@estilos/estilos-globales.css" />
-        <URL value="@estilos/tabla.css" />
         <URL value="@estilos/grafico.css" />
     </stylesheets>
 
     <!-- Contenido principal con el gráfico -->
     <center>
-        <VBox spacing="25" style="-fx-padding: 30; -fx-background-color: transparent;">
+        <VBox spacing="25" styleClass="grafico-main-content">
 
             <!-- Header con título y botón -->
-            <HBox alignment="CENTER_LEFT" spacing="20">
-                <VBox spacing="5">
-                    <Label style="-fx-font-size: 28px; -fx-text-fill: white; -fx-font-weight: bold;" text="📊 Reportes de Ventas" />
-                    <Label style="-fx-font-size: 14px; -fx-text-fill: #b0b0b0;" text="Análisis de productos más vendidos" />
+            <HBox alignment="CENTER_LEFT" spacing="20" styleClass="grafico-header">
+                <VBox spacing="5" styleClass="grafico-title-container">
+                    <Label styleClass="grafico-main-title" text="📊 Reportes de Ventas" />
+                    <Label styleClass="grafico-subtitle" text="Análisis de TOP 5 productos más vendidos" />
                 </VBox>
 
                 <Region HBox.hgrow="ALWAYS" />
@@ -37,25 +35,18 @@
                 <!-- Botón de actualizar -->
                 <Button fx:id="actualizarButton"
                         onAction="#actualizarDatos"
-                        style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 10 20;"
-                        text="🔄 Actualizar">
-                    <effect>
-                        <DropShadow color="#00000050" radius="5" offsetY="2" />
-                    </effect>
-                </Button>
+                        styleClass="grafico-button-primary"
+                        text="🔄 Actualizar" />
             </HBox>
 
             <!-- Contenedor del gráfico con efecto de sombra -->
-            <VBox spacing="10" style="-fx-background-color: #1a1a1a; -fx-background-radius: 15; -fx-padding: 25;">
-                <effect>
-                    <DropShadow color="#00000080" radius="15" offsetY="5" />
-                </effect>
+            <VBox spacing="10" styleClass="grafico-chart-container">
 
                 <!-- Indicador de carga -->
-                <StackPane>
+                <StackPane styleClass="grafico-progress-container">
                     <ProgressIndicator fx:id="progressIndicator"
                                        maxHeight="50" maxWidth="50"
-                                       style="-fx-progress-color: #2196F3;"
+                                       styleClass="grafico-progress-indicator"
                                        visible="false" />
                 </StackPane>
 
@@ -65,52 +56,51 @@
                           prefHeight="450"
                           prefWidth="100"
                           animated="true"
-                          title="🏆 Top Productos Más Vendidos"
-                          style="-fx-background-color: transparent; -fx-title-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;">
+                          title="🏆 TOP 5 Productos Más Vendidos"
+                          styleClass="grafico-bar-chart">
                     <xAxis>
                         <CategoryAxis label="🛍️ Productos"
+                                      tickLabelRotation="45"
                                       tickLabelFill="WHITE"
-                                      style="-fx-tick-label-fill: white; -fx-label-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" />
+                                      styleClass="grafico-x-axis" />
                     </xAxis>
                     <yAxis>
                         <NumberAxis label="📊 Cantidad Vendida"
                                     tickLabelFill="WHITE"
-                                    style="-fx-tick-label-fill: white; -fx-label-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white" />
+                                    styleClass="grafico-y-axis" />
                     </yAxis>
                 </BarChart>
             </VBox>
 
             <!-- Panel inferior con estadísticas -->
-            <HBox alignment="CENTER" spacing="30" style="-fx-padding: 10;">
+            <HBox alignment="CENTER" spacing="30" styleClass="grafico-stats-panel">
 
                 <!-- Tarjeta de estadística 1 -->
-                <VBox alignment="CENTER" spacing="5"
-                      style="-fx-background-color: #2a2a2a; -fx-background-radius: 10; -fx-padding: 15 25;">
-                    <effect>
-                        <DropShadow color="#00000060" radius="8" offsetY="3" />
-                    </effect>
-                    <Label style="-fx-font-size: 20px; -fx-text-fill: #4CAF50; -fx-font-weight: bold;" text="📈" />
-                    <Label style="-fx-font-size: 14px; -fx-text-fill: #b0b0b0;" text="Productos Activos" />
+                <VBox alignment="CENTER" spacing="5" styleClass="grafico-stats-card grafico-stats-card-success">
+                    <Label styleClass="grafico-stats-icon" text="📈" />
+                    <Label fx:id="lblProductosActivos" styleClass="grafico-stats-value" text="5" />
+                    <Label styleClass="grafico-stats-label" text="TOP Productos" />
                 </VBox>
 
                 <!-- Tarjeta de estadística 2 -->
-                <VBox alignment="CENTER" spacing="5"
-                      style="-fx-background-color: #2a2a2a; -fx-background-radius: 10; -fx-padding: 15 25;">
-                    <effect>
-                        <DropShadow color="#00000060" radius="8" offsetY="3" />
-                    </effect>
-                    <Label style="-fx-font-size: 20px; -fx-text-fill: #FF9800; -fx-font-weight: bold;" text="🛍️" />
-                    <Label style="-fx-font-size: 14px; -fx-text-fill: #b0b0b0;" text="Total Ventas" />
+                <VBox alignment="CENTER" spacing="5" styleClass="grafico-stats-card grafico-stats-card-warning">
+                    <Label styleClass="grafico-stats-icon" text="🛍️" />
+                    <Label fx:id="lblTotalVentas" styleClass="grafico-stats-value" text="0" />
+                    <Label styleClass="grafico-stats-label" text="Total Ventas" />
                 </VBox>
 
                 <!-- Tarjeta de estadística 3 -->
-                <VBox alignment="CENTER" spacing="5"
-                      style="-fx-background-color: #2a2a2a; -fx-background-radius: 10; -fx-padding: 15 25;">
-                    <effect>
-                        <DropShadow color="#00000060" radius="8" offsetY="3" />
-                    </effect>
-                    <Label style="-fx-font-size: 20px; -fx-text-fill: #9C27B0; -fx-font-weight: bold;" text="⭐" />
-                    <Label style="-fx-font-size: 14px; -fx-text-fill: #b0b0b0;" text="Top Producto" />
+                <VBox alignment="CENTER" spacing="5" styleClass="grafico-stats-card grafico-stats-card-info">
+                    <Label styleClass="grafico-stats-icon" text="⭐" />
+                    <Label fx:id="lblTopProducto" styleClass="grafico-stats-value" text="-" />
+                    <Label styleClass="grafico-stats-label" text="Top Producto" />
+                </VBox>
+
+                <!-- Tarjeta de estadística 4 -->
+                <VBox alignment="CENTER" spacing="5" styleClass="grafico-stats-card grafico-stats-card-primary">
+                    <Label styleClass="grafico-stats-icon" text="💰" />
+                    <Label fx:id="lblIngresoTotal" styleClass="grafico-stats-value" text="00" />
+                    <Label styleClass="grafico-stats-label" text="Ingresos Totales" />
                 </VBox>
 
             </HBox>

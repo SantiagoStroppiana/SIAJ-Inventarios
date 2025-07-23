@@ -6,7 +6,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import org.example.desktop.dto.UsuarioDTO;
-import org.example.desktop.model.Usuario;
 import org.example.desktop.util.StageManager;
 import org.example.desktop.util.UserSession;
 
@@ -82,7 +81,7 @@ public class SideMenuController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             UserSession.cerrarSesion();
-            StageManager.loadScene("/org/example/desktop/login-view.fxml", 700, 500);
+            StageManager.loadScene("/org/example/desktop/login-view.fxml", 900, 600);
         }
     }
 }

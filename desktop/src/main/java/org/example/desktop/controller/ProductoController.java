@@ -34,6 +34,9 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
+
 public class ProductoController implements Initializable {
 
 
@@ -74,10 +77,10 @@ public class ProductoController implements Initializable {
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response);
+
 
             String responseBody = response.body();
-            System.out.println(responseBody);
+
 
             productosOriginales = gson.fromJson(responseBody, Producto[].class);
 
@@ -85,22 +88,9 @@ public class ProductoController implements Initializable {
             tablaProductos.getItems().addAll(productosOriginales);
 
 
-            for (Producto p : productosOriginales) {
-                System.out.println("Producto: " + p.getNombre() + ", SKU: " + p.getSku());
-            }
-
-            System.out.println("Respuesta del backend:");
-            System.out.println(responseBody);
-
-            for (Producto p : productosOriginales) {
-                System.out.println("Producto: " + p.getNombre() + ", Proveedor: " +
-                        (p.getProveedorid() != null ? p.getProveedorid().getRazonSocial() : "null"));
-            }
-
-
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
 
     }
@@ -127,7 +117,7 @@ public class ProductoController implements Initializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error en mostrarEstado", e);
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error Crítico en mostrar Estado" + e.getMessage());
         }
     }
 
@@ -169,7 +159,7 @@ public class ProductoController implements Initializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error al mostrar proveedores", e);
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
     }
 
@@ -195,7 +185,7 @@ public class ProductoController implements Initializable {
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
     }
 
@@ -280,31 +270,11 @@ public class ProductoController implements Initializable {
 
     }
 
-
-    private void notificar(String titulo, String mensaje, boolean exito){
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-
-            if (exito) {
-                notificacion.showInformation();
-            } else {
-                notificacion.showError();
-            }
-        });
-    }
-
-
     @FXML private TextField txtSku;
     @FXML private TextField txtNombre;
     @FXML private TextField txtStock;
     @FXML private TextField txtPrecio;
     @FXML private TextField txtPrecioCosto;
- //   @FXML private SplitMenuButton menuProveedor;
-
 
     public void actualizarProductos() {
         mostrarProductos(); // refrescar la tabla
@@ -326,9 +296,8 @@ public class ProductoController implements Initializable {
         Producto producto = tablaProductos.getSelectionModel().getSelectedItem();
 
         if (producto == null) {
-            notificar("Seleccionar producto", "Debe seleccionar un producto en la tabla.", false);
+            notificarError("Debe seleccionar un producto de la tabla");
         } else {
-
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/producto-detalle-view.fxml"));
 
@@ -340,7 +309,7 @@ public class ProductoController implements Initializable {
             controller.cargarProducto();
 
             Stage stage = new Stage();
-            stage.setScene(new Scene(root, 800, 550));
+            stage.setScene(new Scene(root, 800, 750));
             stage.setTitle("Detalle de Producto");
             stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés
             stage.setOnCloseRequest(event -> {mostrarProductos();});
@@ -355,7 +324,7 @@ public class ProductoController implements Initializable {
         Producto producto = tablaProductos.getSelectionModel().getSelectedItem();
 
         if (producto == null) {
-            notificar("Seleccionar producto", "Debe seleccionar un producto en la tabla.", false);
+            notificarError("Seleccione un producto en la tabla.");
             return;
         }
 
@@ -377,17 +346,17 @@ public class ProductoController implements Initializable {
             if (responseBody.trim().startsWith("{")) {
                 MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
                 if (resultado.isExito()) {
-                    notificar("Producto modificado", resultado.getMensaje(), true);
+                    notificarExito("Producto modificado correctamente");
                 } else {
-                    notificar("Error al modificar producto", resultado.getMensaje(), false);
+                    notificarError("Error al modificar producto");
                 }
             } else {
-                notificar("Respuesta del servidor incorrecta", responseBody, false);
+                notificarError("Error respuesta del servidor");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error crítico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
 
         mostrarProductos(); // refrescar la tabla
@@ -406,7 +375,7 @@ public class ProductoController implements Initializable {
 
 
             if (sku.isEmpty() || nombre.isEmpty() ||  stockStr.isEmpty() || precioStr.isEmpty()) {
-                notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
+                notificarError("Rellenar los campos son obligatorios");
                 return;
             }
 
@@ -415,11 +384,11 @@ public class ProductoController implements Initializable {
             try {
                 stock = Integer.parseInt(stockStr);
                 if (stock < 0) {
-                    notificar("Stock inválido", "El stock no puede ser negativo.", false);
+                    notificarError("El stock no puede ser negativo");
                     return;
                 }
             } catch (NumberFormatException e) {
-                notificar("Error de formato", "El stock debe ser un número entero.", false);
+                notificarError("El stock debe ser un numero entero");
                 return;
             }
 
@@ -428,21 +397,21 @@ public class ProductoController implements Initializable {
             try {
                 double precioDouble = Double.parseDouble(precioStr);
                 if (precioDouble < 0) {
-                    notificar("Precio inválido", "El precio no puede ser negativo.", false);
+                    notificarError("El precio no puede ser negativo");
                     return;
                 }
                 precio = BigDecimal.valueOf(precioDouble);
             } catch (NumberFormatException e) {
-                notificar("Error de formato", "El precio debe ser un número válido.", false);
+                notificarError("El precio debe ser un numero valido");
                 return;
             }
 
             if (proveedorSeleccionado == null) {
-                notificar("Error", "Debe seleccionar un proveedor.", false);
+                notificarError("Seleccione un proveedor");
                 return;
             }
             if (estadoSeleccionado == null) {
-                notificar("Error", "Debe seleccionar un estado.", false);
+                notificarError("Seleccione un estado");
                 return;
             }
 
@@ -471,9 +440,6 @@ public class ProductoController implements Initializable {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             String responseBody = response.body();
-            System.out.println("Código de estado: " + response.statusCode());
-            System.out.println("Respuesta del servidor: " + response.body());
-            System.out.println("Datos enviados al servidor: " + json);
 
             if (responseBody.trim().startsWith("{")) {
                 MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
@@ -486,23 +452,22 @@ public class ProductoController implements Initializable {
 */
                     mostrarProductos();
 
-                    notificar("Producto creado", resultado.getMensaje(), true);
+                    notificarExito("Producto creado");
                     // limpiarCampos(); // si tenés esta función activa
                 } else {
-                    notificar("Error crear producto", resultado.getMensaje(), false);
+                    notificarError("Error al crear producto");
                 }
 
             } else {
-                notificar("Respuesta del servidor incorrecta", responseBody, false);
+                notificarError("Error respuesta del servido");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error critico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
     }
     private void setupKeyboardNavigation() {
-        // Configurar navegación con Enter en campos de texto
         txtSku.setOnAction(e -> txtNombre.requestFocus());
         txtNombre.setOnAction(e -> txtStock.requestFocus());
         txtStock.setOnAction(e -> txtPrecio.requestFocus());
@@ -564,19 +529,12 @@ public class ProductoController implements Initializable {
     public void verCategorias() throws IOException {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/categorias-view.fxml"));
 
-
             Parent root = fxmlLoader.load();
-
-
-
-            Stage stage = new Stage(); // Esto NO usa StageManager
+            Stage stage = new Stage();
             stage.setScene(new Scene(root, 800, 550));
             stage.setTitle("Detalle de Categorias");
-            stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés
-            //stage.setOnCloseRequest(event -> {mostrarProductos();});
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-
-
 
     }
 

@@ -18,10 +18,11 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.TimeZone;
+
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
 
 public class ProductoDetalleController {
 
@@ -156,7 +157,7 @@ public class ProductoDetalleController {
 
 
             if (sku.isEmpty() || nombre.isEmpty() ||  stockStr.isEmpty() || precioStr.isEmpty()) {
-                notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
+                notificarError("Todos los campos son obligatorios");
                 return;
             }
 
@@ -165,11 +166,11 @@ public class ProductoDetalleController {
             try {
                 stock = Integer.parseInt(stockStr);
                 if (stock < 0) {
-                    notificar("Stock inválido", "El stock no puede ser negativo.", false);
+                    notificarError("El stock no puede ser negativo");
                     return;
                 }
             } catch (NumberFormatException e) {
-                notificar("Error de formato", "El stock debe ser un número entero.", false);
+                notificarError("El stock debe ser un número entero");
                 return;
             }
 
@@ -178,12 +179,12 @@ public class ProductoDetalleController {
             try {
                 double precioDouble = Double.parseDouble(precioStr);
                 if (precioDouble < 0) {
-                    notificar("Precio inválido", "El precio no puede ser negativo.", false);
+                    notificarError("El precio no puede ser negativo");
                     return;
                 }
                 precio = BigDecimal.valueOf(precioDouble);
             } catch (NumberFormatException e) {
-                notificar("Error de formato", "El precio debe ser un número válido.", false);
+                notificarError("El precio debe ser un número válido");
                 return;
             }
 
@@ -191,12 +192,12 @@ public class ProductoDetalleController {
             try {
                 double precioCostoDouble = Double.parseDouble(precioCostoStr);
                 if (precioCostoDouble < 0) {
-                    notificar("Precio inválido", "El precio de costo no puede ser negativo.", false);
+                    notificarError("El precio de costo no puede ser negativo");
                     return;
                 }
                 precioCosto = BigDecimal.valueOf(precioCostoDouble);
             } catch (NumberFormatException e) {
-                notificar("Error de formato", "El precio de costo debe ser un número válido.", false);
+                notificarError("El precio de costo debe ser un número válido");
                 return;
             }
 
@@ -235,7 +236,7 @@ public class ProductoDetalleController {
                             && proveedorOriginal == proveedorSeleccionado
             ) {
 //            if (producto2==producto){
-                notificar("Error al modificar", "No hay datos para modificar.", false);
+                notificarError("No hay datos para modificar");
                 return;
             }
 
@@ -271,39 +272,21 @@ public class ProductoDetalleController {
                 MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
 
                 if (resultado.isExito()) {
-                    notificar("Producto modificado", resultado.getMensaje(), true);
-                    System.out.println("Producto modificado" + resultado.getMensaje());
+                    notificarExito("Producto modificado correctamente " + resultado.getMensaje());
                     inhabilitarEdicion();
-                    // limpiarCampos();
-
                 } else {
-                    notificar("Error al modificar producto", resultado.getMensaje(), false);
+                    notificarError("El producto no puede ser modificado");
                 }
             } else {
-                notificar("Respuesta del servidor incorrecta", responseBody, false);
+                notificarError("Error del servidor: " + responseBody);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error critico", e.getMessage(), false);
+            notificarError("Error critico " + e.getMessage());
         }
     }
 
-    private void notificar(String titulo, String mensaje, boolean exito){
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-
-            if (exito) {
-                notificacion.showInformation();
-            } else {
-                notificacion.showError();
-            }
-        });
-    }
     /*
 
                 <TextField fx:id="txtSku" layoutX="330.0" layoutY="83.0" prefHeight="38.0" prefWidth="230.0" promptText="SKU" />
@@ -355,7 +338,7 @@ public class ProductoDetalleController {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                notificar("Error Crítico", e.getMessage(), false);
+                notificarError("Error critico " + e.getMessage());
             }
 
 
@@ -398,7 +381,7 @@ public class ProductoDetalleController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error critico " + e.getMessage());
         }
 
 
@@ -428,7 +411,7 @@ public class ProductoDetalleController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error critico " + e.getMessage());
         }
     }
 

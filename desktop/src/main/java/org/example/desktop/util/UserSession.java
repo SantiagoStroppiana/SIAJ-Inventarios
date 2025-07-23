@@ -1,7 +1,6 @@
 package org.example.desktop.util;
 
 import org.example.desktop.dto.UsuarioDTO;
-import org.example.desktop.model.Usuario;
 
 public class UserSession {
 

@@ -2,46 +2,84 @@
 
 <?import java.net.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
 <BorderPane prefHeight="620.0" prefWidth="901.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.desktop.controller.CategoriaDetalleController">
 
-    <!-- Sidebar izquierdo: lo dejamos tal cual -->
-    <left>
-        <fx:include fx:id="sidebar" source="side-menu-view.fxml" />
-    </left>
-
-    <!-- Estilos -->
     <stylesheets>
-        <URL value="@estilos/estilos-globales.css" />
-        <URL value="@estilos/tabla.css" />
+        <URL value="@estilos/detalle.css" />
     </stylesheets>
 
-    <!-- Contenido principal centrado -->
+    <top>
+        <VBox styleClass="detalle-header">
+            <HBox styleClass="detalle-header-content">
+                <Label styleClass="detalle-title" text="Detalles de la Categoría" />
+                <Region HBox.hgrow="ALWAYS" />
+            </HBox>
+        </VBox>
+    </top>
+
     <center>
-        <AnchorPane prefHeight="594.0" prefWidth="593.0" BorderPane.alignment="CENTER">
-            <children>
+        <ScrollPane fitToWidth="true" styleClass="detalle-scroll-pane">
+            <VBox styleClass="detalle-main-container">
 
-                <!-- Botón: Modificar -->
-                <Button fx:id="modificar" layoutX="349.0" layoutY="469.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Modificar" />
+                <HBox styleClass="detalle-image-section">
+                    <VBox styleClass="detalle-image-container">
+                        <ImageView fx:id="imgCategoria" fitHeight="200.0" fitWidth="200.0" preserveRatio="true" styleClass="detalle-product-image">
+                            <image>
+                                <Image url="@images/mage--package-box-fill.png" />
+                            </image>
+                        </ImageView>
+                    </VBox>
 
-                <!-- Botón: Guardar -->
-                <Button fx:id="guardar" layoutX="471.0" layoutY="469.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Guardar" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+                    <VBox styleClass="detalle-basic-info">
+                        <Label fx:id="lblCategoriaNombre" styleClass="detalle-product-name" text="Nombre de la Categoría" />
+                        <Label fx:id="lblCategoriaId" styleClass="detalle-product-sku" text="ID: " />
+                        <HBox styleClass="detalle-status-row">
+                            <Label fx:id="lblEstadoActual" styleClass="detalle-status-badge" text="Activa" />
+                        </HBox>
+                    </VBox>
+                </HBox>
 
+                <VBox styleClass="detalle-form-container">
+                    <Label styleClass="detalle-section-title" text="Información de la Categoría" />
 
-                <!-- Datos del producto, centrados horizontalmente (ajustado con layoutX) -->
-                <TextField fx:id="txtNombre" layoutX="330.0" layoutY="83.0" prefHeight="38.0" prefWidth="230.0" promptText="Nombre" />
-                <Label layoutX="210.0" layoutY="97.0" text="Nombre" textFill="WHITE">
-                    <font><Font name="System Bold" size="12.0" /></font>
-                </Label>
+                    <GridPane styleClass="detalle-form-grid">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="120.0" prefWidth="120.0" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="200.0" />
+                            <ColumnConstraints hgrow="NEVER" minWidth="120.0" prefWidth="120.0" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="200.0" />
+                        </columnConstraints>
 
-                <TextField fx:id="txtDescripcion" layoutX="330.0" layoutY="129.0" prefHeight="38.0" prefWidth="230.0" promptText="Descripción" />
-                <Label layoutX="210.0" layoutY="138.0" text="Descripción" textFill="WHITE">
-                    <font><Font name="System Bold" size="12.0" /></font>
-                </Label>
+                        <Label styleClass="detalle-form-label" text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtNombre" promptText="Nombre de la categoría" styleClass="detalle-form-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-            </children>
-        </AnchorPane>
+                        <Label styleClass="detalle-form-label" text="Estado:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <SplitMenuButton fx:id="menuEstado" styleClass="detalle-form-combo" text="Estado" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                        <Label styleClass="detalle-form-label" text="Descripción:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtDescripcion" promptText="Descripción de la categoría" styleClass="detalle-form-field" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+
+                        <rowConstraints>
+                            <RowConstraints />
+                            <RowConstraints />
+                        </rowConstraints>
+                    </GridPane>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
     </center>
+
+    <bottom>
+        <HBox styleClass="detalle-footer">
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnCancelar" styleClass="detalle-btn-secondary" text="Cancelar" />
+            <Button fx:id="modificar" styleClass="detalle-btn-primary" text="Modificar" />
+            <Button fx:id="guardar" styleClass="detalle-btn-success" text="Guardar" />
+        </HBox>
+    </bottom>
+
 </BorderPane>

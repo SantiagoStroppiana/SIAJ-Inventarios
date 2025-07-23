@@ -38,18 +38,34 @@
                             </children>
                         </HBox>
 
-                        <!-- Scroll con el catálogo -->
-                        <ScrollPane fitToWidth="true" styleClass="pv-products-scroll" prefHeight="600.0">
+                        <!-- Scroll con el catálogo - SOLUCIÓN MEJORADA -->
+                        <ScrollPane fitToWidth="true"
+                                    fitToHeight="false"
+                                    styleClass="pv-products-scroll"
+                                    VBox.vgrow="ALWAYS"
+                                    hbarPolicy="NEVER"
+                                    vbarPolicy="AS_NEEDED">
                             <content>
-                                <GridPane fx:id="productGrid" hgap="20.0" vgap="20.0" styleClass="pv-products-grid">
-                                    <!-- Aquí el controlador cargará dinámicamente los productos -->
-                                </GridPane>
+                                <!-- Contenedor principal que se ajusta al tamaño del ScrollPane -->
+                                <VBox alignment="TOP_CENTER" spacing="0.0">
+                                    <children>
+                                        <GridPane fx:id="productGrid"
+                                                  hgap="20.0"
+                                                  vgap="20.0"
+                                                  styleClass="pv-products-grid"
+                                                  alignment="TOP_CENTER">
+                                            <!-- Aquí el controlador cargará dinámicamente los productos -->
+                                        </GridPane>
+
+                                        <!-- Espaciador flexible que ocupa el resto del espacio -->
+                                        <Region VBox.vgrow="ALWAYS" styleClass="pv-products-spacer"/>
+                                    </children>
+                                </VBox>
                             </content>
                         </ScrollPane>
 
                     </children>
                 </VBox>
-
 
                 <!-- Panel del carrito -->
                 <VBox styleClass="pv-cart-panel" prefWidth="600.0">
@@ -61,7 +77,8 @@
                         </Label>
 
                         <ScrollPane fx:id="cartScrollPane" fitToWidth="true" styleClass="pv-cart-scroll"
-                                    prefHeight="400.0">
+                                    VBox.vgrow="ALWAYS"
+                                    hbarPolicy="NEVER">
                             <content>
                                 <VBox fx:id="cartContent" spacing="10.0" styleClass="pv-cart-content">
                                     <!-- Aquí el controlador cargará los ítems del carrito -->
@@ -86,7 +103,6 @@
                                                 <Font name="System Bold" size="22.0" />
                                             </font>
                                         </Label>
-
                                     </children>
                                 </HBox>
 

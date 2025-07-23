@@ -11,17 +11,19 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.UsuarioDTO;
-import org.example.desktop.model.Usuario;
 import org.example.desktop.util.StageManager;
 import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
-import javax.swing.*;
+
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ResourceBundle;
+
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
 
 public class UsuarioController implements Initializable {
 
@@ -80,7 +82,7 @@ public class UsuarioController implements Initializable {
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
 
     }
@@ -130,13 +132,13 @@ public class UsuarioController implements Initializable {
 
                                 if (response.statusCode() == 200) {
                                     mostrarUsuarios();
-                                    notificar("Éxito", "Rol actualizado correctamente", true);
+                                    notificarExito("Rol actualizado correctamente");
                                 } else {
-                                    notificar("Error", "No se pudo actualizar el rol", false);
+                                    notificarError("No se pudo actualizar el rol");
                                 }
 
                             } catch (Exception e) {
-                                notificar("Error crítico", e.getMessage(), false);
+                                notificarError("Error Crítico " + e.getMessage());
                             }
                         });
                     }
@@ -157,20 +159,5 @@ public class UsuarioController implements Initializable {
         accionColumn.setCellFactory(cellFactory);
     }
 
-
-    private void notificar(String titulo, String mensaje, boolean exito){
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-            if (exito) {
-                notificacion.showInformation();
-            }else{
-                notificacion.showError();
-            }
-        });
-    }
 
 }

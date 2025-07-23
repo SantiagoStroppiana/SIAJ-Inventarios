@@ -1,7 +1,6 @@
 package org.example.desktop.controller;
 
 import com.google.gson.Gson;
-import com.lowagie.text.pdf.PdfWriter;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,14 +20,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
-import org.example.desktop.dto.ProductoVentaDTO;
 import org.example.desktop.dto.UsuarioDTO;
 import org.example.desktop.model.*;
 import org.example.desktop.util.*;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -41,6 +38,9 @@ import java.util.List;
 
 import javafx.scene.text.Font;
 import javafx.collections.ObservableList;
+
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
 
 public class VentaController implements Initializable {
 
@@ -60,7 +60,7 @@ public class VentaController implements Initializable {
     private Button btnProcesarVenta, btnLimpiarCarrito;
 
     @FXML
-    private ComboBox<MedioPago> comboMedioPago;  // 👈 NO ComboBox<String>
+    private ComboBox<MedioPago> comboMedioPago;
 
     private final Map<Integer, HBox> productosEnCarrito = new HashMap<>();
 
@@ -70,21 +70,6 @@ public class VentaController implements Initializable {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
-
-    private void notificar(String titulo, String mensaje, boolean exito) {
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-            if (exito) {
-                notificacion.showInformation();
-            } else {
-                notificacion.showError();
-            }
-        });
-    }
 
     public void mostrarProductos() {
 
@@ -119,7 +104,7 @@ public class VentaController implements Initializable {
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
 
     }
@@ -133,9 +118,9 @@ public class VentaController implements Initializable {
         nombre.setFont(Font.font("System Bold", 16));
         nombre.getStyleClass().add("pv-product-name");
 
-        Label categoria = new Label(/*producto.getCategoria() != null ?
-                producto.getCategoria().getNombre() : "Sin categoría"*/);
-        categoria.getStyleClass().add("pv-product-category");
+//        Label categoria = new Label(/*producto.getCategoria() != null ?
+//                producto.getCategoria().getNombre() : "Sin categoría"*/);
+//        categoria.getStyleClass().add("pv-product-category");
 
         Label precio = new Label("$" + producto.getPrecio());
         precio.setFont(Font.font("System Bold", 18));
@@ -162,7 +147,7 @@ public class VentaController implements Initializable {
             agregarAlCarrito(producto,cantidad);
         });
 
-        card.getChildren().addAll(nombre, categoria, precio, stock, cantidadField, agregarBtn);
+        card.getChildren().addAll(nombre/*, categoria*/, precio, stock, cantidadField, agregarBtn);
 
         return card;
     }
@@ -179,16 +164,16 @@ public class VentaController implements Initializable {
     private void agregarAlCarrito(Producto producto, int cantidadInicial) {
 
         if (producto.getStock() <= 0) {
-            notificar("Falta de stock", "No hay stock del producto " + producto.getNombre(), false);
+            notificarError("No hay stock del producto " + producto.getNombre());
         } else {
 
 
             if (cantidadInicial < 1) {
                 cantidadInicial = 1;
-                notificar("Cantidad inválida", "La cantidad inicial de " + producto.getNombre() + " no puede ser menor al stock disponible (" + producto.getStock() + " unidades). Se ajustó a 1.", false);
+                notificarError("La cantidad inicial de " + producto.getNombre() + " no puede ser menor al stock disponible (" + producto.getStock() + " unidades). Se ajustó a 1.");
             }
             if (cantidadInicial > producto.getStock()) {
-                notificar("Cantidad inválida", "La cantidad inicial de " + producto.getNombre() + " no puede ser mayor al stock disponible (" + producto.getStock() + " unidades). Se ajustó a 1.", false);
+                notificarError("La cantidad inicial de " + producto.getNombre() + " no puede ser mayor al stock disponible (" + producto.getStock() + " unidades). Se ajustó a 1.");
                 cantidadInicial = 1; // Se ajusta a 1 si excede el stock
             }
             if (productosEnCarrito.containsKey(producto.getId())) {
@@ -204,7 +189,7 @@ public class VentaController implements Initializable {
                         nuevaCantidad = 1;
                     }
                     if (nuevaCantidad > producto.getStock()) {
-                        notificar("Falta de stock", "No alcanza el stock del producto " + producto.getNombre() + ".\nHay " + producto.getStock() + " unidades disponibles. Se ajustó a 1.", false);
+                        notificarError("No alcanza el stock del producto " + producto.getNombre() + ".\nHay " + producto.getStock() + " unidades disponibles. Se ajustó a 1.");
                         cantidadField.setText(String.valueOf(1));
                     } else {
                         cantidadField.setText(String.valueOf(nuevaCantidad));
@@ -214,7 +199,7 @@ public class VentaController implements Initializable {
 
                     int cantidadParaCampo = cantidadInicial;
                     if (cantidadInicial > producto.getStock()) {
-                        notificar("Cantidad inválida", "La cantidad ingresada para " + producto.getNombre() + " excede el stock disponible (" + producto.getStock() + " unidades). Se ajustó a 1.", false);
+                        notificarError("La cantidad ingresada para " + producto.getNombre() + " excede el stock disponible (" + producto.getStock() + " unidades). Se ajustó a 1.");
                         cantidadParaCampo = 1;
                     } else if (cantidadInicial < 1) {
                         cantidadParaCampo = 1;
@@ -256,17 +241,16 @@ public class VentaController implements Initializable {
                     int cantidadIngresada = Integer.parseInt(newVal);
                     if (cantidadIngresada < 1) {
                         cantidadField.setText("1"); // Si es menor a 1, se pone 1
-                        notificar("Cantidad inválida", "La cantidad mínima es 1.", false);
+                        notificarError("La cantidad mínima es 1");
                     } else if (cantidadIngresada > producto.getStock()) {
                         cantidadField.setText("1"); // Si excede el stock, se pone 1
-                        notificar("Falta de stock", "No hay suficiente stock de " + producto.getNombre() + ".\nSolo hay " + producto.getStock() + " unidades disponibles. Se ajustó a 1.", false);
+                        notificarError("No hay suficiente stock de " + producto.getNombre() + ".\nSolo hay " + producto.getStock() + " unidades disponibles. Se ajustó a 1");
                     }
                 } catch (NumberFormatException e) {
 
                     cantidadField.setText("1");
-                    notificar("Entrada inválida", "Por favor, ingrese un número válido.", false);
+                    notificarError("Por favor, ingrese un número válido");
                 }
-                // -------------------------------------------------
 
                 actualizarSubtotal(item, producto.getPrecio().doubleValue());
                 actualizarTotales();
@@ -386,7 +370,7 @@ public class VentaController implements Initializable {
 
     public void procesarVenta() {
         if (cartContent.getChildren().isEmpty()) {
-            notificar("Carrito vacío", "Agregá productos antes de procesar la venta.", false);
+            notificarError("Agregá productos antes de procesar la venta");
             return;
         }
 
@@ -404,7 +388,7 @@ public class VentaController implements Initializable {
                 // Usá estos datos en tu lógica, por ejemplo para enviarlos al backend
 
             } else {
-                notificar("Error", "Seleccione un medio de pago.", false);
+                notificarError("Seleccione un medio de pago");
             }
 
             UsuarioDTO usuarioDTO = UserSession.getUsuarioActual();
@@ -430,7 +414,7 @@ public class VentaController implements Initializable {
             HttpResponse<String> ventaResponse = httpClient.send(crearVentaRequest, HttpResponse.BodyHandlers.ofString());
 
             if (ventaResponse.statusCode() != 200 && ventaResponse.statusCode() != 201) {
-                notificar("Error", "No se pudo crear la venta", false);
+                notificarError("Error crear la venta");
                 return;
             }
 
@@ -516,25 +500,23 @@ public class VentaController implements Initializable {
             VentaPDFGenerator generador = new VentaPDFGenerator();
             generador.generarPDF(ventaCreada, detalles, archivoSalida);
 
-            emitirFactura(detalles);
+            emitirFactura(detalles, ventaCreada);
 
 
             // Abrir el PDF automáticamente con el visor predeterminado del sistema
 //            Desktop.getDesktop().open(new File(archivoSalida));
 
-
-
-            notificar("Venta Procesada", "La venta fue registrada exitosamente.", true);
+            notificarExito("La venta fue registrada exitosamente");
             limpiarCarrito();
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error", "No se pudo procesar la venta: " + e.getMessage(), false);
+            notificarError("No se pudo procesar la venta: " + e.getMessage());
         }
         mostrarProductos();
     }
 
-    private void emitirFactura (List<DetalleVenta> detalles) {
+    private void emitirFactura (List<DetalleVenta> detalles, Venta venta) {
         try {
             // CUIT del emisor (debe coincidir con el certificado .crt/.key usado para WSAA)
             long cuitEmisor = Long.parseLong(VariablesEntorno.getCUIT());
@@ -573,8 +555,9 @@ public class VentaController implements Initializable {
                     " — Nro: " + factura.getNumero());
 
             // Generar pdf
+            factura.setNumero(venta.getId()); // Hardcodeo porque siempre ARCA en modo homologacion te da numero 1
             String FacturaGenerada = new GeneradorPDF().generarPDF(factura/*, "FacturaC_" + factura.getNumero() + ".pdf"*/);
-            System.out.println("✅ PDF generado: FacturaC_" + factura.getNumero() + ".pdf");
+            System.out.println("✅ PDF generado: Factura C " + factura.getNumero() + ".pdf");
             Desktop.getDesktop().open(new File(FacturaGenerada));
 
         } catch (Exception e) {
@@ -617,7 +600,7 @@ public class VentaController implements Initializable {
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
     }
 
