@@ -38,6 +38,28 @@
                             </children>
                         </HBox>
 
+                        <!-- BUSCADOR - Nueva sección -->
+                        <VBox spacing="8.0" styleClass="pv-search-container">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="pv-search-box">
+                                    <children>
+                                        <Label text="🔍" styleClass="pv-search-icon">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <TextField fx:id="searchField"
+                                                   promptText="Buscar productos por nombre, código o categoría..."
+                                                   styleClass="pv-search-input"
+                                                   prefWidth="400.0"
+                                                   HBox.hgrow="ALWAYS" />
+                                    </children>
+                                </HBox>
+
+
+                            </children>
+                        </VBox>
+
                         <!-- Scroll con el catálogo - SOLUCIÓN MEJORADA -->
                         <ScrollPane fitToWidth="true"
                                     fitToHeight="false"
@@ -49,6 +71,34 @@
                                 <!-- Contenedor principal que se ajusta al tamaño del ScrollPane -->
                                 <VBox alignment="TOP_CENTER" spacing="0.0">
                                     <children>
+                                        <!-- Mensaje cuando no hay resultados -->
+                                        <VBox fx:id="noResultsContainer"
+                                              alignment="CENTER"
+                                              spacing="10.0"
+                                              styleClass="pv-no-results"
+                                              visible="false"
+                                              managed="false">
+                                            <children>
+                                                <Label text="🔍" styleClass="pv-no-results-icon">
+                                                    <font>
+                                                        <Font size="48.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="No se encontraron productos" styleClass="pv-no-results-text">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label fx:id="noResultsSubtext"
+                                                       text="Intenta con otros términos de búsqueda"
+                                                       styleClass="pv-no-results-subtext">
+                                                    <font>
+                                                        <Font size="14.0" />
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </VBox>
+
                                         <GridPane fx:id="productGrid"
                                                   hgap="20.0"
                                                   vgap="20.0"

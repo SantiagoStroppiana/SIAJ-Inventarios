@@ -67,6 +67,9 @@ public class VentaController implements Initializable {
     @FXML
     private Button btnHistorialVentas;
 
+    @FXML
+    private TextField searchField;
+
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
@@ -643,5 +646,34 @@ public class VentaController implements Initializable {
                 throw new RuntimeException(e);
             }
         });
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filtrarProductos(newValue);
+        });
+
     }
+
+    private void filtrarProductos(String filtro) {
+        productGrid.getChildren().clear();
+
+        if (listaProductos == null || listaProductos.isEmpty()) return;
+
+        String filtroLower = filtro.toLowerCase();
+
+        int column = 0;
+        int row = 0;
+
+        for (Producto producto : listaProductos) {
+            if (producto.getNombre().toLowerCase().contains(filtroLower)) {
+                VBox productoCard = crearTarjetaProducto(producto);
+                productGrid.add(productoCard, column, row);
+
+                column++;
+                if (column == 2) {
+                    column = 0;
+                    row++;
+                }
+            }
+        }
+    }
+
 }
