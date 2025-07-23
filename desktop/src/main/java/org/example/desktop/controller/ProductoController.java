@@ -74,28 +74,15 @@ public class ProductoController implements Initializable {
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response);
+
 
             String responseBody = response.body();
-            System.out.println(responseBody);
+
 
             productosOriginales = gson.fromJson(responseBody, Producto[].class);
 
             tablaProductos.getItems().clear();
             tablaProductos.getItems().addAll(productosOriginales);
-
-
-            for (Producto p : productosOriginales) {
-                System.out.println("Producto: " + p.getNombre() + ", SKU: " + p.getSku());
-            }
-
-            System.out.println("Respuesta del backend:");
-            System.out.println(responseBody);
-
-            for (Producto p : productosOriginales) {
-                System.out.println("Producto: " + p.getNombre() + ", Proveedor: " +
-                        (p.getProveedorid() != null ? p.getProveedorid().getRazonSocial() : "null"));
-            }
 
 
         } catch (Exception e) {
@@ -471,9 +458,6 @@ public class ProductoController implements Initializable {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             String responseBody = response.body();
-            System.out.println("Código de estado: " + response.statusCode());
-            System.out.println("Respuesta del servidor: " + response.body());
-            System.out.println("Datos enviados al servidor: " + json);
 
             if (responseBody.trim().startsWith("{")) {
                 MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
@@ -566,8 +550,6 @@ public class ProductoController implements Initializable {
 
 
             Parent root = fxmlLoader.load();
-
-
 
             Stage stage = new Stage(); // Esto NO usa StageManager
             stage.setScene(new Scene(root, 800, 550));

@@ -16,7 +16,6 @@
         <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
     </padding>
 
-    <!-- Header del perfil -->
     <VBox alignment="CENTER" spacing="15.0" styleClass="modern-header">
         <ImageView fx:id="imgPerfil" fitHeight="120.0" fitWidth="120.0" preserveRatio="true" styleClass="modern-avatar">
             <image>

@@ -37,7 +37,7 @@
 }
 
 .modern-data-column {
-    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-background-color: linear-gradient(to bottom right, #374151, #1f2937);
     -fx-background-radius: 16px;
     -fx-padding: 25px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 3);
@@ -51,14 +51,14 @@
 }
 
 .modern-field-label {
-    -fx-text-fill: #6b7280;
+    -fx-text-fill: #ffffff;
     -fx-font-size: 11px;
     -fx-font-weight: 600;
     -fx-letter-spacing: 0.5px;
 }
 
 .modern-field-value {
-    -fx-text-fill: #1f2937;
+    -fx-text-fill: #ffffff;
     -fx-font-size: 16px;
     -fx-font-weight: 600;
 }
@@ -84,7 +84,7 @@
 }
 
 .modern-btn-primary {
-    -fx-background-color: linear-gradient(to bottom right, #10b91e, rgba(16, 185, 24, 0.2));
+    -fx-background-color: linear-gradient(to right, #3ab910, #3a9605);
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-font-weight: 600;
@@ -96,7 +96,7 @@
 }
 
 .modern-btn-primary:hover {
-    -fx-background-color: linear-gradient(to bottom right, #10b91e, rgba(16, 185, 24, 0.2));
+    -fx-background-color: linear-gradient(to right, #3ab910, #3a9605);
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
 }

@@ -75,24 +75,13 @@ public class ProveedorController implements Initializable {
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response);
 
             String responseBody = response.body();
-            System.out.println(responseBody);
 
             proveedoresOriginales = gson.fromJson(responseBody, Proveedor[].class);
 
             tablaProveedores.getItems().clear();
             tablaProveedores.getItems().addAll(proveedoresOriginales);
-
-            for (Proveedor p : proveedoresOriginales) {
-                System.out.println("Proveedor: " + p.getRazonSocial() + ", Teléfono: " + p.getTelefono());
-            }
-
-            System.out.println("Respuesta del backend:");
-            System.out.println(responseBody);
-
-
 
 
         } catch (Exception e) {
@@ -228,9 +217,6 @@ public class ProveedorController implements Initializable {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             String responseBody = response.body();
-            System.out.println("Código de estado: " + response.statusCode());
-            System.out.println("Respuesta del servidor: " + response.body());
-            System.out.println("Datos enviados al servidor: " + json);
 
             if (responseBody.trim().startsWith("{")) {
                 MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
@@ -329,9 +315,6 @@ public class ProveedorController implements Initializable {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             String responseBody = response.body();
-            System.out.println("Código de estado: " + response.statusCode());
-            System.out.println("Respuesta del servidor: " + response.body());
-            System.out.println("Datos enviados al servidor: " + json);
 
             if (responseBody.trim().startsWith("{")) {
                 MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
@@ -490,9 +473,7 @@ public class ProveedorController implements Initializable {
         try {
             String cuit;
             cuit = txtCUIT.getText();
-            // Validar longitud y formato básico
             if (cuit.length() != 11 || !cuit.matches("\\d+")) {
-                System.out.println("CUIT INVALIDO");
                 JOptionPane.showMessageDialog(null, "CUIT inválido: debe tener 11 dígitos numéricos.");
                 notificar("Problemas con el CUIT","CUIT inválido: debe tener 11 dígitos numéricos.",false);
                 return;
@@ -503,7 +484,6 @@ public class ProveedorController implements Initializable {
             if (validarCUIT(cuit)) {
                 System.out.println("CUIT válido ✅");
             } else {
-                System.out.println("CUIT inválido ❌");
                 notificar("Problemas con el CUIT","No es un CUIT valido.",false);
                 return;
             }
@@ -512,13 +492,8 @@ public class ProveedorController implements Initializable {
             // 1) Obtener token y sign
             String service = "ws_sr_padron_a13";
             String ambiente = "Produccion";
-            System.out.println("Generando ticket...");
 
             String soapResponse = LoginTicketRequest.generarTicketProduccion(service,ambiente);
-            System.out.println("Ticket generado.");
-            System.out.println("🧼 Respuesta completa SOAP:");
-            System.out.println(soapResponse);
-
             // 2) Parsear respuesta para extraer token y sign
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(true);
@@ -565,30 +540,18 @@ public class ProveedorController implements Initializable {
             String sign  = creds.getElementsByTagName("sign").item(0).getTextContent();
 
 
-            System.out.println("✅ Token y sign obtenidos correctamente.");
-
             // 3) Llamada al padrón
             String TU_CUIT = VariablesEntorno.getCUIT(); // Cambiar por el propio si es necesario
             Object resultado = PadronClient.consultarCUIT(token, sign, TU_CUIT, cuit);
 
             if (resultado instanceof Persona) {
                 Persona p = (Persona) resultado;
-                System.out.println("👤 Persona:");
-                System.out.println("Nombre: " + p.getNombre() + " " + p.getApellido());
-                System.out.println("Documento: " + p.getTipoDocumento() + " " + p.getNumeroDocumento());
-                System.out.println("Actividad: " + p.getDescripcionActividadPrincipal());
-                System.out.println("Domicilio real: " + p.getDomicilioReal());
-                System.out.println("Domicilio fiscal: " + p.getDomicilioFiscal());
                 txtRazonSocial.setText(p.getApellido() +  ", " + p.getNombre());
                 txtDireccion.setText(p.getDomicilioReal());
 
 
             } else {
                 Empresa e = (Empresa) resultado;
-                System.out.println("🏢 Empresa:");
-                System.out.println("Razón social: " + e.getRazonSocial());
-                System.out.println("Actividad: " + e.getDescripcionActividadPrincipal());
-                System.out.println("Domicilio fiscal: " + e.getDomicilioFiscal());
                 txtRazonSocial.setText(e.getRazonSocial());
                 txtDireccion.setText(e.getDomicilioFiscal());
 
