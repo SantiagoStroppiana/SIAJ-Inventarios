@@ -40,3 +40,13 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+/package/
+package/output/
+*.exe
+*.msi
+/output/
+dist/
+build/
+**/runtime/
+**/lib/modules

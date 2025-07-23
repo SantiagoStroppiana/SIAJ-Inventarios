@@ -23,7 +23,6 @@ import org.example.desktop.model.Producto;
 import org.example.desktop.util.VariablesEntorno;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;

@@ -31,7 +31,7 @@ public class LoginController {
 
     @FXML
     public void olvidePassword(ActionEvent event) {
-        StageManager.loadScene("/org/example/desktop/cambiar-password-view.fxml", 700, 500);
+        StageManager.loadScene("/org/example/desktop/cambiar-password-view.fxml", 700, 600);
     }
 
     @FXML

@@ -6,7 +6,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import org.example.desktop.dto.UsuarioDTO;
-import org.example.desktop.model.Usuario;
 import org.example.desktop.util.StageManager;
 import org.example.desktop.util.UserSession;
 

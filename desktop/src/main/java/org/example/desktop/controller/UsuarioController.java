@@ -11,11 +11,10 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.UsuarioDTO;
-import org.example.desktop.model.Usuario;
 import org.example.desktop.util.StageManager;
 import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
-import javax.swing.*;
+
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;

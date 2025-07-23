@@ -4,15 +4,10 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.UsuarioDTO;
@@ -23,7 +18,6 @@ import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
 
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -56,9 +50,13 @@ public class RegisterController {
         if(usuarioDTO != null && usuarioDTO.getNombreRol().equals("Administrador")) {
             btnLogin.setVisible(false);
             btnLogin.setManaged(false);
+            btnVolver.setManaged(true);
+            btnVolver.setVisible(true);
         }else{
-            btnLogin.setVisible(false);
+            btnLogin.setVisible(true);
             btnLogin.setManaged(true);
+            btnVolver.setManaged(false);
+            btnVolver.setVisible(false);
         }
 
     }

@@ -1,7 +1,5 @@
 package org.example.desktop.util;
 
-import org.example.desktop.util.FacturaItem;
-
 import java.time.LocalDate;
 import java.util.List;
 

@@ -1,3 +1,13 @@
 node_modules/
 target/
 *.log
+
+/package/
+package/output/
+*.exe
+*.msi
+/output/
+dist/
+build/
+**/runtime/
+**/lib/modules

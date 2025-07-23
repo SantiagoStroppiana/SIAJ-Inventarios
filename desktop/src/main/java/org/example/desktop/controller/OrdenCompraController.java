@@ -4,13 +4,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
 import javafx.stage.Modality;
@@ -20,12 +16,8 @@ import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.DetalleOrdenCompraDTO;
 import org.example.desktop.dto.OrdenCompraDTO;
 import org.example.desktop.model.*;
-import org.example.desktop.util.OrdenCompraPDFGenerator;
-import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
 
-import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
@@ -35,23 +27,13 @@ import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.geometry.Insets;
 import javafx.util.StringConverter;
-import java.time.LocalDate;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.URI;
-import com.google.gson.Gson;
 
 public class OrdenCompraController {
 
@@ -443,7 +425,6 @@ public class OrdenCompraController {
     private void limpiarOrden() {
         itemsOrden.clear();
         actualizarVistaOrden();
-        notesTextArea.setText("");
     }
 
     private void generarOrden() throws IOException, InterruptedException {
@@ -477,7 +458,7 @@ public class OrdenCompraController {
         LocalDate fecha = orderDatePicker.getValue();
         MedioPago medioPagoDummy = new MedioPago();
         medioPagoDummy.setId(1);
-        medioPagoDummy.setTipo("A acordar con el proveedor.");
+        medioPagoDummy.setTipo("TEMPORAL");
         double total = Double.parseDouble(totalLabel.getText().replace(",", "."));
 
         /*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
@@ -558,40 +539,8 @@ public class OrdenCompraController {
         // Paso 3: Mostrar mensaje de éxito y limpiar SOLO si todo salió bien
         if (todosDetallesCreados) {
             mostrarAlerta("Éxito", "Orden de compra y todos los detalles creados correctamente.");
-
-            OrdenCompra orden = new OrdenCompra();
-            orden.setId(ordenCompraCreadaDTO.getId());
-            orden.setProveedor(proveedor);
-            orden.setTotal(new BigDecimal(total));
-            orden.setEstado(OrdenCompra.EstadoOrden.pendiente);
-            orden.setMedioPago(medioPagoDummy);
-            orden.setFechaPago(LocalDateTime.now());
-
-            try {
-// Asegurar que exista la carpeta ./pdfs/ordenes/
-                File directorio = new File("pdfs/ordenes");
-                if (!directorio.exists()) {
-                    directorio.mkdirs();
-                }
-
-                String rutaArchivo = "pdfs/ordenes/OrdenCompra " + orden.getId() + ".pdf";
-                String comentario = "";
-                String comentario2 = notesTextArea.getText();
-                if (!comentario2.equals("") || !comentario2.isEmpty()) {
-                    comentario = comentario2;
-                }
-                OrdenCompraPDFGenerator.generarPDF(orden, itemsOrden, rutaArchivo,comentario);
-                Desktop.getDesktop().open(new File(rutaArchivo));
-
-                System.out.println("📄 PDF generado en: " + rutaArchivo);
-            } catch (Exception e) {
-                e.printStackTrace();
-                mostrarAlerta("Error", "No se pudo generar el PDF: " + e.getMessage());
-            }
-
-            limpiarOrden();
-        }
-        else {
+            limpiarOrden(); // ← AHORA sí, al final
+        } else {
             mostrarAlerta("Advertencia", "La orden se creó pero hubo problemas con algunos detalles.");
         }
     }

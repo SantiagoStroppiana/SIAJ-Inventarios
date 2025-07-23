@@ -3,9 +3,6 @@ package org.example.desktop.model;
 
 import org.example.desktop.dto.UsuarioDTO;
 
-import java.time.LocalDateTime;
-
-
 
 public class Venta {
 
