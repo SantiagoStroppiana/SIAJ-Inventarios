@@ -97,27 +97,39 @@
                     </graphic>
                 </Button>
 
-                <VBox layoutX="71.0" layoutY="450.0" prefHeight="244.0" prefWidth="600.0" styleClass="menuprincipal-info-section">
+                <VBox layoutX="72.0" layoutY="451.0" prefHeight="344.0" prefWidth="600.0" styleClass="menuprincipal-info-section">
                     <Label styleClass="menuprincipal-section-header" text="Información General" />
                     <VBox spacing="15" styleClass="menuprincipal-info-content">
+
                         <HBox alignment="CENTER_LEFT" spacing="15" styleClass="menuprincipal-info-item">
-                            <Label styleClass="menuprincipal-info-icon, income-icon" text="💰" />
+                            <Label styleClass="menuprincipal-info-icon, stock-icon" text="📦" />
                             <VBox spacing="2">
-                                <Label styleClass="menuprincipal-info-label" text="Ingresos hoy" />
-                                <Label styleClass="menuprincipal-info-value" text="(ingresos fecha)" />
+                                <Label styleClass="menuprincipal-info-label" text="Unidades en stock" />
+                                <Label fx:id="lblUnidadesStock" styleClass="menuprincipal-info-value" text="1.245 unidades" />
                             </VBox>
                         </HBox>
+
                         <HBox alignment="CENTER_LEFT" spacing="15" styleClass="menuprincipal-info-item">
-                            <Label styleClass="menuprincipal-info-icon, sales-icon" text="💰" />
+                            <Label styleClass="menuprincipal-info-icon, value-icon" text="💰" />
                             <VBox spacing="2">
-                                <Label styleClass="menuprincipal-info-label" text="Ventas hoy (fecha)" />
-                                <Label styleClass="menuprincipal-info-value" text="(numero de ventas)" />
+                                <Label styleClass="menuprincipal-info-label" text="Valor total del inventario" />
+                                <Label fx:id="lblValorInventario" styleClass="menuprincipal-info-value" text="4.520.300" />
                             </VBox>
                         </HBox>
+
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="96.0" spacing="15" styleClass="menuprincipal-info-item">
+                            <Label styleClass="menuprincipal-info-icon, warning-icon" text="⚠" />
+                            <VBox spacing="2">
+                                <Label styleClass="menuprincipal-info-label" text="Productos con stock crítico" />
+                                <Label fx:id="lblProductosCriticos" styleClass="menuprincipal-info-value" text="8 productos" />
+                            </VBox>
+                        </HBox>
+
                     </VBox>
                 </VBox>
 
-                <VBox layoutX="700.0" layoutY="450.0" prefHeight="244.0" prefWidth="600.0" styleClass="menuprincipal-info-section">
+
+                <VBox layoutX="700.0" layoutY="450.0" prefHeight="345.0" prefWidth="600.0" styleClass="menuprincipal-info-section">
                     <Label styleClass="menuprincipal-section-header" text="🥧 TOP 5 Productos Más Vendidos" />
 
                     <VBox spacing="5" styleClass="menuprincipal-info-content">
