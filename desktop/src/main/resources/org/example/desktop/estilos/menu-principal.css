@@ -14,6 +14,7 @@
     -fx-text-fill: #cbd5e1;
 }
 
+
 .menuprincipal-button {
     -fx-background-radius: 18;
     -fx-border-radius: 18;
@@ -36,21 +37,98 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0, 0, 1);
 }
 
-/* Colores por módulo */
+.menuprincipal-button:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 15, 0, 0, 5);
+}
+
+.menuprincipal-button:hover .label {
+    -fx-font-size: 17px;
+}
+
+.menuprincipal-button:hover .image-view {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+
 .punto-venta {
     -fx-background-color: #10b981;
 }
+
+.punto-venta:hover {
+    -fx-background-color: linear-gradient(to bottom right, #10b981, #059669);
+    -fx-border-color: rgba(16, 185, 129, 0.6);
+    -fx-border-width: 2px;
+}
+
+.punto-venta:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
 .inventario {
     -fx-background-color: #f97316;
 }
+
+.inventario:hover {
+    -fx-background-color: linear-gradient(to bottom right, #f97316, #ea580c);
+    -fx-border-color: rgba(249, 115, 22, 0.6);
+    -fx-border-width: 2px;
+}
+
+.inventario:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+
 .proveedores {
     -fx-background-color: #3b82f6;
 }
+
+.proveedores:hover {
+    -fx-background-color: linear-gradient(to bottom right, #3b82f6, #2563eb);
+    -fx-border-color: rgba(59, 130, 246, 0.6);
+    -fx-border-width: 2px;
+}
+
+.proveedores:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+
 .productos {
     -fx-background-color: #ea580c;
 }
 
-/* INFO CARDS */
+.productos:hover {
+    -fx-background-color: linear-gradient(to bottom right, #ea580c, #dc2626);
+    -fx-border-color: rgba(234, 88, 12, 0.6);
+    -fx-border-width: 2px;
+}
+
+.productos:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+
+.menuprincipal-button-entrada {
+    -fx-opacity: 0.7;
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+
+
+.menuprincipal-button-cargado {
+    -fx-opacity: 1.0;
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+}
+
 .menuprincipal-info-section {
     -fx-background-color: #1e293b;
     -fx-border-radius: 12;
@@ -116,4 +194,163 @@
 .menuprincipal-perfil-button:hover {
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
+}
+
+
+.menuprincipal-mini-chart {
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 10px;
+}
+
+.menuprincipal-mini-chart .chart-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.menuprincipal-mini-chart .chart-plot-background {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 6px;
+}
+
+.menuprincipal-mini-chart .chart-horizontal-grid-lines,
+.menuprincipal-mini-chart .chart-vertical-grid-lines {
+    -fx-stroke: rgba(255, 255, 255, 0.1);
+    -fx-stroke-width: 0.5px;
+}
+
+
+.menuprincipal-chart-x-axis,
+.menuprincipal-chart-y-axis {
+    -fx-tick-label-fill: #ffffff;
+    -fx-font-size: 9px;
+}
+
+.menuprincipal-chart-x-axis .axis-label,
+.menuprincipal-chart-y-axis .axis-label {
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-font-size: 8px;
+}
+
+
+.menuprincipal-chart-x-axis .axis,
+.menuprincipal-chart-y-axis .axis {
+    -fx-stroke: rgba(255, 255, 255, 0.3);
+    -fx-stroke-width: 1px;
+}
+
+
+.menuprincipal-chart-x-axis .axis-tick-mark,
+.menuprincipal-chart-y-axis .axis-tick-mark {
+    -fx-stroke: rgba(255, 255, 255, 0.3);
+    -fx-stroke-width: 0.5px;
+}
+
+.menuprincipal-mini-chart .default-color0.chart-bar {
+    -fx-background-color: linear-gradient(to top, #4CAF50, #81C784);
+    -fx-background-radius: 3px 3px 0 0;
+}
+
+.menuprincipal-mini-chart .default-color1.chart-bar {
+    -fx-background-color: linear-gradient(to top, #2196F3, #64B5F6);
+    -fx-background-radius: 3px 3px 0 0;
+}
+
+.menuprincipal-mini-chart .default-color2.chart-bar {
+    -fx-background-color: linear-gradient(to top, #FF9800, #FFB74D);
+    -fx-background-radius: 3px 3px 0 0;
+}
+
+.menuprincipal-mini-chart .default-color3.chart-bar {
+    -fx-background-color: linear-gradient(to top, #9C27B0, #BA68C8);
+    -fx-background-radius: 3px 3px 0 0;
+}
+
+.menuprincipal-mini-chart .default-color4.chart-bar {
+    -fx-background-color: linear-gradient(to top, #F44336, #EF5350);
+    -fx-background-radius: 3px 3px 0 0;
+}
+
+
+.menuprincipal-mini-chart .chart-bar:hover {
+    -fx-opacity: 0.8;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+
+.menuprincipal-mini-stats {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 6px;
+    -fx-padding: 8px 12px;
+    -fx-min-width: 80px;
+    -fx-alignment: center;
+}
+
+.menuprincipal-mini-stats:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+}
+
+.menuprincipal-mini-stats-value {
+    -fx-text-fill: #4CAF50;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+
+.menuprincipal-mini-stats-label {
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-font-size: 9px;
+    -fx-text-alignment: center;
+}
+
+
+@media screen and (max-width: 1200px) {
+    .menuprincipal-mini-chart {
+        -fx-padding: 8px;
+    }
+
+    .menuprincipal-chart-x-axis,
+    .menuprincipal-chart-y-axis {
+        -fx-font-size: 8px;
+    }
+
+    .menuprincipal-mini-stats-value {
+        -fx-font-size: 12px;
+    }
+
+    .menuprincipal-mini-stats-label {
+        -fx-font-size: 8px;
+    }
+}
+
+
+.menuprincipal-mini-chart .chart-bar {
+    -fx-scale-x: 0;
+    -fx-scale-y: 0;
+}
+
+.menuprincipal-mini-chart .chart-bar.chart-bar-animated {
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+
+
+.menuprincipal-mini-stats {
+    -fx-transition: -fx-background-color 0.2s ease-in-out;
+}
+
+.menuprincipal-mini-chart .chart-bar {
+    -fx-transition: -fx-opacity 0.2s ease-in-out, -fx-scale-x 0.2s ease-in-out, -fx-scale-y 0.2s ease-in-out;
+}
+
+.menuprincipal-mini-chart + HBox {
+    -fx-border-color: rgba(255, 255, 255, 0.1) transparent transparent transparent;
+    -fx-border-width: 1px 0 0 0;
+    -fx-padding: 8px 0 0 0;
+    -fx-margin: 5px 0 0 0;
 }

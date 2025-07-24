@@ -12,7 +12,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.poi.ss.usermodel.Row;
@@ -22,7 +21,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.DetalleVentaDTO;
 import org.example.desktop.model.*;
-import org.example.desktop.util.VariablesEntorno;
+import org.example.desktop.util.*;
 
 import java.awt.*;
 import java.io.File;
@@ -32,20 +31,22 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableCell;
-import org.example.desktop.util.VentaPDFGenerator;
 
 import java.time.format.DateTimeFormatter;
 
-public class HistorialVentasController implements Initializable {
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
 
-    // Controles de búsqueda y filtros
+public class HistorialVentasController implements Initializable {
     @FXML
     private TextField txtBuscarVenta;
     @FXML
@@ -56,18 +57,12 @@ public class HistorialVentasController implements Initializable {
     private DatePicker fechaDesde;
     @FXML
     private DatePicker fechaHasta;
-
-    // Botones de filtros
     @FXML
     private Button btnFiltrar;
     @FXML
     private Button btnLimpiar;
-
-    // Tabla de ventas
     @FXML
     private TableView<Venta> tablaVentas;
-
-    // Columnas de la tabla
     @FXML
     private TableColumn<Venta, Integer> idColumn;
     @FXML
@@ -82,8 +77,6 @@ public class HistorialVentasController implements Initializable {
     private TableColumn<Venta, String> fechaColumn;
     @FXML
     private TableColumn<Venta, String> observacionesColumn;
-
-    // Botones de acción
     @FXML
     private Button btnVerDetalles;
     @FXML
@@ -92,8 +85,6 @@ public class HistorialVentasController implements Initializable {
     private Button btnGenerarPDF;
     @FXML
     private Button btnExportar;
-
-    // Labels de estadísticas
     @FXML
     private Label lblTotalVentas;
     @FXML
@@ -106,27 +97,19 @@ public class HistorialVentasController implements Initializable {
     private Label lblMontoTotal;
     @FXML
     private Label lblPromedioVenta;
-
-    // Otros campos necesarios
     private HttpClient httpClient;
     private Gson gson;
     private Venta[] ventasOriginales;
 
-
-
     private MedioPago[] mediosPago;
     private Usuario[] usuarios;
     private DetalleVentaDTO[] detalleVentasDTO;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Inicializar HttpClient y Gson
         httpClient = HttpClient.newHttpClient();
         gson = new Gson();
-
-        // Configurar las columnas de la tabla
         configurarColumnas();
-
-        // Cargar datos iniciales
         cargarEstadosComboBox();
         mostrarVentas();
         cargarUsuarios();
@@ -166,8 +149,6 @@ public class HistorialVentasController implements Initializable {
 
 
 
-
-
     private void configurarColumnas() {
         // Configurar columnas básicas
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -195,7 +176,7 @@ public class HistorialVentasController implements Initializable {
             String fechaStr = cellData.getValue().getFechaPago();
             if (fechaStr != null) {
                 try {
-                    // Primero lo parseás desde el formato que viene del backend
+                    // Primero lo parseas desde el formato que viene del backend
                     DateTimeFormatter parser = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
                     LocalDateTime fecha = LocalDateTime.parse(fechaStr, parser);
 
@@ -296,7 +277,6 @@ public class HistorialVentasController implements Initializable {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
 
-            System.out.println("Ventas del BackEnd"+responseBody+"\n\n\n\n");
             ventasOriginales = gson.fromJson(responseBody, Venta[].class);
 
             tablaVentas.getItems().clear();
@@ -306,11 +286,10 @@ public class HistorialVentasController implements Initializable {
             // Actualizar las estadísticas
             actualizarEstadisticas(ventasOriginales);
 
-            System.out.println("Ventas cargadas correctamente: " + ventasOriginales.length);
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", "Error al cargar las ventas: " + e.getMessage(), false);
+            notificarError("Error al cargar las ventas: " + e.getMessage());
         }
     }
     DetalleVenta[] detalleVentas;
@@ -325,11 +304,9 @@ public class HistorialVentasController implements Initializable {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
 
-            System.out.println("Ventas del BackEnd"+responseBody+"\n\n\n\n");
             detalleVentasDTO = gson.fromJson(responseBody, DetalleVentaDTO[].class);
 
 
-            System.out.println("Detalles de ventas cargados correctamente: " + detalleVentasDTO.length);
 
              detalleVentas = new DetalleVenta[detalleVentasDTO.length];
             for (int i = 0; i < detalleVentasDTO.length; i++) {
@@ -347,7 +324,7 @@ public class HistorialVentasController implements Initializable {
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", "Error al cargar las ventas: " + e.getMessage(), false);
+            notificarError("Error al cargar las ventas: " + e.getMessage());
         }
     }
 
@@ -374,7 +351,7 @@ public class HistorialVentasController implements Initializable {
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error critico: " + e.getMessage());
         }
 
     }
@@ -423,21 +400,6 @@ public class HistorialVentasController implements Initializable {
         lblPromedioVenta.setText(String.format("Promedio: $%.2f", promedio));
     }
 
-    private void notificar(String titulo, String mensaje, boolean exito) {
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-            if (exito) {
-                notificacion.showInformation();
-            } else {
-                notificacion.showError();
-            }
-        });
-    }
-
     private void cargarUsuarios() {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -449,11 +411,10 @@ public class HistorialVentasController implements Initializable {
             String responseBody = response.body();
 
             usuarios = gson.fromJson(responseBody, Usuario[].class);
-            System.out.println("Usuarios cargados: " + usuarios.length);
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error", "No se pudieron cargar los usuarios", false);
+            notificarError("Error, no se pudieron cargar los usuarios" + e.getMessage());
         }
     }
     private void cargarMediosPago() {
@@ -467,11 +428,10 @@ public class HistorialVentasController implements Initializable {
             String responseBody = response.body();
 
             mediosPago = gson.fromJson(responseBody, MedioPago[].class);
-            System.out.println("Medios de pago cargados: " + mediosPago.length);
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error", "No se pudieron cargar los medios de pago", false);
+            notificarError("Error no se pudieron cargar los medios de pago " + e.getMessage());
         }
     }
 
@@ -510,7 +470,7 @@ public class HistorialVentasController implements Initializable {
     private void onGenerarPDF() {
         Venta ventaSeleccionada = tablaVentas.getSelectionModel().getSelectedItem();
         if (ventaSeleccionada == null) {
-            notificar("Advertencia", "Debe seleccionar una venta para generar el PDF.", false);
+            notificarError("Debe seleccionar una venta para generar el PDF");
             return;
         }
 
@@ -553,17 +513,40 @@ public class HistorialVentasController implements Initializable {
 
 
             // Generar el PDF
-            VentaPDFGenerator generador = new VentaPDFGenerator();
-            generador.generarPDF(ventaSeleccionada, detallesDeLaVenta, archivoSalida);
+//            VentaPDFGenerator generador = new VentaPDFGenerator();
+//            generador.generarPDF(ventaSeleccionada, detallesDeLaVenta, archivoSalida);
+
+            GeneradorPDF generadorPDF = new GeneradorPDF();
+            Factura factura = new Factura();
+            List<FacturaItem> items = new ArrayList<>();
+            for(DetalleVenta detalle : detallesDeLaVenta){
+            FacturaItem facturaItem = new FacturaItem(detalle.getProducto().getNombre(), detalle.getCantidad(), detalle.getPrecioUnitario());
+            items.add(facturaItem);
+            }
+            //Simulamos los datos
+            factura.setItems(items);
+            factura.setTipoComprobante(11);
+            factura.setCae("");
+            factura.setTotal(ventaSeleccionada.getTotal());
+            LocalDateTime dateTime = LocalDateTime.parse(ventaSeleccionada.getFechaPago());
+            LocalDate fecha = dateTime.toLocalDate();
+            factura.setFechaEmision(fecha);
+            factura.setCuitReceptor(0);
+            factura.setCuitEmisor(Long.parseLong(VariablesEntorno.getCUIT()));
+            factura.setPuntoVenta(1);
+            factura.setNumero(ventaSeleccionada.getId());
+
+            String rutasalida = generadorPDF.generarPDF(factura);
 
             // Abrir el PDF automáticamente
-            Desktop.getDesktop().open(new File(archivoSalida));
+            Desktop.getDesktop().open(new File(rutasalida));
+//            Desktop.getDesktop().open(new File(archivoSalida));
 
-            notificar("PDF generado", "La factura se generó correctamente.", true);
+            notificarExito("La factura se generó correctamente");
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error", "No se pudo generar el PDF: " + e.getMessage(), false);
+            notificarError("No se pudo generar el PDF: " + e.getMessage());
         }
     }
 
@@ -652,11 +635,11 @@ public class HistorialVentasController implements Initializable {
             workbook.close();
 
             Desktop.getDesktop().open(archivo);
-            notificar("Exportación Exitosa", "El Excel fue generado correctamente.", true);
+            notificarExito("El Excel fue generado correctamente.");
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error", "No se pudo exportar a Excel: " + e.getMessage(), false);
+            notificarError("No se pudo exportar a Excel: " + e.getMessage());
         }
     }
 
@@ -679,7 +662,7 @@ public class HistorialVentasController implements Initializable {
     private void onVerDetalles() {
         Venta ventaSeleccionada = tablaVentas.getSelectionModel().getSelectedItem();
         if (ventaSeleccionada == null) {
-            notificar("Advertencia", "Debe seleccionar una venta para ver sus detalles.", false);
+            notificarError("Debe seleccionar una venta para ver sus detalles");
             return;
         }
 
@@ -707,10 +690,12 @@ public class HistorialVentasController implements Initializable {
             stage.setTitle("Detalle de Venta #" + ventaSeleccionada.getId());
             stage.setScene(new Scene(root));
             stage.show();
+            stage.setResizable(false);
+
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error", "No se pudo abrir la ventana de detalles: " + e.getMessage(), false);
+            notificarError("No se pudo abrir la ventana de detalles: " + e.getMessage());
         }
     }
 

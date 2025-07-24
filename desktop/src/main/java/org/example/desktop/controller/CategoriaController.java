@@ -1,29 +1,20 @@
 package org.example.desktop.controller;
 
 import com.google.gson.Gson;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
 import org.example.desktop.model.Categoria;
 import org.example.desktop.model.MensajesResultados;
-import org.example.desktop.model.Producto;
 import org.example.desktop.util.VariablesEntorno;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
@@ -31,20 +22,25 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ResourceBundle;
 
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
+
 public class CategoriaController implements Initializable {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
+
     @FXML private TextField txtNombre;
     @FXML private TextField txtDescripcion;
     @FXML private TextField txtBuscarCategoria;
+    @FXML private Label lblCategoriaNombre;
     @FXML private TableView<Categoria> tablaCategorias;
-    @FXML private TableColumn<Producto, String> nombreColumn;
-    @FXML private TableColumn<Producto, String> descripcionColumn;
+    @FXML private TableColumn<Categoria, String> nombreColumn;
+    @FXML private TableColumn<Categoria, String> descripcionColumn;
     @FXML private Button btnAgregar;
-    @FXML private Button btnActualizar;
-    @FXML private Button btnDesactivar;
     @FXML private Button btnModificar;
+
+    private Categoria[] categoriasOriginales;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -52,8 +48,6 @@ public class CategoriaController implements Initializable {
         descripcionColumn.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
 
         btnAgregar.setOnAction(event -> crearCategoria());
-        //desactivar.setOnAction(event -> cambiarEstado());
-        btnActualizar.setOnAction(event -> mostrarCategorias());
         btnModificar.setOnAction(event -> {
             try {
                 verCategoria();
@@ -63,24 +57,27 @@ public class CategoriaController implements Initializable {
         });
 
         mostrarCategorias();
+
         txtBuscarCategoria.textProperty().addListener((observable, oldValue, newValue) -> {
             if (categoriasOriginales == null) return;
 
-            String filtro = newValue.toLowerCase();
+            String filtro = newValue.toLowerCase().trim();
 
-            tablaCategorias.getItems().setAll(
-                    java.util.Arrays.stream(categoriasOriginales)
-                            .filter(c -> c.getNombre().toLowerCase().contains(filtro)
-                                    || c.getDescripcion().toLowerCase().contains(filtro))
-                            .toList()
-            );
+            if (filtro.isEmpty()) {
+                tablaCategorias.getItems().setAll(categoriasOriginales);
+            } else {
+                tablaCategorias.getItems().setAll(
+                        java.util.Arrays.stream(categoriasOriginales)
+                                .filter(c -> c.getNombre().toLowerCase().contains(filtro)
+                                        || c.getDescripcion().toLowerCase().contains(filtro))
+                                .toList()
+                );
+            }
         });
-
     }
-    private Categoria[] categoriasOriginales;
+
     @FXML
     public void mostrarCategorias() {
-
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(VariablesEntorno.getServerURL() + "/api/categorias"))
@@ -88,69 +85,46 @@ public class CategoriaController implements Initializable {
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response);
 
-            String responseBody = response.body();
-            System.out.println(responseBody);
+            if (response.statusCode() == 200) {
+                String responseBody = response.body();
 
-            categoriasOriginales = gson.fromJson(responseBody, Categoria[].class);
+                categoriasOriginales = gson.fromJson(responseBody, Categoria[].class);
 
-            tablaCategorias.getItems().clear();
-            tablaCategorias.getItems().addAll(categoriasOriginales);
+                tablaCategorias.getItems().clear();
+                tablaCategorias.getItems().addAll(categoriasOriginales);
 
-            for (Categoria c : categoriasOriginales) {
-                System.out.println("Categoria: " + c.getNombre());
+            } else {
+                notificarError("Error al obtener categorías del servidor");
             }
-
-            System.out.println("Respuesta del backend:");
-            System.out.println(responseBody);
-
-
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error Crítico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
-
     }
-
-    private void notificar(String titulo, String mensaje, boolean exito){
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-
-            if (exito) {
-                notificacion.showInformation();
-            } else {
-                notificacion.showError();
-            }
-        });
-    }
-
-
 
     @FXML
     public void crearCategoria() {
         try {
-
-
             String nombre = txtNombre.getText().trim();
             String descripcion = txtDescripcion.getText().trim();
 
-
-            if (nombre.isEmpty() || descripcion.isEmpty()) {
-                notificar("Campos incompletos", "Todos los campos son obligatorios.", false);
+            if (nombre.isEmpty()) {
+                notificarError("Campo requerido\", \"El nombre es obligatorio.");
+                txtNombre.requestFocus();
                 return;
             }
 
+            if (descripcion.isEmpty()) {
+                notificarError("Campo requerido\", \"La descripcion es obligatorio.");
+                txtDescripcion.requestFocus();
+                return;
+            }
             Categoria categoria = new Categoria();
-
             categoria.setNombre(nombre);
             categoria.setDescripcion(descripcion);
-
+            lblCategoriaNombre.setText(categoria.getNombre());
             String json = gson.toJson(categoria);
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -162,34 +136,29 @@ public class CategoriaController implements Initializable {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             String responseBody = response.body();
-            System.out.println("Código de estado: " + response.statusCode());
-            System.out.println("Respuesta del servidor: " + response.body());
-            System.out.println("Datos enviados al servidor: " + json);
 
-            if (responseBody.trim().startsWith("{")) {
-                MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
-
-                if (resultado.isExito()) {
-                    // Agregar el producto directamente a la tabla
-
-                  /*  Thread.sleep(10000);
-                    mostrarProductos();
-*/
-                    mostrarCategorias();
-
-                    notificar("Categoria creado", resultado.getMensaje(), true);
-                    // limpiarCampos(); // si tenés esta función activa
+            if (response.statusCode() == 200 || response.statusCode() == 201) {
+                if (responseBody.trim().startsWith("{")) {
+                    MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
+                    if (resultado.isExito()) {
+                        mostrarCategorias();
+                        limpiarCampos();
+                        notificarExito("Categoría creada " + resultado.getMensaje());
+                    } else {
+                        notificarError("Error categoria creada " + resultado.getMensaje());
+                    }
                 } else {
-                    notificar("Error crear categoria", resultado.getMensaje(), false);
+                    mostrarCategorias();
+                    limpiarCampos();
+//                    notificarExito("Categoría creada exitosamente");
                 }
-
             } else {
-                notificar("Respuesta del servidor incorrecta", responseBody, false);
+                notificarError("Error al crear la categoría. Código: " + response.statusCode());
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            notificar("Error critico", e.getMessage(), false);
+            notificarError("Error Crítico " + e.getMessage());
         }
     }
 
@@ -198,28 +167,35 @@ public class CategoriaController implements Initializable {
         Categoria categoria = tablaCategorias.getSelectionModel().getSelectedItem();
 
         if (categoria == null) {
-            notificar("Seleccionar categoria", "Debe seleccionar un categoria en la tabla.", false);
-        } else {
+            notificarError("Debe seleccionar una categoría en la tabla.");
+            return;
+        }
 
-
+        try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/desktop/categoria-detalle-view.fxml"));
-
-
             Parent root = fxmlLoader.load();
 
             CategoriaDetalleController controller = fxmlLoader.getController();
             controller.setCategoria(categoria);
             controller.cargarCategoria();
 
-            Stage stage = new Stage(); // Esto NO usa StageManager
-            stage.setScene(new Scene(root, 800, 550));
-            stage.setTitle("Detalle de cCtegoria");
-            stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés
-            stage.setOnCloseRequest(event -> {mostrarCategorias();});
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, 800, 635));
+            stage.setTitle("Detalle de Categoría");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setOnCloseRequest(event -> mostrarCategorias());
             stage.showAndWait();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+            notificarError("No se pudo abrir la ventana de detalle: " + e.getMessage());
         }
+    }
 
+    private void limpiarCampos() {
+        txtNombre.clear();
+        txtDescripcion.clear();
+        txtNombre.requestFocus();
     }
 
 }

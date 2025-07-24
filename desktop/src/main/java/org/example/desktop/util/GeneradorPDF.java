@@ -29,6 +29,19 @@ import java.util.Map;
 
 public class GeneradorPDF {
 
+    private String generarNombreUnico(File carpeta, String nombreBase, String extension) {
+        File archivo = new File(carpeta, nombreBase + extension);
+        int contador = 1;
+
+        while (archivo.exists()) {
+            archivo = new File(carpeta, nombreBase + " (" + contador + ")" + extension);
+            contador++;
+        }
+
+        return archivo.getAbsolutePath();
+    }
+
+
     public String generarPDF(Factura factura) throws Exception {
         Document doc = new Document(PageSize.A4);
         doc.setMargins(20, 20, 20, 20);
@@ -39,9 +52,12 @@ public class GeneradorPDF {
             carpetaFacturas.mkdirs();
         }
 
-        String nombrePdf = "FacturaC " + factura.getNumero() + ".pdf";
-        String rutaSalida = carpetaFacturas.getAbsolutePath() + File.separator + nombrePdf;
+        // Nombre base sin extensión
+        String nombreBase = "Factura C " + factura.getNumero();
+        String rutaSalida = generarNombreUnico(carpetaFacturas, nombreBase, ".pdf");
+
         PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(rutaSalida));
+
 
         doc.open();
 

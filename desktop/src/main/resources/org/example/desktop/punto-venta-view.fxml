@@ -34,22 +34,86 @@
                                     </font>
                                 </Label>
                                 <Pane HBox.hgrow="ALWAYS"/>
-                                <Button text="Historial de ventas" styleClass="button" fx:id="btnHistorialVentas"/>
+                                <Button text="Historial de ventas" fx:id="btnHistorialVentas"
+                                        style="-fx-background-color: linear-gradient(to bottom, rgba(255,127,0,0.9), rgba(230,92,0,0.9)); -fx-border-color: rgba(255,255,255,0.2); -fx-border-width: 1; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 14 28; -fx-background-radius: 12; -fx-border-radius: 12; -fx-effect: dropshadow(gaussian, rgba(255,127,0,0.4), 8, 0, 0, 4);" />
                             </children>
                         </HBox>
 
-                        <!-- Scroll con el catálogo -->
-                        <ScrollPane fitToWidth="true" styleClass="pv-products-scroll" prefHeight="600.0">
+                        <!-- BUSCADOR - Nueva sección -->
+                        <VBox spacing="8.0" styleClass="pv-search-container">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="pv-search-box">
+                                    <children>
+                                        <Label text="🔍" styleClass="pv-search-icon">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <TextField fx:id="searchField"
+                                                   promptText="Buscar productos por nombre, código o categoría..."
+                                                   styleClass="pv-search-input"
+                                                   prefWidth="400.0"
+                                                   HBox.hgrow="ALWAYS" />
+                                    </children>
+                                </HBox>
+
+
+                            </children>
+                        </VBox>
+
+                        <ScrollPane fitToWidth="true"
+                                    fitToHeight="false"
+                                    styleClass="pv-products-scroll"
+                                    VBox.vgrow="ALWAYS"
+                                    hbarPolicy="NEVER"
+                                    vbarPolicy="AS_NEEDED">
                             <content>
-                                <GridPane fx:id="productGrid" hgap="20.0" vgap="20.0" styleClass="pv-products-grid">
-                                    <!-- Aquí el controlador cargará dinámicamente los productos -->
-                                </GridPane>
+                                <VBox alignment="TOP_CENTER" spacing="0.0">
+                                    <children>
+                                        <VBox fx:id="noResultsContainer"
+                                              alignment="CENTER"
+                                              spacing="10.0"
+                                              styleClass="pv-no-results"
+                                              visible="false"
+                                              managed="false">
+                                            <children>
+                                                <Label text="🔍" styleClass="pv-no-results-icon">
+                                                    <font>
+                                                        <Font size="48.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label text="No se encontraron productos" styleClass="pv-no-results-text">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label fx:id="noResultsSubtext"
+                                                       text="Intenta con otros términos de búsqueda"
+                                                       styleClass="pv-no-results-subtext">
+                                                    <font>
+                                                        <Font size="14.0" />
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </VBox>
+
+                                        <GridPane fx:id="productGrid"
+                                                  hgap="20.0"
+                                                  vgap="20.0"
+                                                  styleClass="pv-products-grid"
+                                                  alignment="TOP_CENTER">
+                                            <!-- Aquí el controlador cargará dinámicamente los productos -->
+                                        </GridPane>
+
+                                        <!-- Espaciador flexible que ocupa el resto del espacio -->
+                                        <Region VBox.vgrow="ALWAYS" styleClass="pv-products-spacer"/>
+                                    </children>
+                                </VBox>
                             </content>
                         </ScrollPane>
 
                     </children>
                 </VBox>
-
 
                 <!-- Panel del carrito -->
                 <VBox styleClass="pv-cart-panel" prefWidth="600.0">
@@ -61,7 +125,8 @@
                         </Label>
 
                         <ScrollPane fx:id="cartScrollPane" fitToWidth="true" styleClass="pv-cart-scroll"
-                                    prefHeight="400.0">
+                                    VBox.vgrow="ALWAYS"
+                                    hbarPolicy="NEVER">
                             <content>
                                 <VBox fx:id="cartContent" spacing="10.0" styleClass="pv-cart-content">
                                     <!-- Aquí el controlador cargará los ítems del carrito -->
@@ -86,7 +151,6 @@
                                                 <Font name="System Bold" size="22.0" />
                                             </font>
                                         </Label>
-
                                     </children>
                                 </HBox>
 

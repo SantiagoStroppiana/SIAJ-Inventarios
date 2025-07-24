@@ -15,8 +15,8 @@ import java.io.IOException;
 
 public class HelloApplication extends Application {
 
-    private static final double LOGIN_WIDTH = 700;
-    private static final double LOGIN_HEIGHT = 500;
+    private static final double LOGIN_WIDTH = 900;
+    private static final double LOGIN_HEIGHT = 600;
 
     @Override
     public void start(Stage stage) throws  IOException{

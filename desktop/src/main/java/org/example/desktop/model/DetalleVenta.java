@@ -1,10 +1,6 @@
 package org.example.desktop.model;
 
 
-
-import java.math.BigDecimal;
-
-
 public class DetalleVenta {
 
 

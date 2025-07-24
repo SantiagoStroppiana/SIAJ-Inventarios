@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -17,7 +16,6 @@ import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.DetalleOrdenCompraDTO;
 import org.example.desktop.dto.OrdenCompraDTO;
 import org.example.desktop.model.*;
-import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
 
 import java.io.IOException;
@@ -29,23 +27,16 @@ import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.geometry.Insets;
 import javafx.util.StringConverter;
-import java.time.LocalDate;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.URI;
-import com.google.gson.Gson;
+
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
 
 public class OrdenCompraController {
 
@@ -477,7 +468,7 @@ public class OrdenCompraController {
         String fechaFormateada = LocalDateTime.now().format(formatter);*/
 
         if (medioPagoDummy == null) {
-            notificar("Error", "Seleccione un medio de pago.", false);
+            notificarError("Seleccione un medio de pago");
             return;
         }
         long fechaTimestamp = LocalDateTime.now()
@@ -505,8 +496,7 @@ public class OrdenCompraController {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200 && response.statusCode() != 201) {
-            System.err.println("Error al crear orden: " + response.body());
-            notificar("Error", "No se pudo crear la orden de compra.", false);
+            notificarError("No se pudo crear la orden de compra");
             return;
         }
 
@@ -539,11 +529,9 @@ public class OrdenCompraController {
             System.out.println("Respuesta detalle: " + response2.body());
 
             if (response2.statusCode() == 200 || response2.statusCode() == 201) {
-
-                notificar("Detalle creado", producto.getNombre(), true);
+                notificarExito( producto.getNombre() + " detalle creado");
             } else {
-                System.err.println("Error al crear detalle para producto " + producto.getNombre() + ": " + response2.body());
-                notificar("Error", "No se pudo crear el detalle para " + producto.getNombre(), false);
+                notificarError("No se pudo crear el detalle de para " + producto.getNombre());
                 todosDetallesCreados = false;
             }
         }
@@ -564,22 +552,6 @@ public class OrdenCompraController {
             }
         }
         return null;
-    }
-
-    private void notificar(String titulo, String mensaje, boolean exito){
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-
-            if (exito) {
-                notificacion.showInformation();
-            } else {
-                notificacion.showError();
-            }
-        });
     }
 
     private void actualizarCatalogo() throws IOException {
@@ -623,7 +595,7 @@ public class OrdenCompraController {
     }
 
     // Clase interna para manejar items de la orden
-    private static class ItemOrden {
+    public static class ItemOrden {
         private Producto producto;
         private int cantidad;
 

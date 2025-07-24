@@ -21,6 +21,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
+
 public class PasswordController {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
@@ -59,7 +62,7 @@ public class PasswordController {
             String newPass = newPassword.getText();
 
             if (oldPass.isBlank() || newPass.isBlank()) {
-                notificar("Campos vacíos", "Debes completar ambos campos de contraseña.", false);
+                notificarError("Debes completar ambos campos de contraseña");
                 return;
             }
 
@@ -80,13 +83,13 @@ public class PasswordController {
                 HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (response.statusCode() == 200) {
-                    notificar("Éxito", "Contraseña cambiada con éxito.", true);
+                    notificarExito("Contraseña cambiada con éxito");
                 } else {
-                    notificar("Error", "No se pudo cambiar la contraseña.", false);
+                    notificarError("No se pudo cambiar el password");
                 }
 
             } catch (Exception e) {
-                notificar("Error", "Hubo un problema con la solicitud.", false);
+                notificarError("Hubo un problema con la solicitud");
             }
         }
     }
@@ -98,12 +101,12 @@ public class PasswordController {
         String repetir = confirmarPassword.getText();
 
         if (correo.isBlank() || nueva.isBlank() || repetir.isBlank()) {
-            notificar("Campos vacíos", "Debes completar todos los campos.", false);
+            notificarError("Debes completar ambos campos de contraseña");
             return;
         }
 
         if (!nueva.equals(repetir)) {
-            notificar("Error", "Las contraseñas no coinciden.", false);
+            notificarError("Las contraseñas no coinciden");
             return;
         }
 
@@ -124,13 +127,13 @@ public class PasswordController {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                notificar("Éxito", "Contraseña actualizada correctamente.", true);
+                notificarExito("Contraseña actualizada con éxito");
             } else {
-                notificar("Error", "No se pudo actualizar la contraseña.", false);
+                notificarError("No se pudo actualizar la contraseña");
             }
 
         } catch (Exception e) {
-            notificar("Error", "Hubo un problema con la solicitud.", false);
+            notificarError("Hubo un problema con la solicitud");
         }
     }
 
@@ -139,22 +142,7 @@ public class PasswordController {
         if (UserSession.getUsuarioActual() != null) {
             StageManager.loadScene("/org/example/desktop/menu-view.fxml", 1600, 900);
         } else {
-            StageManager.loadScene("/org/example/desktop/login-view.fxml", 700, 500);
+            StageManager.loadScene("/org/example/desktop/login-view.fxml", 900, 600);
         }
-    }
-
-    private void notificar(String titulo, String mensaje, boolean exito) {
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-            if (exito) {
-                notificacion.showInformation();
-            } else {
-                notificacion.showError();
-            }
-        });
     }
 }

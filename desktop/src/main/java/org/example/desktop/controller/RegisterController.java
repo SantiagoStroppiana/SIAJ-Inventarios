@@ -4,15 +4,10 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.UsuarioDTO;
@@ -23,10 +18,12 @@ import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
 
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
+import static org.example.desktop.util.NotificationManager.notificarError;
+import static org.example.desktop.util.NotificationManager.notificarExito;
 
 
 public class RegisterController {
@@ -56,9 +53,13 @@ public class RegisterController {
         if(usuarioDTO != null && usuarioDTO.getNombreRol().equals("Administrador")) {
             btnLogin.setVisible(false);
             btnLogin.setManaged(false);
+            btnVolver.setManaged(true);
+            btnVolver.setVisible(true);
         }else{
-            btnLogin.setVisible(false);
+            btnLogin.setVisible(true);
             btnLogin.setManaged(true);
+            btnVolver.setManaged(false);
+            btnVolver.setVisible(false);
         }
 
     }
@@ -68,7 +69,7 @@ public class RegisterController {
         if(UserSession.getUsuarioActual() != null) {
             StageManager.loadScene("/org/example/desktop/usuarios-view.fxml", 1600, 900);
         }else{
-            StageManager.loadScene("/org/example/desktop/login-view.fxml", 700, 500);
+            StageManager.loadScene("/org/example/desktop/login-view.fxml", 900, 600);
         }
     }
 
@@ -76,11 +77,9 @@ public class RegisterController {
     public void registrarse(javafx.event.ActionEvent actionEvent) {
 
         if(email.getText().isEmpty() || nombre.getText().isEmpty() || apellido.getText().isEmpty() || password.getText().isEmpty()) {
-            notificar("Error", "Por favor, complete todos los campos", false);
+            notificarError("Por favor, complete todos los campos");
             return;
         }
-
-
 
         new Thread(() -> {
 
@@ -108,7 +107,7 @@ public class RegisterController {
                             MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
 
                             if (resultado.isExito()) {
-                                notificar("Registro exitoso", resultado.getMensaje(), true);
+                                notificarExito(resultado.getMensaje());
                                 limpiarCampos();
                                 UsuarioDTO usuarioDTO = UserSession.getUsuarioActual();
 
@@ -119,45 +118,28 @@ public class RegisterController {
                                 }
 
                             } else {
-                                notificar("Error al registrarse", resultado.getMensaje(), false);
+                                notificarError(resultado.getMensaje());
                             }
                         } else {
-                            notificar("Respuesta del servidor incorrecta", responseBody, false);
+                            notificarError("Error respuesta el servidor");
                         }
 
 
                     } catch (Exception e){
                         e.printStackTrace();
-                        notificar("Error", "Error al registrar el usuario", false);
+                        notificarError("Error critico al registrar" + e.getMessage());
                     }
-
-
 
                 });
 
 
             } catch (Exception e) {
                 e.printStackTrace();
-                notificar("Error critico", e.getMessage(), false);
+                notificarError("Error critico " + e.getMessage());
             }
 
         }).start();
 
-    }
-
-    private void notificar(String titulo, String mensaje, boolean exito){
-        Platform.runLater(() -> {
-            Notifications notificacion = Notifications.create()
-                    .title(titulo)
-                    .text(mensaje)
-                    .position(Pos.TOP_CENTER)
-                    .hideAfter(Duration.seconds(4));
-            if (exito) {
-                notificacion.showInformation();
-            }else{
-                notificacion.showError();
-            }
-        });
     }
 
     private void limpiarCampos() {
@@ -169,10 +151,10 @@ public class RegisterController {
 
     public void irALogin(javafx.event.ActionEvent actionEvent) {
         try{
-            StageManager.loadScene("/org/example/desktop/login-view.fxml", 700, 500);
+            StageManager.loadScene("/org/example/desktop/login-view.fxml", 900, 600);
         }catch (Exception e){
             e.printStackTrace();
-            notificar("Error", "No se pudo cargar la pantalla de productos: " + e.getMessage(), false);
+            notificarError("No se pudo cargar la pantalla de iniciar sesion");
         }
     }
 
