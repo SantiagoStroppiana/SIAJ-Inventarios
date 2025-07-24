@@ -105,8 +105,8 @@ public class ProductoController implements Initializable {
                 menuEstado.getItems().add(estado);
             }
 
-            menuEstado.getSelectionModel().clearSelection(); // No seleccionar por defecto
-            menuEstado.setPromptText("Estado"); // Mostrar texto inicial
+            menuEstado.getSelectionModel().clearSelection();
+            menuEstado.setPromptText("Estado");
 
             menuEstado.setOnAction(event -> {
                 Object selected = menuEstado.getValue();
@@ -134,7 +134,7 @@ public class ProductoController implements Initializable {
 
             menuProveedor.getItems().clear();
             menuProveedor.getItems().addAll(proveedores);
-            menuProveedor.getSelectionModel().clearSelection(); // No seleccionar por defecto
+            menuProveedor.getSelectionModel().clearSelection();
             menuProveedor.setPromptText("Proveedor");
 
             menuProveedor.setCellFactory(lv -> new ListCell<Proveedor>() {
@@ -175,13 +175,13 @@ public class ProductoController implements Initializable {
             Categoria[] categorias = gson.fromJson(responseBody, Categoria[].class);
 
             menuCategorias.getItems().clear();
-            menuCategorias.setPromptText("Categoría"); // Texto inicial
+            menuCategorias.setPromptText("Categoría");
 
             for (Categoria categoria : categorias) {
                 menuCategorias.getItems().add(categoria.getNombre());
             }
 
-            menuCategorias.getSelectionModel().clearSelection(); // No seleccionar por defecto
+            menuCategorias.getSelectionModel().clearSelection();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -215,10 +215,25 @@ public class ProductoController implements Initializable {
                 } else {
                     setText(estado);
                     if (estado.equals("Activo")) {
-                        setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                        setStyle("-fx-text-fill: #00ff00; -fx-font-weight: bold;");
                     } else {
                         setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
                     }
+                }
+            }
+        });
+
+        tablaProductos.setRowFactory(tv -> new TableRow<>() {
+            @Override
+            protected void updateItem(Producto producto, boolean empty) {
+                super.updateItem(producto, empty);
+                if (producto == null || empty) {
+                    setStyle("");
+                } else if (producto.getStock() <= 5) {
+                    setStyle("-fx-background-color: rgba(138,4,4,0.82); -fx-text-fill: #ffffff; -fx-font-weight: bold;");
+                    //deberia cambiar el estado
+                } else {
+                    setStyle("");
                 }
             }
         });
@@ -311,7 +326,7 @@ public class ProductoController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(root, 800, 750));
             stage.setTitle("Detalle de Producto");
-            stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana anterior si querés
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setOnCloseRequest(event -> {mostrarProductos();});
             stage.showAndWait();
 
@@ -329,7 +344,7 @@ public class ProductoController implements Initializable {
         }
 
         try {
-            producto.setActivo(!producto.isActivo()); // cambiar estado
+            producto.setActivo(!producto.isActivo());
 
             String json = gson.toJson(producto);
 
@@ -359,7 +374,7 @@ public class ProductoController implements Initializable {
             notificarError("Error Crítico " + e.getMessage());
         }
 
-        mostrarProductos(); // refrescar la tabla
+        mostrarProductos();
     }
 
     @FXML
@@ -445,7 +460,6 @@ public class ProductoController implements Initializable {
                 MensajesResultados resultado = gson.fromJson(responseBody, MensajesResultados.class);
 
                 if (resultado.isExito()) {
-                    // Agregar el producto directamente a la tabla
 
                   /*  Thread.sleep(10000);
                     mostrarProductos();
