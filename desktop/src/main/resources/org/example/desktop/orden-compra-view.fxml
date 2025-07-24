@@ -63,7 +63,6 @@
                     <VBox styleClass="pv-product-panel" prefWidth="800.0">
                         <children>
 
-                            <!-- Título del catálogo -->
                             <HBox alignment="CENTER_LEFT" spacing="10.0">
                                 <children>
                                     <Label text="📦 Catálogo de Productos" styleClass="pv-panel-title">
@@ -72,7 +71,8 @@
                                         </font>
                                     </Label>
                                     <Pane HBox.hgrow="ALWAYS"/>
-                                    <Button text="Subir Orden Compra" styleClass="button" fx:id="btnRefreshCatalog"/>
+                                    <Button text="Subir Orden Compra" fx:id="btnRefreshCatalog"
+                                            style="-fx-background-color: linear-gradient(to bottom, rgba(255,149,0,0.9), rgba(204,119,0,0.9)); -fx-border-color: rgba(255,255,255,0.2); -fx-border-width: 1; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 14 28; -fx-background-radius: 12; -fx-border-radius: 12; -fx-effect: dropshadow(gaussian, rgba(255,149,0,0.4), 8, 0, 0, 4);" />
                                 </children>
                             </HBox>
 
@@ -98,7 +98,6 @@
                                             </children>
                                         </VBox>
 
-                                        <!-- Aquí el controlador cargará dinámicamente los productos -->
                                         <GridPane fx:id="productGrid" hgap="20.0" vgap="20.0"
                                                   styleClass="pv-products-grid" managed="false" visible="false">
                                         </GridPane>

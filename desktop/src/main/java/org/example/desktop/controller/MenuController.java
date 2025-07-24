@@ -24,10 +24,12 @@ import org.example.desktop.util.UserSession;
 import org.example.desktop.util.VariablesEntorno;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.text.NumberFormat;
 import java.time.Duration;
 import java.util.*;
 import java.util.logging.Level;
@@ -61,6 +63,54 @@ public class MenuController {
         this.gson = new Gson();
     }
 
+    @FXML private Label lblUnidadesStock;
+    @FXML private Label lblValorInventario;
+    @FXML private Label lblProductosCriticos;
+
+    private void infoGeneral() {
+        Task<Producto[]> task = new Task<>() {
+            @Override
+            protected Producto[] call() throws Exception {
+                String baseUrl = VariablesEntorno.getServerURL();
+                return obtenerProductos(baseUrl);
+            }
+
+            @Override
+            protected void succeeded() {
+                Producto[] productos = getValue();
+
+                int stockTotal = Arrays.stream(productos)
+                        .mapToInt(Producto::getStock)
+                        .sum();
+
+                BigDecimal valorTotal = Arrays.stream(productos)
+                        .map(p -> p.getPrecioCosto().multiply(BigDecimal.valueOf(p.getStock())))
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+                long productosCriticos = Arrays.stream(productos)
+                        .filter(p -> p.getStock() <= 5)
+                        .count();
+
+                Platform.runLater(() -> {
+                    NumberFormat nf = NumberFormat.getNumberInstance(new Locale("es", "PY"));
+                    lblUnidadesStock.setText(stockTotal + " unidades");
+                    lblValorInventario.setText("₲ " + nf.format(valorTotal));
+                    lblProductosCriticos.setText(productosCriticos + " productos");
+                });
+            }
+
+            @Override
+            protected void failed() {
+                LOGGER.log(Level.WARNING, "Error al cargar datos generales del inventario", getException());
+            }
+        };
+
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+
     @FXML
     public void initialize() {
         configurarBoton();
@@ -71,6 +121,7 @@ public class MenuController {
 
         configurarGraficoTorta();
         cargarDatosVentasAsync();
+        infoGeneral();
     }
 
     private void configurarBoton(){

@@ -34,7 +34,8 @@
                                     </font>
                                 </Label>
                                 <Pane HBox.hgrow="ALWAYS"/>
-                                <Button text="Historial de ventas" styleClass="button" fx:id="btnHistorialVentas"/>
+                                <Button text="Historial de ventas" fx:id="btnHistorialVentas"
+                                        style="-fx-background-color: linear-gradient(to bottom, rgba(255,127,0,0.9), rgba(230,92,0,0.9)); -fx-border-color: rgba(255,255,255,0.2); -fx-border-width: 1; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 14 28; -fx-background-radius: 12; -fx-border-radius: 12; -fx-effect: dropshadow(gaussian, rgba(255,127,0,0.4), 8, 0, 0, 4);" />
                             </children>
                         </HBox>
 
@@ -60,7 +61,6 @@
                             </children>
                         </VBox>
 
-                        <!-- Scroll con el catálogo - SOLUCIÓN MEJORADA -->
                         <ScrollPane fitToWidth="true"
                                     fitToHeight="false"
                                     styleClass="pv-products-scroll"
@@ -68,10 +68,8 @@
                                     hbarPolicy="NEVER"
                                     vbarPolicy="AS_NEEDED">
                             <content>
-                                <!-- Contenedor principal que se ajusta al tamaño del ScrollPane -->
                                 <VBox alignment="TOP_CENTER" spacing="0.0">
                                     <children>
-                                        <!-- Mensaje cuando no hay resultados -->
                                         <VBox fx:id="noResultsContainer"
                                               alignment="CENTER"
                                               spacing="10.0"
