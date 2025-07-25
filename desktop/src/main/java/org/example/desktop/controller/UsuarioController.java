@@ -45,7 +45,7 @@ public class UsuarioController implements Initializable {
     @FXML private Label labelRol;
 
     @FXML public void irRegistro(){
-        StageManager.loadScene("/org/example/desktop/register-view.fxml", 700, 650);
+        StageManager.loadScene("/org/example/desktop/register-view.fxml", 900, 650);
     };
 
     @FXML

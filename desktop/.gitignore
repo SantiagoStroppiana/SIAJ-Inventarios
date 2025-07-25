@@ -50,3 +50,6 @@ dist/
 build/
 **/runtime/
 **/lib/modules
+
+instalador/
+crear-instalador.bat
