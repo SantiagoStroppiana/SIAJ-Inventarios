@@ -85,7 +85,15 @@ public class VentaController implements Initializable {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
 
-            Producto[] productos = gson.fromJson(responseBody, Producto[].class);
+            Producto[] productos1 = gson.fromJson(responseBody, Producto[].class);
+            List<Producto> productosActivos = new ArrayList<>();
+
+            for (Producto p : productos1) {
+                if (p.isActivo()) {
+                    productosActivos.add(p);
+                }
+            }
+            Producto[] productos = productosActivos.toArray(new Producto[0]);
 
             // Limpiar productos actuales del GridPane
             productGrid.getChildren().clear();
