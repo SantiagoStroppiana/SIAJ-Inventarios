@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
 import javafx.stage.Modality;
@@ -82,6 +84,7 @@ public class OrdenCompraController {
     // Lista para manejar los items de la orden
     private List<ItemOrden> itemsOrden = new ArrayList<>();
     private double totalOrden = 0.0;
+    private Proveedor proveedorAnterior = null;
 
     @FXML
     private void initialize() {
@@ -89,12 +92,115 @@ public class OrdenCompraController {
 
         orderDatePicker.setValue(LocalDate.now());
 
+//        supplierComboBox.setOnAction(e -> {
+//            Proveedor proveedorSeleccionado = supplierComboBox.getValue();
+//            if (proveedorSeleccionado != null) {
+//                cargarProductosPorProveedor(proveedorSeleccionado);
+//            } else {
+//                mostrarEstadoVacioProductos();
+//            }
+//        });
+
+
         supplierComboBox.setOnAction(e -> {
             Proveedor proveedorSeleccionado = supplierComboBox.getValue();
-            if (proveedorSeleccionado != null) {
+
+            // Si hay items en el carrito y se está cambiando de proveedor
+            if (!itemsOrden.isEmpty() && proveedorSeleccionado != null && !proveedorSeleccionado.equals(proveedorAnterior)) {
+                Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmacion.setTitle("Cambiar proveedor");
+                confirmacion.setHeaderText("¿Cambiar de proveedor?");
+                confirmacion.setContentText("Si cambias de proveedor se vaciará el carrito actual. ¿Deseas continuar?");
+
+// Personalizar el DialogPane
+                DialogPane dialogPane = confirmacion.getDialogPane();
+                dialogPane.setGraphic(null);
+
+// Fondo azul y estilos generales
+                dialogPane.setStyle(
+                        "-fx-background-color: #059669;" +
+                                "-fx-background-radius: 15px;" +
+                                "-fx-border-radius: 15px;" +
+                                "-fx-padding: 20px;" +
+                                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
+                );
+
+// Estilo del header text (título)
+                dialogPane.lookup(".header-panel").setStyle(
+                        "-fx-background-color: transparent;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-font-size: 18px;" +
+                                "-fx-text-fill: white;"
+                );
+
+// Estilo del content text (mensaje)
+                dialogPane.lookup(".content").setStyle(
+                        "-fx-background-color: transparent;" +
+                                "-fx-font-size: 14px;" +
+                                "-fx-text-fill: white;"
+                );
+
+// Personalizar botones
+                dialogPane.lookupAll(".button").forEach(node -> {
+                    if (node instanceof Button) {
+                        Button btn = (Button) node;
+                        if (btn.getText().contains("OK") || btn.getText().contains("Aceptar")) {
+                            btn.setStyle(
+                                    "-fx-background-color: #4CAF50;" +
+                                            "-fx-text-fill: white;" +
+                                            "-fx-font-weight: bold;" +
+                                            "-fx-background-radius: 8px;" +
+                                            "-fx-border-radius: 8px;" +
+                                            "-fx-padding: 8 16;"
+                            );
+                        } else {
+                            btn.setStyle(
+                                    "-fx-background-color: #f44336;" +
+                                            "-fx-text-fill: white;" +
+                                            "-fx-font-weight: bold;" +
+                                            "-fx-background-radius: 8px;" +
+                                            "-fx-border-radius: 8px;" +
+                                            "-fx-padding: 8 16;"
+                            );
+                        }
+                    }
+                });
+
+// Para agregar tu logo (más simple, sin try-catch)
+                if (getClass().getResourceAsStream("/org/example/desktop/images/logo.png") != null) {
+                    ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/org/example/desktop/images/siaj-logo.png")));
+                    logo.setFitHeight(40);
+                    logo.setFitWidth(40);
+                    // Obtener el Stage del diálogo y cambiar su ícono
+                    Stage stage = (Stage) dialogPane.getScene().getWindow();
+                    stage.getIcons().add(new Image(getClass().getResourceAsStream("/org/example/desktop/images/siaj-logo.png")));
+                } else {
+                    // Si no encuentra la imagen, usar un emoji como fallback
+                    Label icon = new Label("⚠️");
+                    icon.setStyle("-fx-font-size: 30px;");
+                    dialogPane.setGraphic(icon);
+                }
+
+                Optional<ButtonType> resultado = confirmacion.showAndWait();
+
+                if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+                    // Usuario confirmó, limpiar carrito y cargar nuevos productos
+                    limpiarOrden();
+                    cargarProductosPorProveedor(proveedorSeleccionado);
+                    proveedorAnterior = proveedorSeleccionado; // Actualizar proveedor anterior
+                } else {
+                    // Usuario canceló, revertir la selección del ComboBox
+                    Platform.runLater(() -> {
+                        supplierComboBox.setValue(proveedorAnterior);
+                    });
+                }
+            } else if (proveedorSeleccionado != null) {
+                // No hay items, cargar normalmente
                 cargarProductosPorProveedor(proveedorSeleccionado);
+                proveedorAnterior = proveedorSeleccionado; // Actualizar proveedor anterior
             } else {
                 mostrarEstadoVacioProductos();
+                proveedorAnterior = null; // No hay proveedor seleccionado
             }
         });
 
@@ -268,6 +374,61 @@ public class OrdenCompraController {
         dialog.setHeaderText("Agregar " + producto.getNombre());
         dialog.setContentText("Cantidad:");
 
+        // Personalizar el TextInputDialog
+        DialogPane dialogPane = dialog.getDialogPane();
+        dialogPane.setGraphic(null);
+
+// Fondo verde y estilos
+        dialogPane.setStyle(
+                "-fx-background-color: #059669;" +
+                        "-fx-background-radius: 15px;" +
+                        "-fx-border-radius: 15px;" +
+                        "-fx-padding: 20px;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
+        );
+
+// Estilos de texto
+        dialogPane.lookup(".header-panel").setStyle(
+                "-fx-background-color: transparent;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 16px;" +
+                        "-fx-text-fill: white;"
+        );
+
+        dialogPane.lookup(".content").setStyle(
+                "-fx-background-color: transparent;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-text-fill: white;"
+        );
+
+// Botones
+        dialogPane.lookupAll(".button").forEach(node -> {
+            if (node instanceof Button) {
+                Button btn = (Button) node;
+                if (btn.getText().contains("OK") || btn.getText().contains("Aceptar")) {
+                    btn.setStyle(
+                            "-fx-background-color: #10b981;" +
+                                    "-fx-text-fill: white;" +
+                                    "-fx-font-weight: bold;" +
+                                    "-fx-background-radius: 8px;"
+                    );
+                } else {
+                    btn.setStyle(
+                            "-fx-background-color: #6b7280;" +
+                                    "-fx-text-fill: white;" +
+                                    "-fx-font-weight: bold;" +
+                                    "-fx-background-radius: 8px;"
+                    );
+                }
+            }
+        });
+
+// Logo en la esquina
+        if (getClass().getResourceAsStream("/org/example/desktop/images/siaj-logo.png") != null) {
+            Stage stage = (Stage) dialogPane.getScene().getWindow();
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/org/example/desktop/images/siaj-logo.png")));
+        }
+
         Optional<String> resultado = dialog.showAndWait();
         if (resultado.isPresent()) {
             System.out.println("🔍 Usuario ingresó cantidad: " + resultado.get());
@@ -275,12 +436,15 @@ public class OrdenCompraController {
                 int cantidad = Integer.parseInt(resultado.get());
                 System.out.println("🔍 Cantidad parseada: " + cantidad);
                 System.out.println("🔍 Stock disponible: " + producto.getStock());
-                if (cantidad > 0 && cantidad <= producto.getStock()) {
+//                if (cantidad > 0 && cantidad <= producto.getStock()) {
+                if (cantidad > 0) {
                     System.out.println("🔍 Llamando agregarItemAOrden...");
                     agregarItemAOrden(producto, cantidad);
                 } else {
-                    System.out.println("❌ Cantidad inválida o excede stock");
-                    mostrarAlerta("Error", "Cantidad inválida o excede el stock disponible");
+//                    System.out.println("❌ Cantidad inválida o excede stock");
+//                    mostrarAlerta("Error", "Cantidad inválida o excede el stock disponible");
+                    System.out.println("❌ Cantidad inválida");
+                    mostrarAlerta("Error", "Cantidad inválida");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("❌ Error al parsear cantidad: " + e.getMessage());
