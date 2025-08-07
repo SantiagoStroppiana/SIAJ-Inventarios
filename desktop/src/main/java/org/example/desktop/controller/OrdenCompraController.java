@@ -7,6 +7,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -18,8 +21,11 @@ import org.controlsfx.control.Notifications;
 import org.example.desktop.dto.DetalleOrdenCompraDTO;
 import org.example.desktop.dto.OrdenCompraDTO;
 import org.example.desktop.model.*;
+import org.example.desktop.util.OrdenCompraPDFGenerator;
 import org.example.desktop.util.VariablesEntorno;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
@@ -625,7 +631,7 @@ public class OrdenCompraController {
         LocalDate fecha = orderDatePicker.getValue();
         MedioPago medioPagoDummy = new MedioPago();
         medioPagoDummy.setId(1);
-        medioPagoDummy.setTipo("TEMPORAL");
+        medioPagoDummy.setTipo("A acordar con el proveedor.");
         double total = Double.parseDouble(totalLabel.getText().replace(",", "."));
 
         /*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
@@ -703,6 +709,38 @@ public class OrdenCompraController {
         // Paso 3: Mostrar mensaje de éxito y limpiar SOLO si todo salió bien
         if (todosDetallesCreados) {
             mostrarAlerta("Éxito", "Orden de compra y todos los detalles creados correctamente.");
+
+            OrdenCompra orden = new OrdenCompra();
+            orden.setId(ordenCompraCreadaDTO.getId());
+            orden.setProveedor(proveedor);
+            orden.setTotal(new BigDecimal(total));
+            orden.setEstado(OrdenCompra.EstadoOrden.pendiente);
+            orden.setMedioPago(medioPagoDummy);
+            orden.setFechaPago(LocalDateTime.now());
+
+            try {
+// Asegurar que exista la carpeta ./pdfs/ordenes/
+                File directorio = new File("pdfs/ordenes");
+                if (!directorio.exists()) {
+                    directorio.mkdirs();
+                }
+
+                String rutaArchivo = "pdfs/ordenes/OrdenCompra " + orden.getId() + ".pdf";
+                String comentario = "";
+                String comentario2 = notesTextArea.getText();
+                if (!comentario2.equals("") || !comentario2.isEmpty()) {
+                    comentario = comentario2;
+                }
+                OrdenCompraPDFGenerator.generarPDF(orden, itemsOrden, rutaArchivo,comentario);
+                Desktop.getDesktop().open(new File(rutaArchivo));
+
+                System.out.println("📄 PDF generado en: " + rutaArchivo);
+            } catch (Exception e) {
+                e.printStackTrace();
+                mostrarAlerta("Error", "No se pudo generar el PDF: " + e.getMessage());
+            }
+
+
             limpiarOrden(); // ← AHORA sí, al final
         } else {
             mostrarAlerta("Advertencia", "La orden se creó pero hubo problemas con algunos detalles.");
